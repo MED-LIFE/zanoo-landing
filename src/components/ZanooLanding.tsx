@@ -1,0 +1,1426 @@
+"use client";
+
+import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    LineChart,
+    Line,
+} from "recharts";
+
+/**
+ * Zanoo Landing — Optimized Single File
+ *
+ * Objetivo:
+ * - Mantener TODO en 1 archivo para previsualizar rápido en Canvas
+ * - Evitar “crashes” por render pesado: menos animaciones simultáneas, menos lógica inline, fallbacks robustos
+ * - Asegurar que si faltan assets (/shots, /photos, /brand) no queda nada “vacío”
+ */
+
+// -----------------------------
+// Utils
+// -----------------------------
+function cn(...classes: Array<string | false | null | undefined>) {
+    return classes.filter(Boolean).join(" ");
+}
+
+function scrollToId(id: string) {
+    const el = document.getElementById(id);
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// -----------------------------
+// Motion presets (respeta reduced motion)
+// -----------------------------
+function useFadeUp() {
+    const reduced = useReducedMotion();
+    return useMemo(
+        () => ({
+            initial: reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
+            whileInView: { opacity: 1, y: 0 },
+            viewport: { once: true, margin: "-80px" },
+            transition: { duration: reduced ? 0 : 0.55, ease: "easeOut" } as any,
+        }),
+        [reduced]
+    );
+}
+
+// -----------------------------
+// Content
+// -----------------------------
+const HERO_SHOTS = [
+    { id: "inicio", label: "Inicio (Paciente)", src: "/shots/inicio-paciente.png" },
+    { id: "medicos", label: "Mis médicos", src: "/shots/mis-medicos.png" },
+] as const;
+
+const APP_SHOTS: Array<{
+    id: string;
+    label: string;
+    src?: string;
+    mode?: "list" | "detail" | "metrics";
+}> = [
+        { id: "inicio", label: "Inicio (Paciente)", src: "/shots/inicio-paciente.png", mode: "detail" },
+        { id: "turnos", label: "Turnos (Recepción)", src: "/shots/turnos-recepcion.png", mode: "list" },
+        {
+            id: "metricas",
+            label: "Métricas (Dirección)",
+            src: "/shots/metricas-direccion.png",
+            mode: "metrics",
+        },
+    ];
+
+const PROBLEM_TILES = [
+    {
+        tone: "blue" as const,
+        title: "Papeles, WhatsApps, cuadernos.",
+        desc: "La información queda dispersa y se pierde.",
+        imageSrc: "/photos/papeles-whatsapp-cuaderno.jpg",
+    },
+    {
+        tone: "violet" as const,
+        title: "Turnos duplicados y filas eternas.",
+        desc: "Nadie sabe “qué sigue” hasta que explota.",
+        imageSrc: "/photos/fila-turnos-duplicados.jpg",
+    },
+    {
+        tone: "amber" as const,
+        title: "Historia clínica incompleta.",
+        desc: "Cada consulta empieza de cero.",
+        imageSrc: "/photos/historia-clinica-incompleta.jpg",
+    },
+];
+
+// -----------------------------
+// UI bits
+// -----------------------------
+function GlowOrb({ className = "" }: { className?: string }) {
+    return <div className={"pointer-events-none absolute rounded-full blur-3xl opacity-60 " + className} aria-hidden />;
+}
+
+function GradientBorder({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+    return (
+        <div className={"relative rounded-3xl p-[1px] " + className}>
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-cyan-400/40 via-blue-500/35 to-purple-600/35" />
+            <div className="relative rounded-3xl bg-white/80 backdrop-blur-xl border border-black/5">{children}</div>
+        </div>
+    );
+}
+
+function LogoMark({ className = "" }: { className?: string }) {
+    return (
+        <div
+            className={cn(
+                "h-8 w-8 rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600",
+                className
+            )}
+            aria-hidden
+        />
+    );
+}
+
+function BrandLogo({ className = "" }: { className?: string }) {
+    const [err, setErr] = useState(false);
+    if (err) {
+        return (
+            <div className={cn("flex items-center gap-2", className)}>
+                <LogoMark className="h-9 w-9 rounded-2xl" />
+                <span className="text-sm font-semibold">Zanoo</span>
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src="/brand/zanoo-logo.png"
+            alt="Zanoo"
+            className={cn("h-10 w-auto", className)}
+            loading="lazy"
+            onError={() => setErr(true)}
+        />
+    );
+}
+
+function MiniKpi({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+            <div className="text-xs text-black/55">{label}</div>
+            <div className="mt-1 text-sm font-semibold text-black">{value}</div>
+        </div>
+    );
+}
+
+function SectionBadge({ children }: { children: React.ReactNode }) {
+    return (
+        <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs text-black/60">
+            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600" />
+            {children}
+        </div>
+    );
+}
+
+function FeatureCard({ title, desc }: { title: string; desc: string }) {
+    return (
+        <Card className="relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+            <CardContent className="p-6">
+                <div className="flex items-start justify-between gap-3">
+                    <div>
+                        <div className="text-sm font-semibold text-black">{title}</div>
+                        <div className="mt-2 text-sm text-black/60">{desc}</div>
+                    </div>
+                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400/35 via-blue-500/30 to-purple-600/30 border border-black/10" />
+                </div>
+            </CardContent>
+            <div className="pointer-events-none absolute -inset-24 bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-600/10 blur-3xl opacity-40" />
+        </Card>
+    );
+}
+
+function PhotoTile({
+    title,
+    desc,
+    tone = "blue",
+    imageSrc,
+}: {
+    title: string;
+    desc: string;
+    tone?: "blue" | "violet" | "amber";
+    imageSrc?: string;
+}) {
+    const [imgError, setImgError] = useState(false);
+    const showImage = Boolean(imageSrc) && !imgError;
+
+    const toneMap: Record<string, string> = {
+        blue: "from-slate-900/10 via-blue-900/10 to-cyan-900/10",
+        violet: "from-slate-900/10 via-purple-900/10 to-fuchsia-900/10",
+        amber: "from-slate-900/10 via-orange-900/10 to-amber-900/10",
+    };
+
+    return (
+        <Card className="group relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+            <div className="relative h-44">
+                {showImage ? (
+                    <>
+                        <img
+                            src={imageSrc}
+                            alt={title}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            loading="lazy"
+                            onError={() => setImgError(true)}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/92 via-white/30 to-transparent" />
+                    </>
+                ) : (
+                    <>
+                        <div className={"absolute inset-0 bg-gradient-to-br " + toneMap[tone]} />
+                        <div
+                            className="absolute inset-0 opacity-[0.25]"
+                            style={{
+                                backgroundImage:
+                                    "radial-gradient(circle at 20% 10%, rgba(0,0,0,0.14) 0, rgba(0,0,0,0) 45%), radial-gradient(circle at 80% 35%, rgba(0,0,0,0.12) 0, rgba(0,0,0,0) 40%), radial-gradient(circle at 35% 90%, rgba(0,0,0,0.10) 0, rgba(0,0,0,0) 42%)",
+                            }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent" />
+                    </>
+                )}
+            </div>
+
+            <CardContent className="p-6">
+                <div className="flex items-start justify-between gap-3">
+                    <div>
+                        <h3 className="text-lg font-semibold text-black leading-snug">{title}</h3>
+                        <p className="mt-1 text-sm text-black/60">{desc}</p>
+                    </div>
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/35 to-purple-600/35 border border-black/10 shadow-sm" />
+                </div>
+            </CardContent>
+
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute -inset-12 bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-600/10 blur-2xl" />
+            </div>
+        </Card>
+    );
+}
+// ... continued in next step
+
+// -----------------------------
+// PhoneFrame + Replica
+// -----------------------------
+function PhoneFrame({
+    src,
+    alt,
+    label,
+    children,
+}: {
+    src?: string;
+    alt?: string;
+    label?: string;
+    children?: React.ReactNode;
+}) {
+    const [imgError, setImgError] = useState(false);
+    const showImage = Boolean(src) && !imgError;
+
+    useEffect(() => {
+        setImgError(false);
+    }, [src]);
+
+    return (
+        <div className="relative">
+            <div className="absolute -inset-6 rounded-[44px] bg-gradient-to-r from-cyan-400/12 via-blue-500/10 to-purple-600/12 blur-2xl" />
+
+            <div className="relative mx-auto w-[320px] sm:w-[360px]">
+                <div className="relative rounded-[44px] border border-black/15 bg-gradient-to-b from-white to-white/60 shadow-[0_30px_80px_-38px_rgba(0,0,0,0.65)] overflow-hidden">
+                    <div className="absolute inset-[7px] rounded-[38px] border border-black/10" />
+                    <div className="absolute left-1/2 top-[10px] -translate-x-1/2 h-[22px] w-[126px] rounded-full bg-black/10 backdrop-blur" />
+
+                    <div className="relative m-[14px] mt-[22px] rounded-[34px] overflow-hidden bg-white">
+                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 h-32 w-64 rounded-full bg-gradient-to-r from-cyan-400/22 via-blue-500/18 to-purple-600/18 blur-2xl" />
+
+                        {showImage ? (
+                            <img
+                                src={src}
+                                alt={alt || "Captura de Zanoo"}
+                                className="block w-full h-full object-cover"
+                                loading="lazy"
+                                onError={() => setImgError(true)}
+                            />
+                        ) : (
+                            <div className="relative h-[690px] bg-[#f6f7fb]">{children}</div>
+                        )}
+
+                        {label ? (
+                            <div className="absolute left-4 right-4 bottom-4">
+                                <div className="rounded-2xl border border-black/10 bg-white/80 backdrop-blur px-4 py-3">
+                                    <div className="text-xs text-black/55">Dentro de la app</div>
+                                    <div className="mt-1 text-sm font-semibold text-black leading-tight">{label}</div>
+                                </div>
+                            </div>
+                        ) : null}
+                    </div>
+
+                    <div className="absolute -left-[2px] top-24 h-16 w-1.5 rounded-r bg-black/15" />
+                    <div className="absolute -left-[2px] top-44 h-10 w-1.5 rounded-r bg-black/15" />
+                    <div className="absolute -right-[2px] top-36 h-12 w-1.5 rounded-l bg-black/15" />
+                    <div className="h-6" />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ReplicaScreen({
+    title,
+    subtitle,
+    mode = "list",
+}: {
+    title: string;
+    subtitle: string;
+    mode?: "list" | "detail" | "metrics";
+}) {
+    return (
+        <div className="h-full px-5 pt-5 pb-6 bg-[#fbfbfe]">
+            <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600" />
+                    <div>
+                        <div className="text-[15px] font-semibold text-black leading-tight">{title}</div>
+                        <div className="text-xs text-black/45">{subtitle}</div>
+                    </div>
+                </div>
+                <div className="h-10 w-10 rounded-full border border-black/10 bg-white shadow-[0_10px_26px_-18px_rgba(0,0,0,0.45)]" />
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+                <MiniKpi label="Hoy" value="operativo" />
+                <MiniKpi label="Estado" value="en vivo" />
+            </div>
+
+            {mode === "list" && (
+                <div className="mt-5 space-y-3">
+                    {[
+                        { n: "María López", s: "En espera" },
+                        { n: "Juan Pérez", s: "Llamado" },
+                        { n: "Carlos Gómez", s: "En espera" },
+                        { n: "Ana Díaz", s: "En espera" },
+                    ].map((p) => (
+                        <div
+                            key={p.n}
+                            className="rounded-3xl border border-black/10 bg-white/90 px-5 py-4 flex items-center justify-between shadow-[0_12px_30px_-22px_rgba(0,0,0,0.35)]"
+                        >
+                            <div>
+                                <div className="text-[15px] font-semibold text-black leading-tight">{p.n}</div>
+                                <div className="text-xs text-black/45">DNI · xx.xxx.xxx</div>
+                            </div>
+                            <span
+                                className={cn(
+                                    "text-xs px-3 py-1.5 rounded-full border font-medium",
+                                    p.s === "Llamado"
+                                        ? "border-blue-500/25 bg-blue-500/10 text-blue-700"
+                                        : "border-sky-500/20 bg-sky-500/10 text-sky-700"
+                                )}
+                            >
+                                {p.s}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {mode === "detail" && (
+                <div className="mt-5 space-y-3">
+                    <div className="rounded-2xl border border-black/10 bg-white/70 p-4">
+                        <div className="text-sm font-semibold text-black">Resumen del paciente</div>
+                        <div className="mt-3 space-y-2">
+                            {[
+                                ["Alergias", "Ninguna registrada"],
+                                ["Medicación", "—"],
+                                ["Dx principal", "Control"],
+                            ].map(([k, v]) => (
+                                <div key={k} className="flex items-start justify-between gap-3">
+                                    <div className="text-xs text-black/55">{k}</div>
+                                    <div className="text-xs font-medium text-black text-right">{v}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="rounded-2xl border border-black/10 bg-white/70 p-4">
+                        <div className="text-sm font-semibold text-black">Últimas consultas</div>
+                        <div className="mt-3 space-y-3">
+                            {[
+                                ["Hace 2 semanas", "Dolor de garganta"],
+                                ["Hace 3 meses", "Chequeo"],
+                            ].map(([d, t]) => (
+                                <div key={d} className="flex gap-3">
+                                    <div className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600" />
+                                    <div>
+                                        <div className="text-xs text-black/55">{d}</div>
+                                        <div className="text-xs font-medium text-black">{t}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {mode === "metrics" && (
+                <div className="mt-5 space-y-3">
+                    <div className="rounded-2xl border border-black/10 bg-white/70 p-4">
+                        <div className="text-sm font-semibold text-black">Métricas</div>
+                        <div className="mt-3 grid grid-cols-3 gap-2">
+                            <div className="rounded-2xl border border-black/10 bg-white/70 px-3 py-2">
+                                <div className="text-[11px] text-black/55">Asistencia</div>
+                                <div className="text-sm font-semibold text-black">86%</div>
+                            </div>
+                            <div className="rounded-2xl border border-black/10 bg-white/70 px-3 py-2">
+                                <div className="text-[11px] text-black/55">Ausentismo</div>
+                                <div className="text-sm font-semibold text-black">14%</div>
+                            </div>
+                            <div className="rounded-2xl border border-black/10 bg-white/70 px-3 py-2">
+                                <div className="text-[11px] text-black/55">Espera</div>
+                                <div className="text-sm font-semibold text-black">18m</div>
+                            </div>
+                        </div>
+                        <div className="mt-4 h-28 rounded-2xl border border-black/10 bg-white/70" />
+                        <div className="mt-2 text-xs text-black/55">Señal: sube jueves/viernes.</div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// -----------------------------
+// Small charts wrappers
+// -----------------------------
+function Sparkline({ data }: { data: Array<{ x: string; v: number }> }) {
+    return (
+        <div className="mt-4 h-16">
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data} margin={{ top: 6, right: 4, left: -18, bottom: 0 }}>
+                    <CartesianGrid vertical={false} strokeOpacity={0.12} />
+                    <XAxis dataKey="x" tick={{ fontSize: 10 }} strokeOpacity={0.25} />
+                    <YAxis hide />
+                    <Line type="monotone" dataKey="v" stroke="rgba(59,130,246,0.85)" strokeWidth={2.2} dot={false} />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    );
+}
+
+function DirectorBars({ data }: { data: Array<{ day: string; v: number }> }) {
+    return (
+        <div className="h-40">
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data} margin={{ top: 8, right: 6, left: -18, bottom: 0 }}>
+                    <CartesianGrid vertical={false} strokeOpacity={0.15} />
+                    <XAxis dataKey="day" tick={{ fontSize: 11 }} strokeOpacity={0.3} />
+                    <YAxis tick={{ fontSize: 11 }} strokeOpacity={0.3} />
+                    <Tooltip
+                        contentStyle={{
+                            background: "rgba(255,255,255,0.92)",
+                            border: "1px solid rgba(0,0,0,0.10)",
+                            borderRadius: 14,
+                        }}
+                        labelStyle={{ color: "rgba(0,0,0,0.6)" }}
+                    />
+                    <Bar dataKey="v" radius={[10, 10, 10, 10]} fill="rgba(59,130,246,0.55)" />
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    );
+}
+
+// -----------------------------
+// Quote Carousel
+// -----------------------------
+function QuoteCarousel() {
+    const quotes = [
+        {
+            highlight: "19M de argentinos",
+            text: "“Más de 19 millones de argentinos se atienden exclusivamente en salitas y CAPS. Es casi 1 de cada 2 personas que dependen del primer nivel público.”",
+        },
+        {
+            highlight: "8.000+ centros de salud",
+            text: "“En Argentina existen más de 8.000 salitas y centros de atención primaria. La mayoría funciona con papel, planillas o WhatsApp.”",
+        },
+        {
+            highlight: "45% abre todo el día",
+            text: "“Solo el 45% de los centros de atención primaria abre todos los días. El resto funciona con horarios limitados y desorganización estructural.”",
+        },
+    ];
+
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setIndex((prev) => (prev + 1) % quotes.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [quotes.length]);
+
+    return (
+        <div className="w-full md:w-[75%] mx-auto relative h-48 sm:h-40">
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center"
+                >
+                    <div className="text-3xl md:text-4xl font-bold text-black tracking-tight mb-4">
+                        {quotes[index].highlight}
+                    </div>
+                    <p className="text-lg md:text-xl text-black/70 italic max-w-3xl leading-relaxed">
+                        {quotes[index].text}
+                    </p>
+                </motion.div>
+            </AnimatePresence>
+
+            <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-2">
+                {quotes.map((_, i) => (
+                    <div
+                        key={i}
+                        className={cn(
+                            "h-1.5 rounded-full transition-all duration-300",
+                            i === index ? "w-8 bg-black/40" : "w-1.5 bg-black/10"
+                        )}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+// -----------------------------
+// Main
+// -----------------------------
+export default function ZanooLanding() {
+    const fadeUp = useFadeUp();
+
+    const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
+    const [shotIndex, setShotIndex] = useState(0);
+    const [heroIndex, setHeroIndex] = useState(0);
+
+    const [formSent, setFormSent] = useState(false);
+    const formTimer = useRef<number | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (formTimer.current) window.clearTimeout(formTimer.current);
+        };
+    }, []);
+
+    const spark = useMemo(
+        () => [
+            { x: "L", v: 22 },
+            { x: "M", v: 25 },
+            { x: "X", v: 19 },
+            { x: "J", v: 29 },
+            { x: "V", v: 27 },
+            { x: "S", v: 12 },
+        ],
+        []
+    );
+
+    const directorBars = useMemo(
+        () => [
+            { day: "L", v: 32 },
+            { day: "M", v: 38 },
+            { day: "X", v: 29 },
+            { day: "J", v: 44 },
+            { day: "V", v: 41 },
+            { day: "S", v: 18 },
+        ],
+        []
+    );
+
+    const activeShot = APP_SHOTS[shotIndex % APP_SHOTS.length];
+    const activeHeroShot = HERO_SHOTS[heroIndex % HERO_SHOTS.length];
+
+    return (
+        <div className="min-h-screen bg-[#f6f7fb] text-black font-sans">
+            {/* EFFECTS */}
+            <div className="fixed inset-0 pointer-events-none" aria-hidden>
+                <GlowOrb className="-top-24 -left-24 h-[420px] w-[420px] bg-cyan-400/25" />
+                <GlowOrb className="top-40 -right-24 h-[520px] w-[520px] bg-purple-500/20" />
+                <GlowOrb className="bottom-[-140px] left-1/3 h-[520px] w-[520px] bg-blue-500/18" />
+            </div>
+
+            {/* HEADER */}
+            <header className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/65 border-b border-black/10">
+                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                    <button
+                        type="button"
+                        onClick={() => scrollToId("top")}
+                        className="flex items-center gap-2"
+                        aria-label="Ir al inicio"
+                    >
+                        <img
+                            src="/brand/zanoo-logo-full.png"
+                            alt="Zanoo"
+                            className="h-8 w-auto object-contain"
+                        />
+                    </button>
+
+                    <nav className="hidden md:flex gap-8 text-sm text-black/60">
+                        <button className="hover:text-black" onClick={() => scrollToId("producto")}>
+                            Producto
+                        </button>
+                        <button className="hover:text-black" onClick={() => scrollToId("app")}>
+                            App real
+                        </button>
+                        <button className="hover:text-black" onClick={() => scrollToId("gratis")}>
+                            Gratis
+                        </button>
+                        <button className="hover:text-black" onClick={() => scrollToId("impacto")}>
+                            Impacto
+                        </button>
+                        <button className="hover:text-black" onClick={() => scrollToId("roadmap")}>
+                            Roadmap
+                        </button>
+                        <button className="hover:text-black" onClick={() => scrollToId("contacto")}>
+                            Contacto
+                        </button>
+                    </nav>
+
+                    <Button
+                        className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_14px_40px_-22px_rgba(59,130,246,0.9)]"
+                        onClick={() => scrollToId("contacto")}
+                    >
+                        Pedí demo
+                    </Button>
+                </div>
+            </header>
+
+            {/* HERO */}
+            <section id="top" className="pt-32 pb-24 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_55%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.10),transparent_60%)]" />
+
+                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
+                    <motion.div {...fadeUp}>
+                        <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
+
+                        <h1 className="mt-6 text-5xl md:text-6xl font-semibold leading-[1.03] tracking-tight">
+                            Orden para atender mejor.
+                        </h1>
+
+                        <p className="mt-6 text-lg text-black/65 max-w-xl">
+                            Zanoo ayuda a centros de salud a gestionar <b>turnos</b>, <b>pacientes</b> e <b>información clínica</b> en
+                            un solo lugar. <span className="text-black">Simple para el equipo.</span> Claro para la gente.
+                        </p>
+
+                        <div className="mt-8 flex flex-wrap gap-3">
+                            <Button
+                                className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)]"
+                                onClick={() => scrollToId("contacto")}
+                            >
+                                Pedí demo
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
+                                onClick={() => scrollToId("app")}
+                            >
+                                Ver la app
+                            </Button>
+                        </div>
+
+                        <div className="mt-10 grid grid-cols-3 gap-3 max-w-xl">
+                            <MiniKpi label="Implementación" value="rápida" />
+                            <MiniKpi label="UX" value="sin fricción" />
+                            <MiniKpi label="Roadmap" value="IA-ready" />
+                        </div>
+
+                        <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-5 max-w-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                            <div className="text-sm font-semibold text-black">Lo que resuelve (sin vueltas)</div>
+                            <div className="mt-4 grid sm:grid-cols-2 gap-3">
+                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                    <div className="text-xs text-black/55">Turnos y sala</div>
+                                    <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
+                                </div>
+                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                    <div className="text-xs text-black/55">Pacientes</div>
+                                    <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
+                                </div>
+                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                    <div className="text-xs text-black/55">Equipo</div>
+                                    <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
+                                </div>
+                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                    <div className="text-xs text-black/55">Gestión</div>
+                                    <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
+                                </div>
+                            </div>
+                            <div className="mt-3 text-xs text-black/45">
+                                Nota: los indicadores son objetivos/benchmarks hasta cargar métricas reales.
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* HERO: CELU + SLIDER REAL */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.65, ease: "easeOut" }}
+                        className="relative"
+                    >
+                        <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
+                            {activeHeroShot.id === "inicio" ? (
+                                <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
+                            ) : (
+                                <ReplicaScreen title="Zanoo" subtitle="Mis médicos" mode="list" />
+                            )}
+                        </PhoneFrame>
+
+                        <div className="mt-6 max-w-[360px] mx-auto">
+                            <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <div className="text-sm font-semibold text-black">Capturas reales</div>
+                                        <div className="text-xs text-black/55">Inicio / Mis médicos</div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        {HERO_SHOTS.map((_, i) => (
+                                            <button
+                                                key={i}
+                                                type="button"
+                                                aria-label={`Ir a captura ${i + 1}`}
+                                                onClick={() => setHeroIndex(i)}
+                                                className={cn(
+                                                    "h-2.5 w-2.5 rounded-full border transition-all",
+                                                    heroIndex === i
+                                                        ? "bg-gradient-to-r from-cyan-500 to-purple-600 border-black/20"
+                                                        : "bg-black/10 border-black/10 hover:bg-black/15"
+                                                )}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setHeroIndex((p) => (p === 0 ? HERO_SHOTS.length - 1 : p - 1))}
+                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                    >
+                                        ◀
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setHeroIndex((p) => (p + 1) % HERO_SHOTS.length)}
+                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                    >
+                                        ▶
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 max-w-[360px] mx-auto">
+                            <GradientBorder>
+                                <div className="p-5">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="text-sm font-semibold text-black">En sala (señal)</div>
+                                            <div className="text-xs text-black/55">Actividad semanal</div>
+                                        </div>
+                                        <span className="text-xs text-black/55">Últimos 7 días</span>
+                                    </div>
+                                    <Sparkline data={spark} />
+                                    <div className="mt-2 text-xs text-black/55">Señal: sube a media mañana.</div>
+                                </div>
+                            </GradientBorder>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* PROBLEMA + FOTOS (reales) */}
+            <section id="producto" className="py-24">
+                <div className="max-w-6xl mx-auto px-6">
+                    <motion.div {...fadeUp}>
+                        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
+                            Lo que hoy te frena no es la falta de médicos.
+                            <br />
+                            Es el desorden.
+                        </h2>
+                        <p className="mt-4 text-black/60 max-w-3xl">
+                            En el día a día, el problema aparece como fricción: papeles, mensajes, filas y datos dispersos. Zanoo lo
+                            convierte en una operación clara.
+                        </p>
+                    </motion.div>
+
+                    <div className="mt-12 grid md:grid-cols-3 gap-8">
+                        {PROBLEM_TILES.map((t, idx) => (
+                            <motion.div key={t.title} {...fadeUp} transition={{ ...(fadeUp as any).transition, delay: 0.05 * idx }}>
+                                <PhotoTile title={t.title} desc={t.desc} tone={t.tone} imageSrc={t.imageSrc} />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* APP REAL */}
+            <section id="app" className="py-24">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-14 items-start">
+                        <motion.div {...fadeUp}>
+                            <SectionBadge>Dentro de la app (real)</SectionBadge>
+
+                            <div className="mt-4 flex items-center gap-3">
+                                <BrandLogo />
+                                <div className="text-xs text-black/45">Producto real · capturas reales</div>
+                            </div>
+
+                            <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
+                                Esto no es una promesa.
+                                <br />
+                                Es el producto.
+                            </h2>
+
+                            <p className="mt-4 text-black/60 max-w-xl">
+                                Acá se muestran capturas reales adentro de un celu. Si todavía no hay screenshot cargado, ves una réplica
+                                liviana.
+                            </p>
+
+                            <div className="mt-8 flex flex-wrap gap-2">
+                                {APP_SHOTS.map((s, i) => (
+                                    <button
+                                        key={s.id}
+                                        type="button"
+                                        onClick={() => setShotIndex(i)}
+                                        className={cn(
+                                            "px-4 py-2 rounded-full border text-sm transition-all",
+                                            shotIndex % APP_SHOTS.length === i
+                                                ? "border-black/15 bg-white text-black shadow-sm"
+                                                : "border-transparent bg-black/5 text-black/55 hover:bg-black/10"
+                                        )}
+                                    >
+                                        {s.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="mt-10 grid sm:grid-cols-2 gap-4">
+                                <FeatureCard title="Recepción" desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida." />
+                                <FeatureCard title="Consultorio" desc="Resumen del paciente + últimas consultas para no empezar de cero." />
+                                <FeatureCard title="Dirección" desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella." />
+                                <FeatureCard title="Notificaciones" desc="Recordatorios y coordinación para bajar ausentismo y fricción." />
+                            </div>
+
+
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-80px" }}
+                            transition={{ duration: 0.55, ease: "easeOut" }}
+                            className="relative"
+                        >
+                            <PhoneFrame label={activeShot.label} src={activeShot.src}>
+                                <ReplicaScreen
+                                    title="Zanoo"
+                                    subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
+                                    mode={activeShot.mode || "list"}
+                                />
+                            </PhoneFrame>
+
+                            <div className="mt-6 max-w-[360px] mx-auto">
+                                <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                                    <div className="text-xs text-black/55">Siguiente/Anterior</div>
+                                    <div className="mt-3 flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShotIndex((prev) => (prev === 0 ? APP_SHOTS.length - 1 : prev - 1))}
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                        >
+                                            ◀
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShotIndex((prev) => (prev + 1) % APP_SHOTS.length)}
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                        >
+                                            ▶
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    <div className="mt-20">
+                        <QuoteCarousel />
+                    </div>
+                </div>
+            </section>
+
+            {/* GRATIS + APLICAR */}
+            <section id="gratis" className="py-24">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-14 items-start">
+                        <motion.div {...fadeUp}>
+                            <SectionBadge>Para salitas y centros</SectionBadge>
+
+                            <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
+                                Zanoo es{" "}
+                                <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                                    GRATIS
+                                </span>
+                                <br />
+                                para las salitas.
+                            </h2>
+
+                            <p className="mt-4 text-black/60 max-w-xl">
+                                La misión es simple: ordenar la atención donde más se necesita. Si sos un centro con recursos limitados,
+                                aplicá y coordinamos un contacto inicial.
+                            </p>
+
+                            <div className="mt-8 grid sm:grid-cols-2 gap-4">
+                                <FeatureCard
+                                    title="Implementación cuidada"
+                                    desc="Arrancamos con lo esencial y dejamos el sistema andando con tu equipo."
+                                />
+                                <FeatureCard title="Soporte humano" desc="Acompañamiento en el arranque: recepción, consultorio y dirección." />
+                            </div>
+
+                            <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-6 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                                <div className="text-sm font-semibold text-black">Qué pedimos para arrancar</div>
+                                <ul className="mt-3 text-sm text-black/60 space-y-2 list-disc list-inside">
+                                    <li>Datos de contacto y ubicación del centro</li>
+                                    <li>Volumen aproximado (pacientes/mes, turnos/mes)</li>
+                                    <li>Cómo llevan hoy turnos e historia (papel / WhatsApp / cuaderno / sistema)</li>
+                                </ul>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-80px" }}
+                            transition={{ duration: 0.55, ease: "easeOut" }}
+                        >
+                            <div className="rounded-[32px] border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_30px_80px_-38px_rgba(0,0,0,0.65)] overflow-hidden">
+                                <div className="px-6 py-5 border-b border-black/10 bg-white/60 flex items-center gap-3">
+                                    <img
+                                        src="/brand/zanoo-logo-full.png"
+                                        alt="Zanoo"
+                                        className="h-8 object-contain"
+                                    />
+                                    <div>
+                                        <div className="text-sm font-semibold text-black">Aplicación para centros</div>
+                                        <div className="text-xs text-black/50">Formulario básico (contacto inicial)</div>
+                                    </div>
+                                </div>
+
+                                <div className="p-6">
+                                    {formSent ? (
+                                        <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
+                                            <div className="text-sm font-semibold text-black">Listo ✅</div>
+                                            <div className="mt-2 text-sm text-black/60">
+                                                Recibimos tu solicitud. Te contactamos para coordinar el primer paso.
+                                            </div>
+                                            <div className="mt-4">
+                                                <Button
+                                                    variant="outline"
+                                                    className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
+                                                    onClick={() => setFormSent(false)}
+                                                >
+                                                    Enviar otra
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <form
+                                            onSubmit={(e) => {
+                                                e.preventDefault();
+                                                setFormSent(true);
+                                                // auto reset suave para no “trabar” si el usuario quiere volver a completar
+                                                formTimer.current = window.setTimeout(() => setFormSent(false), 12000);
+                                            }}
+                                            className="grid sm:grid-cols-2 gap-4"
+                                        >
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Nombre del centro</label>
+                                                <input
+                                                    required
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: CAPS San Martín"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Provincia</label>
+                                                <input
+                                                    required
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Buenos Aires"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Localidad / Barrio</label>
+                                                <input
+                                                    required
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: San Justo"
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Dirección</label>
+                                                <input
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Calle y número"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Personas atendidas / mes</label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    min={0}
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: 1200"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Turnos / mes</label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    min={0}
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: 900"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Contacto</label>
+                                                <input
+                                                    required
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Nombre y rol"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">WhatsApp</label>
+                                                <input
+                                                    required
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: +54 11 1234-5678"
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Correo</label>
+                                                <input
+                                                    required
+                                                    type="email"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="contacto@centro.gob.ar"
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Comentario (opcional)</label>
+                                                <textarea
+                                                    rows={3}
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: hoy usamos planilla y WhatsApp; queremos ordenar turnos y sala."
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2 flex items-center justify-between gap-3 pt-2">
+                                                <div className="text-xs text-black/45">Esto inicia el contacto. Coordinamos y vemos si aplica.</div>
+                                                <Button
+                                                    type="submit"
+                                                    className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white"
+                                                >
+                                                    Enviar aplicación
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* DEMO (web) */}
+            <section id="demo" className="py-24">
+                <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
+                    <motion.div {...fadeUp}>
+                        <SectionBadge>Demo liviana (web)</SectionBadge>
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
+                            Una sola vista.
+                            <br />
+                            Todo lo{" "}
+                            <span className="relative inline-block align-baseline">
+                                <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 bg-clip-text text-transparent font-mono font-bold">
+                                    importante
+                                </span>
+                                <span className="absolute -inset-x-1 -bottom-1 h-[10px] bg-gradient-to-r from-cyan-400/20 via-blue-500/15 to-purple-600/20 blur-xl" />
+                            </span>
+                            .
+                        </h2>
+                        <p className="mt-4 text-black/60 max-w-xl">
+                            La misma plataforma sirve para Recepción, Consultorio y Dirección. Cambiás de rol sin cambiar de sistema.
+                        </p>
+
+                        <div className="mt-8 flex flex-wrap gap-2">
+                            {(["Recepción", "Consultorio", "Dirección"] as const).map((t) => (
+                                <button
+                                    key={t}
+                                    type="button"
+                                    onClick={() => setDemoTab(t)}
+                                    className={cn(
+                                        "px-4 py-2 rounded-full border text-sm transition-all",
+                                        demoTab === t
+                                            ? "border-black/15 bg-white text-black shadow-sm"
+                                            : "border-transparent bg-black/5 text-black/55 hover:bg-black/10"
+                                    )}
+                                >
+                                    {t}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="mt-10 grid grid-cols-2 gap-3 max-w-xl">
+                            <MiniKpi label="Baja fricción" value="1 vista" />
+                            <MiniKpi label="Operación" value="en tiempo real" />
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: 0.55, ease: "easeOut" }}
+                        className="relative"
+                    >
+                        <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-r from-cyan-400/12 via-blue-500/10 to-purple-600/12 blur-2xl" />
+
+                        <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_70px_-35px_rgba(0,0,0,0.55)] overflow-hidden">
+                            <div className="flex items-center justify-between px-5 py-4 border-b border-black/10 bg-white/60">
+                                <div className="flex items-center gap-2">
+                                    <LogoMark className="h-7 w-7 rounded-xl" />
+                                    <div className="text-sm font-semibold text-black">Zanoo</div>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs text-black/55">
+                                    <span className="px-2 py-1 rounded-full border border-black/10 bg-white/70">Equipo</span>
+                                    <span className="px-2 py-1 rounded-full border border-black/10 bg-white/70">Hoy</span>
+                                </div>
+                            </div>
+
+                            <div className="px-5 pt-4">
+                                <div className="flex gap-2 text-xs">
+                                    {(["Recepción", "Consultorio", "Dirección"] as const).map((t) => (
+                                        <button
+                                            key={t}
+                                            className={cn(
+                                                "px-3 py-2 rounded-full border transition-all",
+                                                demoTab === t
+                                                    ? "border-black/15 bg-white text-black shadow-sm"
+                                                    : "border-transparent bg-black/5 text-black/55 hover:bg-black/10"
+                                            )}
+                                            type="button"
+                                            onClick={() => setDemoTab(t)}
+                                        >
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="p-5">
+                                {demoTab === "Recepción" && (
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="text-sm font-semibold text-black">Próximos turnos</div>
+                                                <div className="text-xs text-black/55">Estado en tiempo real</div>
+                                            </div>
+                                            <div className="text-xs text-black/55">Consultorio 2</div>
+                                        </div>
+
+                                        <div className="mt-4 grid grid-cols-2 gap-3">
+                                            <MiniKpi label="En espera" value="7" />
+                                            <MiniKpi label="Tiempo prom." value="18 min" />
+                                        </div>
+
+                                        <div className="mt-4 space-y-2">
+                                            {[
+                                                { name: "María López", time: "08:20", status: "En espera" },
+                                                { name: "Juan Pérez", time: "08:40", status: "Llamado" },
+                                                { name: "Carlos Gómez", time: "09:00", status: "En espera" },
+                                                { name: "Ana Díaz", time: "09:20", status: "En espera" },
+                                            ].map((p) => (
+                                                <div
+                                                    key={p.name}
+                                                    className="flex items-center justify-between rounded-2xl border border-black/10 bg-white/70 px-4 py-3"
+                                                >
+                                                    <div>
+                                                        <div className="text-sm font-medium text-black">{p.name}</div>
+                                                        <div className="text-xs text-black/55">{p.time}</div>
+                                                    </div>
+                                                    <span
+                                                        className={cn(
+                                                            "text-xs px-2 py-1 rounded-full border",
+                                                            p.status === "Llamado"
+                                                                ? "border-blue-500/30 bg-blue-500/10 text-blue-700"
+                                                                : "border-cyan-500/25 bg-cyan-500/10 text-cyan-700"
+                                                        )}
+                                                    >
+                                                        {p.status}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="mt-4 rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-xs text-black/60">
+                                            Notificación: “Faltan 2 pacientes para tu turno”.
+                                        </div>
+                                    </div>
+                                )}
+
+                                {demoTab === "Consultorio" && (
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div className="rounded-2xl border border-black/10 bg-white/70 p-4">
+                                            <div className="text-sm font-semibold text-black">Resumen del paciente</div>
+                                            <div className="text-xs text-black/55">Juan Pérez</div>
+                                            <div className="mt-4 space-y-3">
+                                                {[
+                                                    ["Alergias", "Ninguna registrada"],
+                                                    ["Medicación", "Ibuprofeno (si dolor)"],
+                                                    ["Dx principal", "Control general"],
+                                                ].map(([t, v]) => (
+                                                    <div key={t} className="flex items-start justify-between gap-3">
+                                                        <div className="text-xs text-black/55">{t}</div>
+                                                        <div className="text-xs font-medium text-black text-right">{v}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="mt-4 flex gap-2">
+                                                <button className="text-xs px-3 py-2 rounded-full border border-black/10 bg-white hover:bg-black/5">
+                                                    Agregar nota
+                                                </button>
+                                                <button className="text-xs px-3 py-2 rounded-full border border-black/10 bg-white hover:bg-black/5">
+                                                    Recetar
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="rounded-2xl border border-black/10 bg-white/70 p-4">
+                                            <div className="text-sm font-semibold text-black">Últimas consultas</div>
+                                            <div className="mt-4 space-y-3">
+                                                {[
+                                                    ["Hace 2 semanas", "Dolor de garganta — reposo"],
+                                                    ["Hace 3 meses", "Chequeo anual"],
+                                                ].map(([d, t]) => (
+                                                    <div key={d} className="flex gap-3">
+                                                        <div className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600" />
+                                                        <div>
+                                                            <div className="text-xs text-black/55">{d}</div>
+                                                            <div className="text-xs font-medium text-black">{t}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {demoTab === "Dirección" && (
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="text-sm font-semibold text-black">Métricas</div>
+                                                <div className="text-xs text-black/55">Actividad semanal</div>
+                                            </div>
+                                            <div className="text-xs text-black/55">Últimos 7 días</div>
+                                        </div>
+
+                                        <div className="mt-4 grid grid-cols-3 gap-3">
+                                            <MiniKpi label="Asistencia" value="86%" />
+                                            <MiniKpi label="Ausentismo" value="14%" />
+                                            <MiniKpi label="Prom. espera" value="18 min" />
+                                        </div>
+
+                                        <div className="mt-4 rounded-2xl border border-black/10 bg-white/70 p-4">
+                                            <DirectorBars data={directorBars} />
+                                            <div className="mt-3 text-xs text-black/55">Señal: mayor carga jueves y viernes.</div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* IMPACTO */}
+            <section id="impacto" className="py-24">
+                <div className="max-w-5xl mx-auto px-6 text-center">
+                    <motion.div {...fadeUp}>
+                        <SectionBadge>Impacto</SectionBadge>
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
+                            Cuando el sistema está al límite, cada mejora cuenta.
+                        </h2>
+                        <p className="mt-4 text-black/60 max-w-3xl mx-auto">
+                            Zanoo busca reducir daños colaterales del desorden: esperas innecesarias, duplicaciones, historias
+                            incompletas y desgaste del equipo.
+                        </p>
+                    </motion.div>
+
+                    <div className="mt-12 grid md:grid-cols-3 gap-6">
+                        {[
+                            { t: "↓ Tiempos de espera", d: "Operación más previsible" },
+                            { t: "↓ Ausentismo", d: "Recordatorios y coordinación" },
+                            { t: "↑ Continuidad clínica", d: "Información lista" },
+                        ].map((k) => (
+                            <Card
+                                key={k.t}
+                                className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]"
+                            >
+                                <CardContent className="p-6">
+                                    <div className="text-xl font-semibold text-black">{k.t}</div>
+                                    <div className="mt-2 text-sm text-black/60">{k.d}</div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ROADMAP */}
+            <section id="roadmap" className="py-24">
+                <div className="max-w-6xl mx-auto px-6">
+                    <motion.div {...fadeUp}>
+                        <SectionBadge>Roadmap</SectionBadge>
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">De gestión a inteligencia sanitaria.</h2>
+                        <p className="mt-4 text-black/60 max-w-3xl">
+                            Arrancás por orden operativo. Después se habilita coordinación, predicción y capas de IA cuando el
+                            ecosistema ya tiene señal.
+                        </p>
+                    </motion.div>
+
+                    <div className="mt-12 relative">
+                        <div className="absolute left-0 right-0 top-5 h-[2px] bg-gradient-to-r from-cyan-500/40 via-blue-500/35 to-purple-600/35 rounded-full" />
+
+                        <div className="grid md:grid-cols-5 gap-6">
+                            {[
+                                { t: "Orden operativo", d: "Turnos · pacientes · historia" },
+                                { t: "Coordinación", d: "Derivaciones · recordatorios" },
+                                { t: "Predicción", d: "Demanda · ausentismo · alertas" },
+                                { t: "Ecosistema", d: "Red de instituciones" },
+                                { t: "IA aplicada", d: "Resumen · señales · asistentes" },
+                            ].map((s, i) => (
+                                <div key={s.t} className="relative">
+                                    <div className="absolute left-6 top-3 h-4 w-4 rounded-full bg-white border border-black/15 shadow-sm" />
+                                    <Card className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                                        <CardContent className="p-6">
+                                            <div className="text-xs text-black/50">Etapa {i + 1}</div>
+                                            <div className="mt-2 text-sm font-semibold text-black">{s.t}</div>
+                                            <div className="mt-2 text-sm text-black/60">{s.d}</div>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section id="contacto" className="py-28">
+                <div className="max-w-4xl mx-auto px-6 text-center">
+                    <motion.div {...fadeUp}>
+                        <SectionBadge>Contacto</SectionBadge>
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
+                            Si querés ver Zanoo en serio, te lo mostramos.
+                        </h2>
+                        <p className="mt-4 text-black/60">Una demo corta, enfocada en tu realidad operativa.</p>
+
+                        <div className="mt-8 flex items-center justify-center gap-3">
+                            <Button
+                                className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)]"
+                                onClick={() => scrollToId("demo")}
+                            >
+                                Coordinar demo
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
+                                onClick={() => {
+                                    // reemplazá por tu link real
+                                    window.open("https://wa.me/", "_blank");
+                                }}
+                            >
+                                Escribir por WhatsApp
+                            </Button>
+                        </div>
+                    </motion.div>
+
+                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (optimized)</div>
+                </div>
+            </section>
+        </div>
+    );
+}
