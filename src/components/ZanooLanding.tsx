@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -474,6 +474,29 @@ function DirectorBars({ data }: { data: Array<{ day: string; v: number }> }) {
                     <Bar dataKey="v" radius={[10, 10, 10, 10]} fill="rgba(59,130,246,0.55)" />
                 </BarChart>
             </ResponsiveContainer>
+        </div>
+    );
+}
+
+// -----------------------------
+// Parallax Image Component
+// -----------------------------
+function ParallaxImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"],
+    });
+    const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
+    return (
+        <div ref={ref} className={cn("overflow-hidden", className)}>
+            <motion.img
+                style={{ y }}
+                src={src}
+                alt={alt}
+                className="w-full h-full object-cover scale-110"
+            />
         </div>
     );
 }
