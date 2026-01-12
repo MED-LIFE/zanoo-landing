@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
-import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTheme } from "next-themes";
 import {
     ResponsiveContainer,
     BarChart,
@@ -15,6 +16,24 @@ import {
     LineChart,
     Line,
 } from "recharts";
+import {
+    ChevronRight,
+    Check,
+    Play,
+    Menu,
+    X,
+    ArrowRight,
+    Sparkles,
+    ShieldCheck,
+    BarChart3,
+    Calendar,
+    Users,
+    Activity,
+    Moon,
+    Sun,
+    Monitor,
+    Smartphone
+} from "lucide-react";
 
 /**
  * Zanoo Landing — Optimized Single File
@@ -148,34 +167,44 @@ function BrandLogo({ className = "" }: { className?: string }) {
     );
 }
 
-function MiniKpi({ label, value }: { label: string; value: string }) {
+
+
+// -----------------------------
+// Section Components
+// -----------------------------
+function SectionBadge({ children }: { children: React.ReactNode }) {
     return (
-        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-            <div className="text-xs text-black/55">{label}</div>
-            <div className="mt-1 text-sm font-semibold text-black">{value}</div>
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-700 dark:text-blue-300">
+            <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+            </span>
+            {children}
         </div>
     );
 }
 
-function SectionBadge({ children }: { children: React.ReactNode }) {
+function MiniKpi({ label, value }: { label: string; value: string }) {
     return (
-        <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs text-black/60">
-            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600" />
-            {children}
+        <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-white/40 dark:bg-white/5 px-4 py-3 backdrop-blur-sm">
+            <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">{label}</div>
+            <div className="text-lg font-bold text-foreground">{value}</div>
         </div>
     );
 }
 
 function FeatureCard({ title, desc }: { title: string; desc: string }) {
     return (
-        <Card className="relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+        <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-blue-500/10">
             <CardContent className="p-6">
                 <div className="flex items-start justify-between gap-3">
                     <div>
-                        <div className="text-sm font-semibold text-black">{title}</div>
-                        <div className="mt-2 text-sm text-black/60">{desc}</div>
+                        <div className="text-sm font-semibold text-foreground">{title}</div>
+                        <div className="mt-2 text-sm text-muted-foreground">{desc}</div>
                     </div>
-                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400/35 via-blue-500/30 to-purple-600/30 border border-black/10" />
+                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400/35 via-blue-500/30 to-purple-600/30 border border-black/10 dark:border-white/10 flex items-center justify-center">
+                        <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-300 opacity-70" />
+                    </div>
                 </div>
             </CardContent>
             <div className="pointer-events-none absolute -inset-24 bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-600/10 blur-3xl opacity-40" />
@@ -204,18 +233,18 @@ function PhotoTile({
     };
 
     return (
-        <Card className="group relative overflow-hidden rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+        <Card className="group relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-purple-500/10">
             <div className="relative h-44">
                 {showImage ? (
                     <>
                         <img
                             src={imageSrc}
                             alt={title}
-                            className="absolute inset-0 h-full w-full object-cover"
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                             loading="lazy"
                             onError={() => setImgError(true)}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/92 via-white/30 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/92 via-white/30 to-transparent dark:from-zinc-900/95 dark:via-zinc-900/50" />
                     </>
                 ) : (
                     <>
@@ -227,29 +256,137 @@ function PhotoTile({
                                     "radial-gradient(circle at 20% 10%, rgba(0,0,0,0.14) 0, rgba(0,0,0,0) 45%), radial-gradient(circle at 80% 35%, rgba(0,0,0,0.12) 0, rgba(0,0,0,0) 40%), radial-gradient(circle at 35% 90%, rgba(0,0,0,0.10) 0, rgba(0,0,0,0) 42%)",
                             }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-zinc-900 dark:via-zinc-900/40" />
                     </>
                 )}
             </div>
 
-            <CardContent className="p-6">
+            <CardContent className="p-6 relative z-10">
                 <div className="flex items-start justify-between gap-3">
                     <div>
-                        <h3 className="text-lg font-semibold text-black leading-snug">{title}</h3>
-                        <p className="mt-1 text-sm text-black/60">{desc}</p>
+                        <h3 className="text-lg font-semibold text-foreground leading-snug">{title}</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
                     </div>
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/35 to-purple-600/35 border border-black/10 shadow-sm" />
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/35 to-purple-600/35 border border-black/10 dark:border-white/10 shadow-sm" />
                 </div>
             </CardContent>
 
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                 <div className="absolute -inset-12 bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-600/10 blur-2xl" />
             </div>
         </Card>
     );
 }
-// ... continued in next step
 
+// -----------------------------
+// Theme Toggle
+// -----------------------------
+function ThemeToggle() {
+    const { theme, setTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null; // Avoid hydration mismatch
+
+    return (
+        <div className="flex items-center gap-1 rounded-full border border-black/5 dark:border-white/10 bg-black/5 dark:bg-white/5 p-1 backdrop-blur-sm">
+            <button
+                onClick={() => setTheme("light")}
+                className={cn(
+                    "rounded-full p-1.5 transition-all",
+                    theme === "light"
+                        ? "bg-white text-black shadow-sm"
+                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                )}
+                aria-label="Light Mode"
+            >
+                <Sun className="h-4 w-4" />
+            </button>
+            <button
+                onClick={() => setTheme("dark")}
+                className={cn(
+                    "rounded-full p-1.5 transition-all",
+                    theme === "dark"
+                        ? "bg-black text-white shadow-sm"
+                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                )}
+                aria-label="Dark Mode"
+            >
+                <Moon className="h-4 w-4" />
+            </button>
+            <button
+                onClick={() => setTheme("system")}
+                className={cn(
+                    "rounded-full p-1.5 transition-all",
+                    theme === "system"
+                        ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
+                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                )}
+                aria-label="System Mode"
+            >
+                <Monitor className="h-4 w-4" />
+            </button>
+        </div>
+    );
+}
+
+// -----------------------------
+// Advanced Tech Background
+// -----------------------------
+function AdvancedTechBackground() {
+    const { scrollY } = useScroll();
+
+    // Multiple parallax layers
+    const y1 = useTransform(scrollY, [0, 2000], [0, 600]);
+    const y2 = useTransform(scrollY, [0, 2000], [0, -400]);
+    const y3 = useTransform(scrollY, [0, 2000], [0, 200]);
+
+    // Opacity based on scroll to fade out at bottom if needed
+    const opacity = useTransform(scrollY, [0, 400], [0.6, 0.2]);
+
+    return (
+        <div className="fixed inset-0 z-[-1] overflow-hidden bg-white dark:bg-black transition-colors duration-500 pointer-events-none">
+            {/* Base Grid */}
+            <div
+                className="absolute inset-0 opacity-[0.4] dark:opacity-[0.1]"
+                style={{
+                    backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
+                    backgroundSize: "40px 40px",
+                    color: "var(--foreground)" // Adapts to theme
+                }}
+            />
+
+            {/* Moving Blobs Layers */}
+            <motion.div style={{ y: y1 }} className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-cyan-400/20 dark:bg-cyan-500/10 blur-[120px]" />
+            <motion.div style={{ y: y2 }} className="absolute top-[40%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/20 dark:bg-blue-600/10 blur-[120px]" />
+            <motion.div style={{ y: y3 }} className="absolute bottom-[-10%] right-[10%] h-[600px] w-[600px] rounded-full bg-purple-500/20 dark:bg-purple-600/10 blur-[120px]" />
+
+            {/* Floating Tech Elements (Decorations) */}
+            <div className="absolute top-20 left-10 opacity-20 dark:opacity-10">
+                <GridDecoration />
+            </div>
+            <div className="absolute bottom-40 right-10 opacity-20 dark:opacity-10 rotate-180">
+                <GridDecoration />
+            </div>
+        </div>
+    );
+}
+
+function GridDecoration() {
+    return (
+        <svg width="200" height="200" viewBox="0 0 200 200" fill="none" className="text-black dark:text-white">
+            <path d="M0 0H200V1H0V0Z" fill="currentColor" />
+            <path d="M0 20H200V21H0V20Z" fill="currentColor" />
+            <path d="M0 40H200V41H0V40Z" fill="currentColor" />
+            <path d="M0 0V200H1V0H0Z" fill="currentColor" />
+            <path d="M20 0V200H21V0H20Z" fill="currentColor" />
+            <path d="M40 0V200H41V0H40Z" fill="currentColor" />
+        </svg>
+    )
+}
 // -----------------------------
 // PhoneFrame + Replica
 // -----------------------------
@@ -604,10 +741,10 @@ function QuoteCarousel() {
                     transition={{ duration: 0.5 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center"
                 >
-                    <div className="text-3xl md:text-4xl font-bold text-black tracking-tight mb-4">
+                    <div className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-4">
                         {quotes[index].highlight}
                     </div>
-                    <p className="text-lg md:text-xl text-black/70 italic max-w-3xl leading-relaxed">
+                    <p className="text-lg md:text-xl text-muted-foreground italic max-w-3xl leading-relaxed">
                         {quotes[index].text}
                     </p>
                 </motion.div>
@@ -619,7 +756,7 @@ function QuoteCarousel() {
                         key={i}
                         className={cn(
                             "h-1.5 rounded-full transition-all duration-300",
-                            i === index ? "w-8 bg-black/40" : "w-1.5 bg-black/10"
+                            i === index ? "w-8 bg-foreground/40" : "w-1.5 bg-foreground/10"
                         )}
                     />
                 ))}
@@ -637,6 +774,7 @@ export default function ZanooLanding() {
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
     const [shotIndex, setShotIndex] = useState(0);
     const [heroIndex, setHeroIndex] = useState(0);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const [formSent, setFormSent] = useState(false);
     const formTimer = useRef<number | null>(null);
@@ -675,59 +813,90 @@ export default function ZanooLanding() {
     const activeHeroShot = HERO_SHOTS[heroIndex % HERO_SHOTS.length];
 
     return (
-        <div className="font-sans text-black selection:bg-black/10">
-            <TechBackground />
-            {/* EFFECTS */}
-            <div className="fixed inset-0 pointer-events-none" aria-hidden>
-                <GlowOrb className="-top-24 -left-24 h-[420px] w-[420px] bg-cyan-400/25" />
-                <GlowOrb className="top-40 -right-24 h-[520px] w-[520px] bg-purple-500/20" />
-                <GlowOrb className="bottom-[-140px] left-1/3 h-[520px] w-[520px] bg-blue-500/18" />
-            </div>
+        <div className="font-sans text-foreground selection:bg-primary/20">
+            <AdvancedTechBackground />
 
-            {/* HEADER */}
-            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl transition-all duration-300">
+            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 dark:border-white/5 bg-white/70 dark:bg-black/70 backdrop-blur-xl transition-all duration-300">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <button
                         type="button"
                         onClick={() => scrollToId("top")}
-                        className="flex items-center gap-2"
-                        aria-label="Ir al inicio"
+                        className="flex items-center gap-2 group"
                     >
-                        <img
-                            src="/brand/zanoo-logo-full.png"
-                            alt="Zanoo"
-                            className="h-8 w-auto object-contain"
-                        />
+                        {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
+                        <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/25">
+                            Z
+                        </div>
+                        <span className="text-xl font-bold tracking-tight text-foreground group-hover:opacity-80 transition-opacity">
+                            Zanoo
+                        </span>
                     </button>
 
-                    <nav className="hidden md:flex gap-8 text-sm text-black/60">
-                        <button className="hover:text-black" onClick={() => scrollToId("producto")}>
-                            Producto
-                        </button>
-                        <button className="hover:text-black" onClick={() => scrollToId("app")}>
-                            App real
-                        </button>
-                        <button className="hover:text-black" onClick={() => scrollToId("gratis")}>
-                            Gratis
-                        </button>
-                        <button className="hover:text-black" onClick={() => scrollToId("impacto")}>
-                            Impacto
-                        </button>
-                        <button className="hover:text-black" onClick={() => scrollToId("roadmap")}>
-                            Roadmap
-                        </button>
-                        <button className="hover:text-black" onClick={() => scrollToId("contacto")}>
-                            Contacto
-                        </button>
-                    </nav>
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex items-center gap-6">
+                        <div className="hidden md:flex gap-6 text-sm font-medium text-muted-foreground">
+                            {["Producto", "App real", "Gratis", "Impacto", "Roadmap"].map((item) => (
+                                <button
+                                    key={item}
+                                    className="hover:text-foreground transition-colors"
+                                    onClick={() => scrollToId(item.toLowerCase().replace(" ", ""))}
+                                >
+                                    {item}
+                                </button>
+                            ))}
+                        </div>
 
-                    <Button
-                        className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_14px_40px_-22px_rgba(59,130,246,0.9)]"
-                        onClick={() => scrollToId("contacto")}
-                    >
-                        Pedí demo
-                    </Button>
+                        <div className="h-4 w-[1px] bg-border mx-2" />
+
+                        <ThemeToggle />
+
+                        <Button
+                            className="rounded-full bg-foreground text-background hover:bg-foreground/90 font-medium px-6"
+                            onClick={() => scrollToId("contacto")}
+                        >
+                            Pedí demo
+                        </Button>
+                    </div>
+
+                    {/* Mobile Menu Toggle + Theme */}
+                    <div className="flex items-center gap-3 md:hidden">
+                        <ThemeToggle />
+                        <button
+                            type="button"
+                            className="p-2 text-foreground"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        >
+                            {mobileMenuOpen ? <X /> : <Menu />}
+                        </button>
+                    </div>
                 </div>
+
+                {/* Mobile Menu Dropdown */}
+                <AnimatePresence>
+                    {mobileMenuOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border md:hidden"
+                        >
+                            <div className="flex flex-col p-6 space-y-4">
+                                {["Producto", "App real", "Gratis", "Impacto", "Roadmap", "Contacto"].map((item) => (
+                                    <button
+                                        key={item}
+                                        className="text-lg font-medium text-foreground text-left py-2 border-b border-border/50 last:border-0"
+                                        onClick={() => {
+                                            scrollToId(item.toLowerCase().replace(" ", ""));
+                                            setMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        {item}
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </nav>
 
             {/* HERO */}
