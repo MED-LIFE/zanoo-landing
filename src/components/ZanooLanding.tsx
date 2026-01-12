@@ -292,14 +292,14 @@ function ThemeToggle() {
     if (!mounted) return null; // Avoid hydration mismatch
 
     return (
-        <div className="flex items-center gap-1 rounded-full border border-black/5 dark:border-white/10 bg-black/5 dark:bg-white/5 p-1 backdrop-blur-sm">
+        <div className="flex items-center gap-1 rounded-full border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/10 p-1 backdrop-blur-md shadow-sm">
             <button
                 onClick={() => setTheme("light")}
                 className={cn(
-                    "rounded-full p-1.5 transition-all",
+                    "rounded-full p-2 transition-all",
                     theme === "light"
-                        ? "bg-white text-black shadow-sm"
-                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                        ? "bg-white text-black shadow-md scale-105"
+                        : "text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white"
                 )}
                 aria-label="Light Mode"
             >
@@ -308,10 +308,10 @@ function ThemeToggle() {
             <button
                 onClick={() => setTheme("dark")}
                 className={cn(
-                    "rounded-full p-1.5 transition-all",
+                    "rounded-full p-2 transition-all",
                     theme === "dark"
-                        ? "bg-black text-white shadow-sm"
-                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                        ? "bg-black text-white shadow-md scale-105"
+                        : "text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white"
                 )}
                 aria-label="Dark Mode"
             >
@@ -320,10 +320,10 @@ function ThemeToggle() {
             <button
                 onClick={() => setTheme("system")}
                 className={cn(
-                    "rounded-full p-1.5 transition-all",
+                    "rounded-full p-2 transition-all",
                     theme === "system"
-                        ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
-                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                        ? "bg-zinc-200 dark:bg-zinc-700 text-black dark:text-white shadow-md scale-105"
+                        : "text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white"
                 )}
                 aria-label="System Mode"
             >
@@ -334,58 +334,130 @@ function ThemeToggle() {
 }
 
 // -----------------------------
-// Advanced Tech Background
+// Advanced Tech Background (Dynamic)
 // -----------------------------
 function AdvancedTechBackground() {
     const { scrollY } = useScroll();
 
-    // Multiple parallax layers
-    const y1 = useTransform(scrollY, [0, 2000], [0, 600]);
-    const y2 = useTransform(scrollY, [0, 2000], [0, -400]);
-    const y3 = useTransform(scrollY, [0, 2000], [0, 200]);
-
-    // Opacity based on scroll to fade out at bottom if needed
-    const opacity = useTransform(scrollY, [0, 400], [0.6, 0.2]);
+    // Parallax layers
+    const y1 = useTransform(scrollY, [0, 2000], [0, 500]);
+    const y2 = useTransform(scrollY, [0, 2000], [0, -300]);
+    const y3 = useTransform(scrollY, [0, 2000], [0, 150]);
 
     return (
         <div className="fixed inset-0 z-[-1] overflow-hidden bg-white dark:bg-black transition-colors duration-500 pointer-events-none">
-            {/* Base Grid */}
-            <div
-                className="absolute inset-0 opacity-[0.4] dark:opacity-[0.1]"
-                style={{
-                    backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
-                    backgroundSize: "40px 40px",
-                    color: "var(--foreground)" // Adapts to theme
-                }}
+            {/* Scanning Grid */}
+            <div className="absolute inset-0 opacity-[0.4] dark:opacity-[0.15]">
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        backgroundImage: "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+                        backgroundSize: "60px 60px",
+                        color: "var(--foreground)"
+                    }}
+                />
+                <motion.div
+                    animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.02, 1] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--background)_80%)]"
+                />
+            </div>
+
+            {/* Moving Blobs (Breathing) */}
+            <motion.div
+                style={{ y: y1 }}
+                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-cyan-400/20 dark:bg-cyan-500/10 blur-[120px]"
+            />
+            <motion.div
+                style={{ y: y2 }}
+                animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute top-[40%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/20 dark:bg-blue-600/10 blur-[120px]"
+            />
+            <motion.div
+                style={{ y: y3 }}
+                animate={{ scale: [1, 1.05, 1], opacity: [0.2, 0.3, 0.2] }}
+                transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                className="absolute bottom-[-10%] right-[10%] h-[600px] w-[600px] rounded-full bg-purple-500/20 dark:bg-purple-600/10 blur-[120px]"
             />
 
-            {/* Moving Blobs Layers */}
-            <motion.div style={{ y: y1 }} className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-cyan-400/20 dark:bg-cyan-500/10 blur-[120px]" />
-            <motion.div style={{ y: y2 }} className="absolute top-[40%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/20 dark:bg-blue-600/10 blur-[120px]" />
-            <motion.div style={{ y: y3 }} className="absolute bottom-[-10%] right-[10%] h-[600px] w-[600px] rounded-full bg-purple-500/20 dark:bg-purple-600/10 blur-[120px]" />
-
-            {/* Floating Tech Elements (Decorations) */}
-            <div className="absolute top-20 left-10 opacity-20 dark:opacity-10">
-                <GridDecoration />
-            </div>
-            <div className="absolute bottom-40 right-10 opacity-20 dark:opacity-10 rotate-180">
-                <GridDecoration />
-            </div>
+            {/* Scanning Line (Cyberpunk scan) */}
+            <motion.div
+                animate={{ top: ["0%", "100%"] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent dark:via-cyan-400/20 blur-sm"
+            />
         </div>
     );
 }
 
 function GridDecoration() {
     return (
-        <svg width="200" height="200" viewBox="0 0 200 200" fill="none" className="text-black dark:text-white">
+        <motion.svg
+            width="200" height="200" viewBox="0 0 200 200" fill="none"
+            className="text-black/20 dark:text-white/10"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        >
             <path d="M0 0H200V1H0V0Z" fill="currentColor" />
             <path d="M0 20H200V21H0V20Z" fill="currentColor" />
             <path d="M0 40H200V41H0V40Z" fill="currentColor" />
-            <path d="M0 0V200H1V0H0Z" fill="currentColor" />
-            <path d="M20 0V200H21V0H20Z" fill="currentColor" />
-            <path d="M40 0V200H41V0H40Z" fill="currentColor" />
-        </svg>
+            <circle cx="100" cy="100" r="2" fill="currentColor" />
+        </motion.svg>
     )
+}
+
+// -----------------------------
+// Tech Reveal (Exit Animation)
+// -----------------------------
+function TechReveal({
+    children,
+    direction = "up",
+    delay = 0,
+    className
+}: {
+    children: React.ReactNode;
+    direction?: "left" | "right" | "up" | "down";
+    delay?: number;
+    className?: string;
+}) {
+    const variants = {
+        hidden: {
+            opacity: 0,
+            y: direction === "up" ? 40 : direction === "down" ? -40 : 0,
+            x: direction === "left" ? -40 : direction === "right" ? 40 : 0,
+            scale: 0.95
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            scale: 1,
+            transition: { duration: 0.6, delay }
+        },
+        exit: {
+            opacity: 0,
+            y: -60, // Slides UP
+            x: -80, // Slides LEFT
+            scale: 0.9,
+            transition: { duration: 0.5 }
+        }
+    };
+
+    return (
+        <motion.div
+            initial="hidden"
+            whileInView="visible"
+            exit="exit" // Triggers inside AnimatePresence or manuel exit
+            viewport={{ once: false, margin: "-10%" }} // Re-triggers on scroll
+            variants={variants}
+            className={className}
+        >
+            {children}
+        </motion.div>
+    );
 }
 // -----------------------------
 // PhoneFrame + Replica
@@ -941,30 +1013,30 @@ export default function ZanooLanding() {
                         <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-5 max-w-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
                             <div className="text-sm font-semibold text-black">Lo que resuelve (sin vueltas)</div>
                             <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                                <ScrollReveal direction="left" delay={0.1}>
+                                <TechReveal direction="left" delay={0.1}>
                                     <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
                                         <div className="text-xs text-black/55">Turnos y sala</div>
                                         <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
                                     </div>
-                                </ScrollReveal>
-                                <ScrollReveal direction="right" delay={0.2}>
+                                </TechReveal>
+                                <TechReveal direction="right" delay={0.2}>
                                     <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
                                         <div className="text-xs text-black/55">Pacientes</div>
                                         <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
                                     </div>
-                                </ScrollReveal>
-                                <ScrollReveal direction="left" delay={0.3}>
+                                </TechReveal>
+                                <TechReveal direction="left" delay={0.3}>
                                     <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
                                         <div className="text-xs text-black/55">Equipo</div>
                                         <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
                                     </div>
-                                </ScrollReveal>
-                                <ScrollReveal direction="right" delay={0.4}>
+                                </TechReveal>
+                                <TechReveal direction="right" delay={0.4}>
                                     <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
                                         <div className="text-xs text-black/55">Gestión</div>
                                         <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
                                     </div>
-                                </ScrollReveal>
+                                </TechReveal>
                             </div>
                             <div className="mt-3 text-xs text-black/45">
                                 Nota: los indicadores son objetivos/benchmarks hasta cargar métricas reales.
@@ -1117,18 +1189,18 @@ export default function ZanooLanding() {
                             </div>
 
                             <div className="mt-10 grid sm:grid-cols-2 gap-4">
-                                <ScrollReveal direction="left" delay={0.1}>
+                                <TechReveal direction="left" delay={0.1}>
                                     <FeatureCard title="Recepción" desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida." />
-                                </ScrollReveal>
-                                <ScrollReveal direction="right" delay={0.2}>
+                                </TechReveal>
+                                <TechReveal direction="right" delay={0.2}>
                                     <FeatureCard title="Consultorio" desc="Resumen del paciente + últimas consultas para no empezar de cero." />
-                                </ScrollReveal>
-                                <ScrollReveal direction="left" delay={0.3}>
+                                </TechReveal>
+                                <TechReveal direction="left" delay={0.3}>
                                     <FeatureCard title="Dirección" desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella." />
-                                </ScrollReveal>
-                                <ScrollReveal direction="right" delay={0.4}>
+                                </TechReveal>
+                                <TechReveal direction="right" delay={0.4}>
                                     <FeatureCard title="Notificaciones" desc="Recordatorios y coordinación para bajar ausentismo y fricción." />
-                                </ScrollReveal>
+                                </TechReveal>
                             </div>
 
 
