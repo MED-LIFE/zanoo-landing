@@ -479,6 +479,70 @@ function DirectorBars({ data }: { data: Array<{ day: string; v: number }> }) {
 }
 
 // -----------------------------
+// Tech Background
+// -----------------------------
+function TechBackground() {
+    return (
+        <div className="fixed inset-0 z-[-1] overflow-hidden bg-white pointer-events-none">
+            {/* Grid Pattern */}
+            <div
+                className="absolute inset-0 opacity-[0.4]"
+                style={{
+                    backgroundImage: "radial-gradient(#cbd5e1 1px, transparent 1px)",
+                    backgroundSize: "32px 32px"
+                }}
+            />
+
+            {/* Soft Blobs */}
+            <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[100px]" />
+            <div className="absolute bottom-[20%] right-[-5%] h-[400px] w-[400px] rounded-full bg-purple-100/40 blur-[100px]" />
+            <div className="absolute top-[40%] left-[20%] h-[300px] w-[300px] rounded-full bg-cyan-100/30 blur-[80px]" />
+        </div>
+    );
+}
+
+// -----------------------------
+// Scroll Reveal (Directional)
+// -----------------------------
+function ScrollReveal({
+    children,
+    direction = "up",
+    delay = 0,
+    className
+}: {
+    children: React.ReactNode;
+    direction?: "left" | "right" | "up" | "down";
+    delay?: number;
+    className?: string;
+}) {
+    const variants = {
+        hidden: {
+            opacity: 0,
+            y: direction === "up" ? 40 : direction === "down" ? -40 : 0,
+            x: direction === "left" ? -40 : direction === "right" ? 40 : 0
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            transition: { duration: 0.6, delay }
+        }
+    };
+
+    return (
+        <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={variants}
+            className={className}
+        >
+            {children}
+        </motion.div>
+    );
+}
+
+// -----------------------------
 // Parallax Image Component
 // -----------------------------
 function ParallaxImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
@@ -611,7 +675,8 @@ export default function ZanooLanding() {
     const activeHeroShot = HERO_SHOTS[heroIndex % HERO_SHOTS.length];
 
     return (
-        <div className="min-h-screen bg-[#f6f7fb] text-black font-sans">
+        <div className="font-sans text-black selection:bg-black/10">
+            <TechBackground />
             {/* EFFECTS */}
             <div className="fixed inset-0 pointer-events-none" aria-hidden>
                 <GlowOrb className="-top-24 -left-24 h-[420px] w-[420px] bg-cyan-400/25" />
@@ -620,7 +685,7 @@ export default function ZanooLanding() {
             </div>
 
             {/* HEADER */}
-            <header className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/65 border-b border-black/10">
+            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl transition-all duration-300">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <button
                         type="button"
@@ -663,7 +728,7 @@ export default function ZanooLanding() {
                         Pedí demo
                     </Button>
                 </div>
-            </header>
+            </nav>
 
             {/* HERO */}
             <section id="top" className="pt-32 pb-24 relative overflow-hidden">
@@ -707,22 +772,30 @@ export default function ZanooLanding() {
                         <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-5 max-w-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
                             <div className="text-sm font-semibold text-black">Lo que resuelve (sin vueltas)</div>
                             <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                    <div className="text-xs text-black/55">Turnos y sala</div>
-                                    <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
-                                </div>
-                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                    <div className="text-xs text-black/55">Pacientes</div>
-                                    <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
-                                </div>
-                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                    <div className="text-xs text-black/55">Equipo</div>
-                                    <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
-                                </div>
-                                <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                    <div className="text-xs text-black/55">Gestión</div>
-                                    <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
-                                </div>
+                                <ScrollReveal direction="left" delay={0.1}>
+                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                        <div className="text-xs text-black/55">Turnos y sala</div>
+                                        <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
+                                    </div>
+                                </ScrollReveal>
+                                <ScrollReveal direction="right" delay={0.2}>
+                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                        <div className="text-xs text-black/55">Pacientes</div>
+                                        <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
+                                    </div>
+                                </ScrollReveal>
+                                <ScrollReveal direction="left" delay={0.3}>
+                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                        <div className="text-xs text-black/55">Equipo</div>
+                                        <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
+                                    </div>
+                                </ScrollReveal>
+                                <ScrollReveal direction="right" delay={0.4}>
+                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                        <div className="text-xs text-black/55">Gestión</div>
+                                        <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
+                                    </div>
+                                </ScrollReveal>
                             </div>
                             <div className="mt-3 text-xs text-black/45">
                                 Nota: los indicadores son objetivos/benchmarks hasta cargar métricas reales.
@@ -875,10 +948,18 @@ export default function ZanooLanding() {
                             </div>
 
                             <div className="mt-10 grid sm:grid-cols-2 gap-4">
-                                <FeatureCard title="Recepción" desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida." />
-                                <FeatureCard title="Consultorio" desc="Resumen del paciente + últimas consultas para no empezar de cero." />
-                                <FeatureCard title="Dirección" desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella." />
-                                <FeatureCard title="Notificaciones" desc="Recordatorios y coordinación para bajar ausentismo y fricción." />
+                                <ScrollReveal direction="left" delay={0.1}>
+                                    <FeatureCard title="Recepción" desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida." />
+                                </ScrollReveal>
+                                <ScrollReveal direction="right" delay={0.2}>
+                                    <FeatureCard title="Consultorio" desc="Resumen del paciente + últimas consultas para no empezar de cero." />
+                                </ScrollReveal>
+                                <ScrollReveal direction="left" delay={0.3}>
+                                    <FeatureCard title="Dirección" desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella." />
+                                </ScrollReveal>
+                                <ScrollReveal direction="right" delay={0.4}>
+                                    <FeatureCard title="Notificaciones" desc="Recordatorios y coordinación para bajar ausentismo y fricción." />
+                                </ScrollReveal>
                             </div>
 
 
