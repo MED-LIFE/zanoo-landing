@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
+import React, { useEffect, useMemo, useRef, useState, Suspense, isValidElement, cloneElement, ReactElement } from "react";
 import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,17 +22,16 @@ import {
     Play,
     Menu,
     X,
-    ArrowRight,
+    Star,
     Sparkles,
-    ShieldCheck,
-    BarChart3,
-    Calendar,
-    Users,
-    Activity,
-    Moon,
+    Zap,
+    Layout,
+    BarChart as BarChartIcon, // Renamed to avoid conflict with Recharts BarChart
+    Bell,
+    ArrowUpRight,
     Sun,
-    Monitor,
-    Smartphone
+    Moon,
+    Monitor
 } from "lucide-react";
 
 /**
@@ -146,23 +145,16 @@ function LogoMark({ className = "" }: { className?: string }) {
 }
 
 function BrandLogo({ className = "" }: { className?: string }) {
-    const [err, setErr] = useState(false);
-    if (err) {
-        return (
-            <div className={cn("flex items-center gap-2", className)}>
-                <LogoMark className="h-9 w-9 rounded-2xl" />
-                <span className="text-sm font-semibold">Zanoo</span>
-            </div>
-        );
-    }
-
+    // FORCE ORIGINAL LOGO AS REQUESTED
     return (
         <img
-            src="/brand/zanoo-logo.png"
+            src="/brand/zanoo-logo-full.png"
             alt="Zanoo"
-            className={cn("h-10 w-auto", className)}
-            loading="lazy"
-            onError={() => setErr(true)}
+            className={cn("h-8 w-auto object-contain", className)}
+        // Note: If the full logo has dark text, it might need inversion in dark mode.
+        // Assuming it's the colorful logo which looks good on both, or we might need a filter.
+        // Adding a safe filter for dark mode just in case it's black text.
+        // If it's the blue icon+text, it should be fine.
         />
     );
 }
@@ -193,22 +185,29 @@ function MiniKpi({ label, value }: { label: string; value: string }) {
     );
 }
 
-function FeatureCard({ title, desc }: { title: string; desc: string }) {
+function FeatureCard({ title, desc, icon, bg }: { title: string; desc: string; icon?: React.ReactNode; bg?: string }) {
+    // Default values if optional styling isn't provided
+    const background = bg || "from-slate-900/10 via-blue-900/10 to-cyan-900/10";
+    const IconComponent = icon || <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-300 opacity-70" />;
+
     return (
-        <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-blue-500/10">
-            <CardContent className="p-6">
-                <div className="flex items-start justify-between gap-3">
-                    <div>
-                        <div className="text-sm font-semibold text-foreground">{title}</div>
-                        <div className="mt-2 text-sm text-muted-foreground">{desc}</div>
+        <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+            <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-blue-500/10 transition-shadow hover:shadow-xl dark:hover:shadow-blue-500/20">
+                <CardContent className="p-6">
+                    <div className="flex items-start justify-between gap-3">
+                        <div className={cn("p-3 rounded-2xl bg-gradient-to-br text-white shadow-md", background)}>
+                            {/* If icon is a raw node (like <Zap />), render it. If it was passed as fallback, render it. */}
+                            {isValidElement(icon) ? cloneElement(icon as ReactElement<{ className?: string }>, { className: "h-5 w-5 text-white" }) : IconComponent}
+                        </div>
+                        <ArrowUpRight className="h-5 w-5 text-muted-foreground/50" />
                     </div>
-                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400/35 via-blue-500/30 to-purple-600/30 border border-black/10 dark:border-white/10 flex items-center justify-center">
-                        <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-300 opacity-70" />
-                    </div>
-                </div>
-            </CardContent>
-            <div className="pointer-events-none absolute -inset-24 bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-600/10 blur-3xl opacity-40" />
-        </Card>
+                    <h3 className="mt-4 text-xl font-bold leading-tight tracking-tight">{title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                        {desc}
+                    </p>
+                </CardContent>
+            </Card>
+        </motion.div>
     );
 }
 
@@ -347,19 +346,18 @@ function AdvancedTechBackground() {
     const y2 = useTransform(scrollY, [0, 2000], [0, -200]);
     const y3 = useTransform(scrollY, [0, 2000], [0, 100]);
 
+    const { theme } = useTheme();
+    // Force specific backgrounds based on theme to prevent "black in light mode" issues
+    const bgColor = theme === "light" ? "#ffffff" : undefined;
+
     return (
-        <div className="fixed inset-0 z-[-1] overflow-hidden bg-white dark:bg-black transition-colors duration-500 pointer-events-none">
+        <div
+            className="fixed inset-0 z-[-1] overflow-hidden bg-white dark:bg-black transition-colors duration-500 pointer-events-none"
+            style={{ backgroundColor: bgColor }} // HAMMER FIX for light mode
+        >
             {/* Subtle Dot Grid (Replaces Lines) */}
-            <div className="absolute inset-0 opacity-[0.3] dark:opacity-[0.1]">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
-                        backgroundSize: "24px 24px", // Finer grid
-                        color: "var(--foreground)"
-                    }}
-                />
-            </div>
+            {/* Subtle Dot Grid REMOVED based on user feedback */}
+            {/* <div className="absolute inset-0 opacity-[0.3] dark:opacity-[0.1]">...</div> */}
 
             {/* Aurora Blobs (Softer, less defined) */}
             <motion.div
@@ -887,12 +885,11 @@ export default function ZanooLanding() {
                         className="flex items-center gap-2 group"
                     >
                         {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
-                        <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/25">
-                            Z
-                        </div>
-                        <span className="text-xl font-bold tracking-tight text-foreground group-hover:opacity-80 transition-opacity">
+                        {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
+                        <BrandLogo className="h-9 w-auto object-contain dark:invert" />
+                        {/* <span className="text-xl font-bold tracking-tight text-foreground group-hover:opacity-80 transition-opacity">
                             Zanoo
-                        </span>
+                        </span> */}
                     </button>
 
                     {/* Desktop Menu */}
@@ -1144,8 +1141,12 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-            {/* APP REAL */}
-            <section id="app" className="py-24">
+            {/* APP REAL SECTION */}
+            <section id="app" className="py-24 relative">
+                {/* Section Specific Background Spotlights */}
+                <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
+
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid lg:grid-cols-2 gap-14 items-start">
                         <motion.div {...fadeUp}>
@@ -1187,16 +1188,36 @@ export default function ZanooLanding() {
 
                             <div className="mt-10 grid sm:grid-cols-2 gap-4">
                                 <TechReveal direction="left" delay={0.1}>
-                                    <FeatureCard title="Recepción" desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida." />
+                                    <FeatureCard
+                                        title="Recepción"
+                                        desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida."
+                                        icon={<Zap />}
+                                        bg="from-cyan-400 via-blue-500 to-indigo-600"
+                                    />
                                 </TechReveal>
                                 <TechReveal direction="right" delay={0.2}>
-                                    <FeatureCard title="Consultorio" desc="Resumen del paciente + últimas consultas para no empezar de cero." />
+                                    <FeatureCard
+                                        title="Consultorio"
+                                        desc="Resumen del paciente + últimas consultas para no empezar de cero."
+                                        icon={<Layout />}
+                                        bg="from-purple-400 via-fuchsia-500 to-pink-600"
+                                    />
                                 </TechReveal>
                                 <TechReveal direction="left" delay={0.3}>
-                                    <FeatureCard title="Dirección" desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella." />
+                                    <FeatureCard
+                                        title="Dirección"
+                                        desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella."
+                                        icon={<BarChart />}
+                                        bg="from-amber-400 via-orange-500 to-red-600"
+                                    />
                                 </TechReveal>
                                 <TechReveal direction="right" delay={0.4}>
-                                    <FeatureCard title="Notificaciones" desc="Recordatorios y coordinación para bajar ausentismo y fricción." />
+                                    <FeatureCard
+                                        title="Notificaciones"
+                                        desc="Recordatorios y coordinación para bajar ausentismo y fricción."
+                                        icon={<Bell />}
+                                        bg="from-emerald-400 via-teal-500 to-cyan-600"
+                                    />
                                 </TechReveal>
                             </div>
 
