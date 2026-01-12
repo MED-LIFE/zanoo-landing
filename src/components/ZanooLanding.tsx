@@ -336,58 +336,49 @@ function ThemeToggle() {
 // -----------------------------
 // Advanced Tech Background (Dynamic)
 // -----------------------------
+// -----------------------------
+// Advanced Tech Background (Dynamic - REDUCED/SUBTLE)
+// -----------------------------
 function AdvancedTechBackground() {
     const { scrollY } = useScroll();
 
-    // Parallax layers
-    const y1 = useTransform(scrollY, [0, 2000], [0, 500]);
-    const y2 = useTransform(scrollY, [0, 2000], [0, -300]);
-    const y3 = useTransform(scrollY, [0, 2000], [0, 150]);
+    // Parallax layers (slower, more subtle movement)
+    const y1 = useTransform(scrollY, [0, 2000], [0, 300]);
+    const y2 = useTransform(scrollY, [0, 2000], [0, -200]);
+    const y3 = useTransform(scrollY, [0, 2000], [0, 100]);
 
     return (
         <div className="fixed inset-0 z-[-1] overflow-hidden bg-white dark:bg-black transition-colors duration-500 pointer-events-none">
-            {/* Scanning Grid */}
-            <div className="absolute inset-0 opacity-[0.4] dark:opacity-[0.15]">
+            {/* Subtle Dot Grid (Replaces Lines) */}
+            <div className="absolute inset-0 opacity-[0.3] dark:opacity-[0.1]">
                 <div
                     className="absolute inset-0"
                     style={{
-                        backgroundImage: "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-                        backgroundSize: "60px 60px",
+                        backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
+                        backgroundSize: "24px 24px", // Finer grid
                         color: "var(--foreground)"
                     }}
                 />
-                <motion.div
-                    animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.02, 1] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--background)_80%)]"
-                />
             </div>
 
-            {/* Moving Blobs (Breathing) */}
+            {/* Aurora Blobs (Softer, less defined) */}
             <motion.div
                 style={{ y: y1 }}
-                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-cyan-400/20 dark:bg-cyan-500/10 blur-[120px]"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.4, 0.3] }}
+                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-cyan-400/10 dark:bg-cyan-500/5 blur-[120px]"
             />
             <motion.div
                 style={{ y: y2 }}
-                animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute top-[40%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/20 dark:bg-blue-600/10 blur-[120px]"
+                animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
+                transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                className="absolute top-[30%] left-[-20%] h-[700px] w-[700px] rounded-full bg-blue-500/10 dark:bg-blue-600/5 blur-[120px]"
             />
             <motion.div
                 style={{ y: y3 }}
-                animate={{ scale: [1, 1.05, 1], opacity: [0.2, 0.3, 0.2] }}
-                transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                className="absolute bottom-[-10%] right-[10%] h-[600px] w-[600px] rounded-full bg-purple-500/20 dark:bg-purple-600/10 blur-[120px]"
-            />
-
-            {/* Scanning Line (Cyberpunk scan) */}
-            <motion.div
-                animate={{ top: ["0%", "100%"] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent dark:via-cyan-400/20 blur-sm"
+                animate={{ scale: [1, 1.05, 1], opacity: [0.25, 0.35, 0.25] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+                className="absolute bottom-[-20%] right-[10%] h-[800px] w-[800px] rounded-full bg-purple-500/10 dark:bg-purple-600/5 blur-[120px]"
             />
         </div>
     );
@@ -976,73 +967,79 @@ export default function ZanooLanding() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_55%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.10),transparent_60%)]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
-                    <motion.div {...fadeUp}>
-                        <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
+                    {/* Hero Text */}
+                    <div className="space-y-8">
+                        <TechReveal direction="up" delay={0.1}>
+                            <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
+                        </TechReveal>
 
-                        <h1 className="mt-6 text-5xl md:text-6xl font-semibold leading-[1.03] tracking-tight">
-                            Orden para atender mejor.
-                        </h1>
+                        <TechReveal direction="up" delay={0.2}>
+                            <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+                                Orden para atender <br />
+                                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                                    mejor.
+                                </span>
+                            </h1>
+                        </TechReveal>
 
-                        <p className="mt-6 text-lg text-black/65 max-w-xl">
-                            Zanoo ayuda a centros de salud a gestionar <b>turnos</b>, <b>pacientes</b> e <b>información clínica</b> en
-                            un solo lugar. <span className="text-black">Simple para el equipo.</span> Claro para la gente.
-                        </p>
+                        <TechReveal direction="up" delay={0.3}>
+                            <p className="max-w-xl text-lg text-muted-foreground leading-relaxed">
+                                Zanoo ayuda a centros de salud a gestionar <strong>turnos, pacientes e información clínica</strong> en un solo lugar.
+                                <br className="hidden sm:block" />
+                                <span className="text-foreground font-medium">Simple para el equipo. Claro para la gente.</span>
+                            </p>
+                        </TechReveal>
 
-                        <div className="mt-8 flex flex-wrap gap-3">
-                            <Button
-                                className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)]"
-                                onClick={() => scrollToId("contacto")}
-                            >
-                                Pedí demo
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
-                                onClick={() => scrollToId("app")}
-                            >
-                                Ver la app
-                            </Button>
-                        </div>
-
-                        <div className="mt-10 grid grid-cols-3 gap-3 max-w-xl">
-                            <MiniKpi label="Implementación" value="rápida" />
-                            <MiniKpi label="UX" value="sin fricción" />
-                            <MiniKpi label="Roadmap" value="IA-ready" />
-                        </div>
-
-                        <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-5 max-w-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
-                            <div className="text-sm font-semibold text-black">Lo que resuelve (sin vueltas)</div>
-                            <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                                <TechReveal direction="left" delay={0.1}>
-                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                        <div className="text-xs text-black/55">Turnos y sala</div>
-                                        <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
-                                    </div>
-                                </TechReveal>
-                                <TechReveal direction="right" delay={0.2}>
-                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                        <div className="text-xs text-black/55">Pacientes</div>
-                                        <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
-                                    </div>
-                                </TechReveal>
-                                <TechReveal direction="left" delay={0.3}>
-                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                        <div className="text-xs text-black/55">Equipo</div>
-                                        <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
-                                    </div>
-                                </TechReveal>
-                                <TechReveal direction="right" delay={0.4}>
-                                    <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                        <div className="text-xs text-black/55">Gestión</div>
-                                        <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
-                                    </div>
-                                </TechReveal>
+                        <TechReveal direction="up" delay={0.4}>
+                            <div className="flex flex-wrap gap-4">
+                                <Button size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-12 text-base">
+                                    Pedí demo
+                                </Button>
+                                <Button variant="outline" size="lg" className="rounded-full border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 h-12 px-8 text-base">
+                                    Ver la app
+                                </Button>
                             </div>
-                            <div className="mt-3 text-xs text-black/45">
-                                Nota: los indicadores son objetivos/benchmarks hasta cargar métricas reales.
+
+                            <div className="mt-10 grid grid-cols-3 gap-3 max-w-xl">
+                                <MiniKpi label="Implementación" value="rápida" />
+                                <MiniKpi label="UX" value="sin fricción" />
+                                <MiniKpi label="Roadmap" value="IA-ready" />
                             </div>
-                        </div>
-                    </motion.div>
+
+                            <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-5 max-w-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                                <div className="text-sm font-semibold text-black">Lo que resuelve (sin vueltas)</div>
+                                <div className="mt-4 grid sm:grid-cols-2 gap-3">
+                                    <TechReveal direction="left" delay={0.1}>
+                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                            <div className="text-xs text-black/55">Turnos y sala</div>
+                                            <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
+                                        </div>
+                                    </TechReveal>
+                                    <TechReveal direction="right" delay={0.2}>
+                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                            <div className="text-xs text-black/55">Pacientes</div>
+                                            <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
+                                        </div>
+                                    </TechReveal>
+                                    <TechReveal direction="left" delay={0.3}>
+                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                            <div className="text-xs text-black/55">Equipo</div>
+                                            <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
+                                        </div>
+                                    </TechReveal>
+                                    <TechReveal direction="right" delay={0.4}>
+                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
+                                            <div className="text-xs text-black/55">Gestión</div>
+                                            <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
+                                        </div>
+                                    </TechReveal>
+                                </div>
+                                <div className="mt-3 text-xs text-black/45">
+                                    Nota: los indicadores son objetivos/benchmarks hasta cargar métricas reales.
+                                </div>
+                            </div>
+                        </TechReveal>
+                    </div>
 
                     {/* HERO: CELU + SLIDER REAL */}
                     <motion.div
