@@ -145,17 +145,21 @@ function LogoMark({ className = "" }: { className?: string }) {
 }
 
 function BrandLogo({ className = "" }: { className?: string }) {
-    // FORCE ORIGINAL LOGO AS REQUESTED
     return (
-        <img
-            src="/brand/zanoo-logo-full.png"
-            alt="Zanoo"
-            className={cn("h-8 w-auto object-contain", className)}
-        // Note: If the full logo has dark text, it might need inversion in dark mode.
-        // Assuming it's the colorful logo which looks good on both, or we might need a filter.
-        // Adding a safe filter for dark mode just in case it's black text.
-        // If it's the blue icon+text, it should be fine.
-        />
+        <div className={cn("relative", className)}>
+            {/* Light Mode Logo */}
+            <img
+                src="/brand/zanoo-logo-full.png"
+                alt="Zanoo"
+                className="h-full w-auto object-contain dark:hidden"
+            />
+            {/* Dark Mode Logo */}
+            <img
+                src="/brand/zanoo-logo-white.png"
+                alt="Zanoo"
+                className="h-full w-auto object-contain hidden dark:block"
+            />
+        </div>
     );
 }
 
@@ -179,8 +183,8 @@ function SectionBadge({ children }: { children: React.ReactNode }) {
 function MiniKpi({ label, value }: { label: string; value: string }) {
     return (
         <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-white/40 dark:bg-white/5 px-4 py-3 backdrop-blur-sm">
-            <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">{label}</div>
-            <div className="text-lg font-bold text-foreground">{value}</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium truncate">{label}</div>
+            <div className="text-lg font-bold text-foreground whitespace-nowrap">{value}</div>
         </div>
     );
 }
@@ -191,9 +195,9 @@ function FeatureCard({ title, desc, icon, bg }: { title: string; desc: string; i
     const IconComponent = icon || <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-300 opacity-70" />;
 
     return (
-        <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
+        <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }} className="will-change-transform">
             {/* MOBILE PERF: backdrop-blur-none on mobile, xl on md+ */}
-            <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-none md:backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-blue-500/10 transition-shadow hover:shadow-xl dark:hover:shadow-blue-500/20">
+            <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-none md:backdrop-blur-xl shadow-lg dark:shadow-blue-500/10 transition-shadow hover:shadow-xl dark:hover:shadow-blue-500/20">
                 <CardContent className="p-6">
                     <div className="flex items-start justify-between gap-3">
                         <div className={cn("p-3 rounded-2xl bg-gradient-to-br text-white shadow-md", background)}>
@@ -1160,14 +1164,14 @@ export default function ZanooLanding() {
                                     <button
                                         type="button"
                                         onClick={() => setHeroIndex((p) => (p === 0 ? HERO_SHOTS.length - 1 : p - 1))}
-                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20 transition-colors"
                                     >
                                         ◀
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setHeroIndex((p) => (p + 1) % HERO_SHOTS.length)}
-                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20 transition-colors"
                                     >
                                         ▶
                                     </button>
@@ -1201,12 +1205,20 @@ export default function ZanooLanding() {
                         <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
                             Lo que hoy te frena no es la falta de médicos.
                             <br />
-                            Es el desorden.
+                            Es el <span className="text-blue-600 dark:text-blue-400">desorden</span>.
                         </h2>
-                        <p className="mt-4 text-black/60 max-w-3xl">
-                            En el día a día, el problema aparece como fricción: papeles, mensajes, filas y datos dispersos. Zanoo lo
-                            convierte en una operación clara.
-                        </p>
+                        <motion.p
+                            className="mt-4 text-black/60 dark:text-white/60 max-w-3xl text-lg"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                        >
+                            En el día a día, el problema aparece como fricción: papeles, mensajes y filas.
+                            <br />
+                            <span className="block mt-4 font-semibold text-foreground flex items-center gap-2">
+                                Mirá cómo lo resolvemos <ArrowUpRight className="rotate-180 h-4 w-4" />
+                            </span>
+                        </motion.p>
                     </motion.div>
 
                     <div className="mt-12 grid md:grid-cols-3 gap-8">
@@ -1402,6 +1414,7 @@ export default function ZanooLanding() {
                         >
                             <div className="rounded-[32px] border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_30px_80px_-38px_rgba(0,0,0,0.65)] overflow-hidden">
                                 <div className="px-6 py-5 border-b border-black/10 bg-white/60 flex items-center gap-3">
+                                    {/* Logo for White Card - Always Full Color */}
                                     <img
                                         src="/brand/zanoo-logo-full.png"
                                         alt="Zanoo"
@@ -1561,7 +1574,7 @@ export default function ZanooLanding() {
                             Una sola vista.
                             <br />
                             Todo lo{" "}
-                            <span className="relative inline-block align-baseline">
+                            <span className="relative inline-block align-baseline pb-1">
                                 <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 bg-clip-text text-transparent font-mono font-bold">
                                     importante
                                 </span>
@@ -1609,7 +1622,11 @@ export default function ZanooLanding() {
                         <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_70px_-35px_rgba(0,0,0,0.55)] overflow-hidden">
                             <div className="flex items-center justify-between px-5 py-4 border-b border-black/10 bg-white/60">
                                 <div className="flex items-center gap-2">
-                                    <BrandLogo className="h-7 w-auto object-contain" />
+                                    <img
+                                        src="/brand/zanoo-logo-full.png"
+                                        alt="Zanoo"
+                                        className="h-7 w-auto object-contain"
+                                    />
                                     <div className="text-sm font-semibold text-black">Zanoo</div>
                                 </div>
                                 <div className="flex items-center gap-2 text-xs text-black/55">
@@ -1762,10 +1779,10 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
                 </div>
-            </section>
+            </section >
 
             {/* IMPACTO */}
-            <section id="impacto" className="py-24">
+            < section id="impacto" className="py-24" >
                 <div className="max-w-5xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Impacto</SectionBadge>
@@ -1796,10 +1813,10 @@ export default function ZanooLanding() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* ROADMAP */}
-            <section id="roadmap" className="py-24">
+            < section id="roadmap" className="py-24" >
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Roadmap</SectionBadge>
@@ -1835,15 +1852,19 @@ export default function ZanooLanding() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* CTA */}
-            <section id="contacto" className="py-28">
+            < section id="contacto" className="py-28" >
                 <div className="max-w-4xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Contacto</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                            Si querés ver Zanoo en serio, te lo mostramos.
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2">
+                            <span>Si querés ver</span>
+                            <span className="inline-flex items-center justify-center align-middle mx-3 bg-white/10 rounded-xl px-2 py-1">
+                                <BrandLogo className="h-10 w-auto" />
+                            </span>
+                            <span>en serio, te lo mostramos.</span>
                         </h2>
                         <p className="mt-4 text-black/60">Una demo corta, enfocada en tu realidad operativa.</p>
 
@@ -1869,7 +1890,7 @@ export default function ZanooLanding() {
 
                     <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (optimized)</div>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 }
