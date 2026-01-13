@@ -146,14 +146,14 @@ function LogoMark({ className = "" }: { className?: string }) {
 
 function BrandLogo({ className = "" }: { className?: string }) {
     return (
-        <div className={cn("relative", className)}>
+        <div className={cn("relative inline-block", className)}>
             {/* Light Mode Logo */}
             <img
                 src="/brand/zanoo-logo-full.png"
                 alt="Zanoo"
                 className="h-full w-auto object-contain dark:hidden"
             />
-            {/* Dark Mode Logo */}
+            {/* Dark Mode Logo - Force block to ensure visibility */}
             <img
                 src="/brand/zanoo-logo-white.png"
                 alt="Zanoo"
@@ -1215,8 +1215,8 @@ export default function ZanooLanding() {
                         >
                             En el día a día, el problema aparece como fricción: papeles, mensajes y filas.
                             <br />
-                            <span className="block mt-4 font-semibold text-foreground flex items-center gap-2">
-                                Mirá cómo lo resolvemos <ArrowUpRight className="rotate-180 h-4 w-4" />
+                            <span className="block mt-4 font-semibold text-foreground flex items-center gap-3">
+                                Mirá cómo lo resolvemos <ArrowUpRight className="rotate-180 h-4 w-4 text-blue-600 dark:text-blue-400" />
                             </span>
                         </motion.p>
                     </motion.div>
@@ -1243,8 +1243,8 @@ export default function ZanooLanding() {
                             <SectionBadge>Dentro de la app (real)</SectionBadge>
 
                             <div className="mt-4 flex items-center gap-3">
-                                <BrandLogo />
-                                <div className="text-xs text-black/45">Producto real · capturas reales</div>
+                                <BrandLogo className="h-8 w-auto" />
+                                <div className="text-xs text-black/45 dark:text-white/50">Producto real · capturas reales</div>
                             </div>
 
                             <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
@@ -1859,10 +1859,11 @@ export default function ZanooLanding() {
                 <div className="max-w-4xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Contacto</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2">
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
-                            <span className="inline-flex items-center justify-center align-middle mx-3 bg-white/10 rounded-xl px-2 py-1">
-                                <BrandLogo className="h-10 w-auto" />
+                            <span className="inline-flex items-center justify-center align-middle mx-2 bg-black/5 dark:bg-white/10 rounded-xl px-3 py-1.5 translate-y-[2px]">
+                                <img src="/brand/zanoo-logo-full.png" alt="Zanoo" className="h-6 w-auto object-contain dark:hidden" />
+                                <img src="/brand/zanoo-logo-white.png" alt="Zanoo" className="h-6 w-auto object-contain hidden dark:block" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
