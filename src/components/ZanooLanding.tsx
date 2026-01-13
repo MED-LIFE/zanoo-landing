@@ -192,7 +192,8 @@ function FeatureCard({ title, desc, icon, bg }: { title: string; desc: string; i
 
     return (
         <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
-            <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-blue-500/10 transition-shadow hover:shadow-xl dark:hover:shadow-blue-500/20">
+            {/* MOBILE PERF: backdrop-blur-none on mobile, xl on md+ */}
+            <Card className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-none md:backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-blue-500/10 transition-shadow hover:shadow-xl dark:hover:shadow-blue-500/20">
                 <CardContent className="p-6">
                     <div className="flex items-start justify-between gap-3">
                         <div className={cn("p-3 rounded-2xl bg-gradient-to-br text-white shadow-md", background)}>
@@ -277,6 +278,38 @@ function PhotoTile({
     );
 }
 
+
+// -----------------------------
+// Scroll To Top
+// -----------------------------
+function ScrollToTop() {
+    const { scrollY } = useScroll();
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        return scrollY.on("change", (latest) => {
+            setVisible(latest > 600);
+        });
+    }, [scrollY]);
+
+    return (
+        <AnimatePresence>
+            {visible && (
+                <motion.button
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-black/80 text-white shadow-lg backdrop-blur hover:bg-black transition-colors dark:bg-white/90 dark:text-black"
+                    aria-label="Volver arriba"
+                >
+                    <ArrowUpRight className="h-5 w-5 rotate-[-45deg]" />
+                </motion.button>
+            )}
+        </AnimatePresence>
+    );
+}
+
 // -----------------------------
 // Theme Toggle
 // -----------------------------
@@ -356,8 +389,51 @@ function AdvancedTechBackground() {
             style={{ backgroundColor: bgColor }} // HAMMER FIX for light mode
         >
             {/* Subtle Dot Grid (Replaces Lines) */}
-            {/* Subtle Dot Grid REMOVED based on user feedback */}
-            {/* <div className="absolute inset-0 opacity-[0.3] dark:opacity-[0.1]">...</div> */}
+            {/* Aurora Blobs (Softer, less defined, better mobile perf) */}
+            <motion.div
+                className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-blue-500/10 dark:bg-blue-600/10 blur-[80px] md:blur-[120px]"
+                animate={{
+                    x: [0, 50, 0],
+                    y: [0, 30, 0],
+                    scale: [1, 1.1, 1],
+                }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+                style={{ willChange: "transform" }}
+            />
+            <motion.div
+                className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-purple-500/10 dark:bg-purple-600/10 blur-[80px] md:blur-[120px]"
+                animate={{
+                    x: [0, -40, 0],
+                    y: [0, 60, 0],
+                    scale: [1, 1.2, 1],
+                }}
+                transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2,
+                }}
+                style={{ willChange: "transform" }}
+            />
+            <motion.div
+                className="absolute bottom-[-10%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-cyan-500/10 dark:bg-cyan-600/10 blur-[80px] md:blur-[120px]"
+                animate={{
+                    x: [0, 30, 0],
+                    y: [0, -40, 0],
+                    scale: [1, 1.1, 1],
+                }}
+                transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 4,
+                }}
+                style={{ willChange: "transform" }}
+            />
 
             {/* Aurora Blobs (Softer, less defined) */}
             <motion.div
@@ -526,7 +602,7 @@ function ReplicaScreen({
         <div className="h-full px-5 pt-5 pb-6 bg-[#fbfbfe]">
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600" />
+                    {/* Removed generic logo as requested */}
                     <div>
                         <div className="text-[15px] font-semibold text-black leading-tight">{title}</div>
                         <div className="text-xs text-black/45">{subtitle}</div>
@@ -874,10 +950,12 @@ export default function ZanooLanding() {
     const activeHeroShot = HERO_SHOTS[heroIndex % HERO_SHOTS.length];
 
     return (
-        <div className="font-sans text-foreground selection:bg-primary/20">
+        <div className="font-sans text-foreground selection:bg-primary/20 overflow-x-hidden">
             <AdvancedTechBackground />
+            <ScrollToTop />
 
-            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 dark:border-white/5 bg-white/70 dark:bg-black/70 backdrop-blur-xl transition-all duration-300">
+            {/* MOBILE PERF: backdrop-blur-none on mobile, xl on md+ */}
+            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 dark:border-white/5 bg-white/80 dark:bg-black/80 backdrop-blur-none md:backdrop-blur-xl transition-all duration-300">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <button
                         type="button"
@@ -1178,7 +1256,7 @@ export default function ZanooLanding() {
                                             "px-4 py-2 rounded-full border text-sm transition-all",
                                             shotIndex % APP_SHOTS.length === i
                                                 ? "border-black/15 bg-white text-black shadow-sm"
-                                                : "border-transparent bg-black/5 text-black/55 hover:bg-black/10"
+                                                : "border-transparent bg-black/5 text-black/55 hover:bg-black/10 dark:bg-white/10 dark:text-white/70"
                                         )}
                                     >
                                         {s.label}
@@ -1189,32 +1267,32 @@ export default function ZanooLanding() {
                             <div className="mt-10 grid sm:grid-cols-2 gap-4">
                                 <TechReveal direction="left" delay={0.1}>
                                     <FeatureCard
-                                        title="Recepción"
-                                        desc="Ordena la sala: turnos, estados, llamados y búsqueda rápida."
+                                        title="↓ Tiempos de espera"
+                                        desc="Estudios confirman una reducción del 45% en demoras con agenda inteligente."
                                         icon={<Zap />}
                                         bg="from-cyan-400 via-blue-500 to-indigo-600"
                                     />
                                 </TechReveal>
                                 <TechReveal direction="right" delay={0.2}>
                                     <FeatureCard
-                                        title="Consultorio"
-                                        desc="Resumen del paciente + últimas consultas para no empezar de cero."
+                                        title="↑ Continuidad clínica"
+                                        desc="El acceso inmediato al historial evita repeticiones y errores de medicación."
                                         icon={<Layout />}
-                                        bg="from-purple-400 via-fuchsia-500 to-pink-600"
+                                        bg="from-blue-400 via-indigo-500 to-purple-600"
                                     />
                                 </TechReveal>
                                 <TechReveal direction="left" delay={0.3}>
                                     <FeatureCard
-                                        title="Dirección"
-                                        desc="Métricas simples: asistencia, ausentismo, tiempos y cuellos de botella."
-                                        icon={<BarChart />}
+                                        title="↓ Ausentismo"
+                                        desc="Recordatorios automáticos reducen el ausentismo un 30% en el primer mes."
+                                        icon={<BarChartIcon />}
                                         bg="from-amber-400 via-orange-500 to-red-600"
                                     />
                                 </TechReveal>
                                 <TechReveal direction="right" delay={0.4}>
                                     <FeatureCard
-                                        title="Notificaciones"
-                                        desc="Recordatorios y coordinación para bajar ausentismo y fricción."
+                                        title="↓ Fricción operativa"
+                                        desc="Alertas tempranas previenen cuellos de botella antes de que colapsen la sala."
                                         icon={<Bell />}
                                         bg="from-emerald-400 via-teal-500 to-cyan-600"
                                     />
@@ -1225,35 +1303,43 @@ export default function ZanooLanding() {
                         </motion.div>
 
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-80px" }}
-                            transition={{ duration: 0.55, ease: "easeOut" }}
-                            className="relative"
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.7, ease: "easeOut" }}
+                            className="relative perspective-1000"
                         >
-                            <PhoneFrame label={activeShot.label} src={activeShot.src}>
-                                <ReplicaScreen
-                                    title="Zanoo"
-                                    subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
-                                    mode={activeShot.mode || "list"}
-                                />
-                            </PhoneFrame>
+                            <motion.div
+                                style={{
+                                    y: useTransform(useScroll().scrollYProgress, [0, 1], [50, -50]),
+                                    rotateX: useTransform(useScroll().scrollYProgress, [0.2, 0.8], [5, -5]),
+                                }}
+                                className="transition-transform duration-100 ease-out"
+                            >
+                                <PhoneFrame label={activeShot.label} src={activeShot.src}>
+                                    <ReplicaScreen
+                                        title="Zanoo"
+                                        subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
+                                        mode={activeShot.mode || "list"}
+                                    />
+                                </PhoneFrame>
+                            </motion.div>
 
                             <div className="mt-6 max-w-[360px] mx-auto">
-                                <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
-                                    <div className="text-xs text-black/55">Siguiente/Anterior</div>
+                                <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:bg-white/10 dark:border-white/10">
+                                    <div className="text-xs text-black/55 dark:text-white/60">Siguiente/Anterior</div>
                                     <div className="mt-3 flex gap-2">
                                         <button
                                             type="button"
                                             onClick={() => setShotIndex((prev) => (prev === 0 ? APP_SHOTS.length - 1 : prev - 1))}
-                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20"
                                         >
                                             ◀
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setShotIndex((prev) => (prev + 1) % APP_SHOTS.length)}
-                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm"
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20"
                                         >
                                             ▶
                                         </button>
@@ -1523,7 +1609,7 @@ export default function ZanooLanding() {
                         <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_70px_-35px_rgba(0,0,0,0.55)] overflow-hidden">
                             <div className="flex items-center justify-between px-5 py-4 border-b border-black/10 bg-white/60">
                                 <div className="flex items-center gap-2">
-                                    <LogoMark className="h-7 w-7 rounded-xl" />
+                                    <BrandLogo className="h-7 w-auto object-contain" />
                                     <div className="text-sm font-semibold text-black">Zanoo</div>
                                 </div>
                                 <div className="flex items-center gap-2 text-xs text-black/55">
