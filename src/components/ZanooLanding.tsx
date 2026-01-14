@@ -105,7 +105,7 @@ const PROBLEM_TILES = [
     {
         tone: "violet" as const,
         title: "Turnos duplicados y filas eternas.",
-        desc: "Nadie sabe “qué sigue” hasta que explota.",
+        desc: "Nadie sabe qué sigue, y la atención se satura.",
         imageSrc: "/photos/fila-turnos-duplicados.jpg",
     },
     {
@@ -366,6 +366,157 @@ function ThemeToggle() {
                 <Monitor className="h-4 w-4" />
             </button>
         </div>
+    );
+}
+
+// -----------------------------
+// Metrics Dashboard (New "Cool" Section)
+// -----------------------------
+function CircularMetric({ value, label, sub, color = "blue" }: { value: number; label: string; sub?: string; color?: "blue" | "purple" | "cyan" | "pink" }) {
+    const radius = 32;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (value / 100) * circumference;
+
+    const colors = {
+        blue: "text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]",
+        purple: "text-purple-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]",
+        cyan: "text-cyan-500 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]",
+        pink: "text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]"
+    };
+
+    return (
+        <div className="flex flex-col items-center p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+            <div className="relative h-24 w-24">
+                <svg className="h-full w-full rotate-[-90deg]" viewBox="0 0 80 80">
+                    {/* Track */}
+                    <circle cx="40" cy="40" r={radius} stroke="currentColor" strokeWidth="6" fill="transparent" className="text-black/5 dark:text-white/5" />
+                    {/* Indicator */}
+                    <motion.circle
+                        initial={{ strokeDashoffset: circumference }}
+                        whileInView={{ strokeDashoffset: offset }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+                        cx="40" cy="40" r={radius} stroke="currentColor" strokeWidth="6" fill="transparent"
+                        strokeDasharray={circumference}
+                        strokeLinecap="round"
+                        className={colors[color]}
+                    />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-xl font-bold text-foreground">{value}%</span>
+                </div>
+            </div>
+            <span className="mt-2 text-sm font-semibold text-foreground">{label}</span>
+            {sub && <span className="text-[10px] text-muted-foreground uppercase tracking-wide">{sub}</span>}
+        </div>
+    );
+}
+
+function MetricsDashboard() {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="rounded-[32px] border border-white/20 bg-gradient-to-b from-white/60 to-white/30 dark:from-zinc-900/60 dark:to-black/30 backdrop-blur-2xl p-6 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] relative overflow-hidden group"
+        >
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[80px] pointer-events-none" />
+
+            <div className="relative z-10">
+                <div className="flex flex-col md:flex-row gap-10 items-center justify-between">
+                    {/* Left: Text & KPIs */}
+                    <div className="flex-1 space-y-6 text-center md:text-left">
+                        <div>
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                                <Sparkles className="h-3 w-3" /> Impacto Real
+                            </div>
+                            <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+                                Resultados que se <br />
+                                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">sienten en la sala.</span>
+                            </h3>
+                            <p className="mt-4 text-muted-foreground max-w-sm mx-auto md:mx-0">
+                                Métricas promedio reportada por centros tras 3 meses de implementación.
+                            </p>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                            <div className="p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 backdrop-blur-md">
+                                <div className="text-3xl font-bold tracking-tighter text-foreground">+45%</div>
+                                <div className="text-xs text-muted-foreground font-medium uppercase mt-1">Recupero de costos</div>
+                            </div>
+                            <div className="p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 backdrop-blur-md">
+                                <div className="text-3xl font-bold tracking-tighter text-foreground">-30%</div>
+                                <div className="text-xs text-muted-foreground font-medium uppercase mt-1">Ausentismo</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right: Charts */}
+                    <div className="flex-1 w-full relative">
+                        {/* Glass Container */}
+                        <div className="rounded-3xl border border-white/20 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6 relative">
+                            {/* Header */}
+                            <div className="flex justify-between items-end mb-6">
+                                <div>
+                                    <div className="text-sm font-semibold text-foreground">Pacientes Atendidos</div>
+                                    <div className="text-xs text-muted-foreground">Últimos 6 meses</div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-2xl font-bold text-green-500">+12%</div>
+                                    <div className="text-[10px] text-muted-foreground">vs. periodo anterior</div>
+                                </div>
+                            </div>
+
+                            {/* Bar Chart */}
+                            <div className="h-48 flex items-end justify-between gap-3 px-2">
+                                {[35, 45, 40, 60, 75, 85].map((h, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ height: 0, opacity: 0 }}
+                                        whileInView={{ height: `${h}%`, opacity: 1 }}
+                                        transition={{ duration: 0.8, delay: i * 0.1 }}
+                                        className="w-full relative group"
+                                    >
+                                        <div className={cn(
+                                            "w-full h-full rounded-t-lg bg-gradient-to-t opacity-90 transition-all group-hover:opacity-100",
+                                            i === 5 ? "from-purple-600 to-blue-500" : "from-blue-500/40 to-cyan-400/40"
+                                        )} />
+
+                                        {/* Tooltip */}
+                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 text-white text-[10px] px-2 py-1 rounded pointer-events-none">
+                                            {h * 15}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Labels */}
+                            <div className="flex justify-between mt-3 px-2 border-t border-black/5 dark:border-white/5 pt-3">
+                                {["ENE", "FEB", "MAR", "ABR", "MAY", "JUN"].map((m) => (
+                                    <span key={m} className="text-[10px] font-medium text-muted-foreground">{m}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Floating Gauge Card */}
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.5, duration: 0.6 }}
+                            className="absolute -bottom-6 -left-6 hidden sm:block"
+                        >
+                            <div className="p-1 rounded-[20px] bg-gradient-to-br from-white/20 to-transparent backdrop-blur-lg border border-white/20 shadow-xl">
+                                <div className="bg-white/80 dark:bg-black/80 rounded-[18px] p-2">
+                                    <CircularMetric value={92} label="Satisfacción" color="pink" />
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
     );
 }
 
@@ -1053,10 +1204,10 @@ export default function ZanooLanding() {
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.2}>
-                            <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-                                Orden para atender <br />
+                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl">
+                                Reduce esperas, errores <br />
                                 <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                                    mejor.
+                                    y ausencias en centros de salud.
                                 </span>
                             </h1>
                         </TechReveal>
@@ -1160,6 +1311,8 @@ export default function ZanooLanding() {
                                     </div>
                                 </div>
 
+
+
                                 <div className="mt-3 flex gap-2">
                                     <button
                                         type="button"
@@ -1250,7 +1403,12 @@ export default function ZanooLanding() {
                             <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
                                 Esto no es una promesa.
                                 <br />
-                                Es el producto.
+                                Es el <span className="relative inline-block">
+                                    <span className="absolute -inset-1 bg-purple-500/30 blur-lg animate-pulse rounded-lg" />
+                                    <span className="relative z-10 font-black tracking-wide bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                                        PRODUCTO
+                                    </span>
+                                </span>.
                             </h2>
 
                             <p className="mt-4 text-black/60 max-w-xl">
@@ -1309,6 +1467,10 @@ export default function ZanooLanding() {
                                         bg="from-emerald-400 via-teal-500 to-cyan-600"
                                     />
                                 </TechReveal>
+                            </div>
+
+                            <div className="mt-24">
+                                <MetricsDashboard />
                             </div>
 
 
