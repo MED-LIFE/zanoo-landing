@@ -147,13 +147,13 @@ function LogoMark({ className = "" }: { className?: string }) {
 function BrandLogo({ className = "" }: { className?: string }) {
     return (
         <div className={cn("relative inline-block", className)}>
-            {/* Light Mode Logo */}
+            {/* Light Mode Logo - Scaled up slightly to match optical weight of white logo */}
             <img
                 src="/brand/zanoo-logo-color-v2.png"
                 alt="Zanoo"
-                className="h-full w-auto object-contain dark:hidden"
+                className="h-full w-auto object-contain dark:hidden scale-110 origin-left"
             />
-            {/* Dark Mode Logo - Force block to ensure visibility */}
+            {/* Dark Mode Logo */}
             <img
                 src="/brand/zanoo-logo-white-v2.png"
                 alt="Zanoo"
@@ -1573,9 +1573,9 @@ export default function ZanooLanding() {
                                 <div className="px-6 py-5 border-b border-black/10 bg-white/60 flex items-center gap-3">
                                     {/* Logo for White Card - Always Full Color */}
                                     <img
-                                        src="/brand/zanoo-logo-full.png"
+                                        src="/brand/zanoo-logo-color-v2.png"
                                         alt="Zanoo"
-                                        className="h-8 object-contain"
+                                        className="h-9 object-contain"
                                     />
                                     <div>
                                         <div className="text-sm font-semibold text-black">Aplicación para centros</div>
@@ -1995,7 +1995,12 @@ export default function ZanooLanding() {
                                 { t: "Ecosistema", d: "Red de instituciones" },
                                 { t: "IA aplicada", d: "Resumen · señales · asistentes" },
                             ].map((s, i) => (
-                                <div key={s.t} className="relative">
+                                <motion.div
+                                    key={s.t}
+                                    className="relative"
+                                    whileHover={{ scale: 1.05 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                >
                                     <div className="absolute left-6 top-3 h-4 w-4 rounded-full bg-white border border-black/15 shadow-sm" />
                                     <Card className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
                                         <CardContent className="p-6">
@@ -2004,7 +2009,7 @@ export default function ZanooLanding() {
                                             <div className="mt-2 text-sm text-black/60">{s.d}</div>
                                         </CardContent>
                                     </Card>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
@@ -2019,8 +2024,8 @@ export default function ZanooLanding() {
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
                             <span className="inline-block mx-2 translate-y-1">
-                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
-                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden invert opacity-90" />
+                                <img src="/brand/zanoo-logo-white-v2.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
+                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
