@@ -1119,7 +1119,7 @@ export default function ZanooLanding() {
                     >
                         {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
                         {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
-                        <BrandLogo className="h-9 w-auto object-contain dark:invert" />
+                        <BrandLogo className="h-9 w-auto" />
                         {/* <span className="text-xl font-bold tracking-tight text-foreground group-hover:opacity-80 transition-opacity">
                             Zanoo
                         </span> */}
@@ -1404,7 +1404,7 @@ export default function ZanooLanding() {
                                 Esto no es una promesa.
                                 <br />
                                 Es el <span className="relative inline-block">
-                                    <span className="relative z-10 font-extrabold tracking-tight text-5xl md:text-6xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    <span className="relative z-10 font-extrabold tracking-tight text-4xl md:text-5xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                                         PRODUCTO
                                     </span>
                                 </span>.
@@ -1535,7 +1535,7 @@ export default function ZanooLanding() {
                         <motion.div {...fadeUp}>
                             <SectionBadge>Para salitas y centros</SectionBadge>
                             <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                                Zanoo es <span className="text-blue-600 font-bold">GRATIS</span>
+                                Zanoo es <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent font-extrabold">GRATIS</span>
                                 <br />
                                 para las salitas.
                             </h2>
@@ -1944,7 +1944,7 @@ export default function ZanooLanding() {
                     <motion.div {...fadeUp}>
                         <SectionBadge>Impacto</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                            Cuando el sistema está al límite, cada mejora cuenta.
+                            Cuando el sistema está <span className="font-bold">al límite</span>, cada mejora cuenta.
                         </h2>
                         <p className="mt-4 text-black/60 max-w-3xl mx-auto">
                             Zanoo busca reducir daños colaterales del desorden: esperas innecesarias, duplicaciones, historias
@@ -2020,7 +2020,7 @@ export default function ZanooLanding() {
                             <span>Si querés ver</span>
                             <span className="inline-block mx-2 translate-y-1">
                                 <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
-                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden invert mix-blend-multiply opacity-90" />
+                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden invert opacity-90" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
@@ -2029,7 +2029,7 @@ export default function ZanooLanding() {
                         <div className="mt-8 flex items-center justify-center gap-3">
                             <Button
                                 className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)]"
-                                onClick={() => scrollToId("contacto")}
+                                onClick={() => scrollToId("gratis")}
                             >
                                 Coordinar demo
                             </Button>
