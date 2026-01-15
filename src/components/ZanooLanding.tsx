@@ -147,11 +147,11 @@ function LogoMark({ className = "" }: { className?: string }) {
 function BrandLogo({ className = "" }: { className?: string }) {
     return (
         <div className={cn("relative inline-block", className)}>
-            {/* Light Mode Logo - Scaled up slightly to match optical weight of white logo */}
+            {/* Light Mode Logo - Increased height/scale to match optical weight */}
             <img
                 src="/brand/zanoo-logo-color-v2.png"
                 alt="Zanoo"
-                className="h-full w-auto object-contain dark:hidden scale-125 origin-left"
+                className="h-[140%] w-auto object-contain dark:hidden absolute top-1/2 -translate-y-1/2 left-0 origin-left"
             />
             {/* Dark Mode Logo */}
             <img
@@ -758,10 +758,12 @@ function ReplicaScreen({
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                     {/* Restored logo for fallback view */}
-                    <div>
-                        <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-6 w-auto mb-2 object-contain" />
-                        <div className="text-[15px] font-semibold text-black leading-tight">{title}</div>
-                        <div className="text-xs text-black/45">{subtitle}</div>
+                    {/* Restored logo for fallback view - Aligned Row */}
+                    <div className="flex items-center gap-2">
+                        <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-5 w-auto object-contain" />
+                        <div className="text-[15px] font-semibold text-black leading-tight translate-y-[1px]">{title}</div>
+                        <div className="h-4 w-[1px] bg-black/10 mx-1" />
+                        <div className="text-xs text-black/45 translate-y-[1px]">{subtitle}</div>
                     </div>
                 </div>
                 <div className="h-10 w-10 rounded-full border border-black/10 bg-white shadow-[0_10px_26px_-18px_rgba(0,0,0,0.45)]" />
@@ -2024,12 +2026,9 @@ export default function ZanooLanding() {
                         <SectionBadge>Contacto</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
-                            <span className="inline-block mx-2 translate-y-1">
-                                <span className="inline-block mx-2 translate-y-1">
-                                    <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
-                                    <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden" />
-                                </span>
-                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden" />
+                            <span className="inline-flex items-center mx-2 translate-y-2">
+                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
+                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-12 w-auto object-contain dark:hidden" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
