@@ -147,11 +147,11 @@ function LogoMark({ className = "" }: { className?: string }) {
 function BrandLogo({ className = "" }: { className?: string }) {
     return (
         <div className={cn("relative inline-block", className)}>
-            {/* Light Mode Logo - Increased height/scale to match optical weight */}
+            {/* Light Mode Logo - Scaled to match optical weight */}
             <img
                 src="/brand/zanoo-logo-color-v2.png"
                 alt="Zanoo"
-                className="h-[140%] w-auto object-contain dark:hidden absolute top-1/2 -translate-y-1/2 left-0 origin-left"
+                className="h-full w-auto object-contain dark:hidden scale-125 origin-left"
             />
             {/* Dark Mode Logo */}
             <img
@@ -1069,6 +1069,17 @@ export default function ZanooLanding() {
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
     const [shotIndex, setShotIndex] = useState(0);
     const [heroIndex, setHeroIndex] = useState(0);
+    // Hero Text Rotation
+    const [heroTextIndex, setHeroTextIndex] = useState(0);
+    const heroPhrases = useMemo(() => ["atender mejor", "cuidar el tiempo", "cuidar a las personas", "hacer más justo el acceso"], []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setHeroTextIndex((prev) => (prev + 1) % heroPhrases.length);
+        }, 3000); // 3 seconds per phrase
+        return () => clearInterval(interval);
+    }, [heroPhrases]);
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const [formSent, setFormSent] = useState(false);
@@ -1207,11 +1218,20 @@ export default function ZanooLanding() {
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.2}>
-                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl">
-                                Reduce esperas, errores <br />
-                                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                                    y ausencias en centros de salud.
-                                </span>
+                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl leading-tight min-h-[160px] md:min-h-[auto]">
+                                Ordenar la atención es <br />
+                                <AnimatePresence mode="wait">
+                                    <motion.span
+                                        key={heroTextIndex}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                                        className="inline-block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent pb-1"
+                                    >
+                                        {heroPhrases[heroTextIndex]}.
+                                    </motion.span>
+                                </AnimatePresence>
                             </h1>
                         </TechReveal>
 
@@ -2026,9 +2046,9 @@ export default function ZanooLanding() {
                         <SectionBadge>Contacto</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
-                            <span className="inline-flex items-center mx-2 translate-y-2">
-                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
-                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-12 w-auto object-contain dark:hidden" />
+                            <span className="inline-flex items-center mx-2 align-middle">
+                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-[52px] w-auto object-contain hidden dark:block" />
+                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-[58px] w-auto object-contain dark:hidden" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
