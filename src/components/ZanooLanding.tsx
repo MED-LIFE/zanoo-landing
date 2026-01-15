@@ -456,7 +456,7 @@ function MetricsDashboard() {
                     {/* Right: Charts */}
                     <div className="flex-1 w-full relative">
                         {/* Glass Container */}
-                        <div className="rounded-3xl border border-white/20 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6 relative">
+                        <div className="rounded-3xl border border-white/20 bg-white/40 dark:bg-white/5 backdrop-blur-md p-6 relative">
                             {/* Header */}
                             <div className="flex justify-between items-end mb-6">
                                 <div>
@@ -1105,7 +1105,7 @@ export default function ZanooLanding() {
     const activeHeroShot = HERO_SHOTS[heroIndex % HERO_SHOTS.length];
 
     return (
-        <div className="font-sans text-foreground selection:bg-primary/20 overflow-x-hidden">
+        <div className="font-sans text-foreground selection:bg-primary/20 overflow-x-hidden bg-white dark:bg-black">
             <AdvancedTechBackground />
             <ScrollToTop />
 
@@ -1404,8 +1404,7 @@ export default function ZanooLanding() {
                                 Esto no es una promesa.
                                 <br />
                                 Es el <span className="relative inline-block">
-                                    <span className="absolute -inset-1 bg-purple-500/30 blur-lg animate-pulse rounded-lg" />
-                                    <span className="relative z-10 font-black tracking-wide bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                                    <span className="relative z-10 font-extrabold tracking-tight bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                                         PRODUCTO
                                     </span>
                                 </span>.

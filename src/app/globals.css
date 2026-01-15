@@ -12,6 +12,9 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
+    /* Override defaults to ensure pure white in light mode */
+    background-color: #ffffff;
+    color: hsl(var(--foreground));
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -92,13 +95,13 @@
   }
 
   /* ALSO FORCE ON HTML to override next-themes class on html element */
+  html.light,
   html.light body {
     background-color: #ffffff !important;
   }
 
+  html.dark,
   html.dark body {
     background-color: #020617 !important;
   }
-
-  /* slate-950 */
 }
