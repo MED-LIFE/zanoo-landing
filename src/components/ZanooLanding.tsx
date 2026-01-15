@@ -151,7 +151,7 @@ function BrandLogo({ className = "" }: { className?: string }) {
             <img
                 src="/brand/zanoo-logo-color-v2.png"
                 alt="Zanoo"
-                className="h-full w-auto object-contain dark:hidden scale-110 origin-left"
+                className="h-full w-auto object-contain dark:hidden scale-125 origin-left"
             />
             {/* Dark Mode Logo */}
             <img
@@ -757,8 +757,9 @@ function ReplicaScreen({
         <div className="h-full px-5 pt-5 pb-6 bg-[#fbfbfe]">
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                    {/* Removed generic logo as requested */}
+                    {/* Restored logo for fallback view */}
                     <div>
+                        <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-6 w-auto mb-2 object-contain" />
                         <div className="text-[15px] font-semibold text-black leading-tight">{title}</div>
                         <div className="text-xs text-black/45">{subtitle}</div>
                     </div>
@@ -2024,7 +2025,10 @@ export default function ZanooLanding() {
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
                             <span className="inline-block mx-2 translate-y-1">
-                                <img src="/brand/zanoo-logo-white-v2.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
+                                <span className="inline-block mx-2 translate-y-1">
+                                    <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
+                                    <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden" />
+                                </span>
                                 <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
