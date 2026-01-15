@@ -1404,7 +1404,7 @@ export default function ZanooLanding() {
                                 Esto no es una promesa.
                                 <br />
                                 Es el <span className="relative inline-block">
-                                    <span className="relative z-10 font-extrabold tracking-tight text-5xl md:text-6xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    <span className="relative z-10 font-extrabold tracking-tight text-5xl md:text-6xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                                         PRODUCTO
                                     </span>
                                 </span>.
@@ -1977,7 +1977,7 @@ export default function ZanooLanding() {
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Roadmap</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">De gestión a inteligencia sanitaria.</h2>
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">De gestión a <span className="font-bold">inteligencia sanitaria</span>.</h2>
                         <p className="mt-4 text-black/60 max-w-3xl">
                             Arrancás por orden operativo. Después se habilita coordinación, predicción y capas de IA cuando el
                             ecosistema ya tiene señal.
@@ -2018,9 +2018,9 @@ export default function ZanooLanding() {
                         <SectionBadge>Contacto</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
-                            <span className="inline-flex items-center justify-center align-middle mx-2 bg-black/5 dark:bg-white/10 rounded-xl px-4 py-2 translate-y-[2px]">
-                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-8 w-auto object-contain dark:hidden mix-blend-multiply" />
-                                <img src="/brand/zanoo-logo-white-v2.png" alt="Zanoo" className="h-8 w-auto object-contain hidden dark:block" />
+                            <span className="inline-block mx-2 translate-y-1">
+                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain hidden dark:block" />
+                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-10 w-auto object-contain dark:hidden invert mix-blend-multiply opacity-90" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
@@ -2029,7 +2029,7 @@ export default function ZanooLanding() {
                         <div className="mt-8 flex items-center justify-center gap-3">
                             <Button
                                 className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)]"
-                                onClick={() => scrollToId("demo")}
+                                onClick={() => scrollToId("contacto")}
                             >
                                 Coordinar demo
                             </Button>
