@@ -1356,11 +1356,9 @@ export default function ZanooLanding() {
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
-                            Lo que hoy te frena no es la falta de médicos.
+                            Lo que hoy te <span className="font-bold italic">frena</span> no es la falta de médicos.
                             <br />
-                            Lo que hoy te frena no es la falta de médicos.
-                            <br />
-                            Es el <span className="text-blue-600 dark:text-blue-400 font-bold italic">desorden</span>.
+                            Es el <span className="text-blue-600 dark:text-blue-400">desorden</span>.
                         </h2>
                         <motion.p
                             className="mt-4 text-black/60 dark:text-white/60 max-w-3xl text-lg"
@@ -1406,7 +1404,7 @@ export default function ZanooLanding() {
                                 Esto no es una promesa.
                                 <br />
                                 Es el <span className="relative inline-block">
-                                    <span className="relative z-10 font-extrabold tracking-tight text-4xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent animate-pulse">
+                                    <span className="relative z-10 font-extrabold tracking-tight text-5xl md:text-6xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                                         PRODUCTO
                                     </span>
                                 </span>.
@@ -1536,12 +1534,8 @@ export default function ZanooLanding() {
                     <div className="grid lg:grid-cols-2 gap-14 items-start">
                         <motion.div {...fadeUp}>
                             <SectionBadge>Para salitas y centros</SectionBadge>
-
-                            <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                                Zanoo es{" "}
-                                <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                                    GRATIS
-                                </span>
+                            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                                Zanoo es <span className="text-blue-600 font-bold">GRATIS</span>
                                 <br />
                                 para las salitas.
                             </h2>
@@ -2025,7 +2019,7 @@ export default function ZanooLanding() {
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
                             <span className="inline-flex items-center justify-center align-middle mx-2 bg-black/5 dark:bg-white/10 rounded-xl px-4 py-2 translate-y-[2px]">
-                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-8 w-auto object-contain dark:hidden" />
+                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-8 w-auto object-contain dark:hidden mix-blend-multiply" />
                                 <img src="/brand/zanoo-logo-white-v2.png" alt="Zanoo" className="h-8 w-auto object-contain hidden dark:block" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
