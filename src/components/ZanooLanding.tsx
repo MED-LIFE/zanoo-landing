@@ -1077,7 +1077,8 @@ export default function ZanooLanding() {
         target: heroRef,
         offset: ["start start", "end start"]
     });
-    const heroPhoneY = useTransform(scrollYProgress, [0, 1], [0, 100]); // Moves 100px down as you scroll through hero
+    const heroPhoneY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+    const heroPhoneRotate = useTransform(scrollYProgress, [0, 1], [0, -12]); // Rotates 12deg as you scroll
     const fadeUp = useFadeUp();
 
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
@@ -1330,8 +1331,9 @@ export default function ZanooLanding() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.65, ease: "easeOut" }}
                         className="relative"
+                        style={{ perspective: 1000 }} // Add perspective for 3D rotation
                     >
-                        <motion.div style={{ y: heroPhoneY }}>
+                        <motion.div style={{ y: heroPhoneY, rotateY: heroPhoneRotate }}>
                             <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
                                 {activeHeroShot.id === "inicio" ? (
                                     <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
@@ -2103,13 +2105,8 @@ export default function ZanooLanding() {
                 <div className="max-w-4xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Contacto</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
-                            <span>¿Listo para transformar</span>
-                            <span className="inline-flex items-center mx-2 align-middle">
-                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={220} height={90} className="h-[60px] md:h-[100px] w-auto object-contain hidden dark:block" />
-                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={220} height={100} className="h-[64px] md:h-[110px] w-auto object-contain dark:hidden" />
-                            </span>
-                            <span>la atención de tu centro?</span>
+                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight text-center leading-tight">
+                            ¿Listo para transformar la atención de tu centro?
                         </h2>
                         <p className="mt-4 text-black/60">Agendá una demo corta, enfocada en tu realidad operativa.</p>
 
@@ -2130,6 +2127,13 @@ export default function ZanooLanding() {
                             >
                                 Escribir por WhatsApp
                             </Button>
+                        </div>
+
+                        <div className="mt-12 flex justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                            <span className="inline-flex items-center mx-2 align-middle">
+                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={160} height={70} className="h-[48px] w-auto object-contain hidden dark:block" />
+                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={160} height={70} className="h-[48px] w-auto object-contain dark:hidden" />
+                            </span>
                         </div>
                     </motion.div>
 
