@@ -1072,6 +1072,8 @@ function QuoteCarousel() {
 // Main
 // -----------------------------
 export default function ZanooLanding() {
+    const { scrollY } = useScroll();
+    const heroPhoneY = useTransform(scrollY, [0, 1000], [0, 150]);
     const fadeUp = useFadeUp();
 
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
@@ -1325,75 +1327,77 @@ export default function ZanooLanding() {
                         transition={{ duration: 0.65, ease: "easeOut" }}
                         className="relative"
                     >
-                        <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
-                            {activeHeroShot.id === "inicio" ? (
-                                <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
-                            ) : (
-                                <ReplicaScreen title="Zanoo" subtitle="Mis médicos" mode="list" />
-                            )}
-                        </PhoneFrame>
+                        <motion.div style={{ y: heroPhoneY }}>
+                            <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
+                                {activeHeroShot.id === "inicio" ? (
+                                    <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
+                                ) : (
+                                    <ReplicaScreen title="Zanoo" subtitle="Mis médicos" mode="list" />
+                                )}
+                            </PhoneFrame>
 
-                        <div className="mt-6 max-w-[360px] mx-auto">
-                            <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <div className="text-sm font-semibold text-black">Capturas reales</div>
-                                        <div className="text-xs text-black/55">Inicio / Mis médicos</div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        {HERO_SHOTS.map((_, i) => (
-                                            <button
-                                                key={i}
-                                                type="button"
-                                                aria-label={`Ir a captura ${i + 1}`}
-                                                onClick={() => setHeroIndex(i)}
-                                                className={cn(
-                                                    "h-2.5 w-2.5 rounded-full border transition-all",
-                                                    heroIndex === i
-                                                        ? "bg-gradient-to-r from-cyan-500 to-purple-600 border-black/20"
-                                                        : "bg-black/10 border-black/10 hover:bg-black/15"
-                                                )}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-
-
-
-                                <div className="mt-3 flex gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => setHeroIndex((p) => (p === 0 ? HERO_SHOTS.length - 1 : p - 1))}
-                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20 transition-colors"
-                                    >
-                                        ◀
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setHeroIndex((p) => (p + 1) % HERO_SHOTS.length)}
-                                        className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20 transition-colors"
-                                    >
-                                        ▶
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="mt-6 max-w-[360px] mx-auto">
-                            <GradientBorder>
-                                <div className="p-5">
+                            <div className="mt-6 max-w-[360px] mx-auto">
+                                <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <div className="text-sm font-semibold text-black">En sala (señal)</div>
-                                            <div className="text-xs text-black/55">Actividad semanal</div>
+                                            <div className="text-sm font-semibold text-black">Capturas reales</div>
+                                            <div className="text-xs text-black/55">Inicio / Mis médicos</div>
                                         </div>
-                                        <span className="text-xs text-black/55">Últimos 7 días</span>
+                                        <div className="flex items-center gap-2">
+                                            {HERO_SHOTS.map((_, i) => (
+                                                <button
+                                                    key={i}
+                                                    type="button"
+                                                    aria-label={`Ir a captura ${i + 1}`}
+                                                    onClick={() => setHeroIndex(i)}
+                                                    className={cn(
+                                                        "h-2.5 w-2.5 rounded-full border transition-all",
+                                                        heroIndex === i
+                                                            ? "bg-gradient-to-r from-cyan-500 to-purple-600 border-black/20"
+                                                            : "bg-black/10 border-black/10 hover:bg-black/15"
+                                                    )}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
-                                    <Sparkline data={spark} />
-                                    <div className="mt-2 text-xs text-black/55">Señal: sube a media mañana.</div>
+
+
+
+                                    <div className="mt-3 flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setHeroIndex((p) => (p === 0 ? HERO_SHOTS.length - 1 : p - 1))}
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20 transition-colors"
+                                        >
+                                            ◀
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setHeroIndex((p) => (p + 1) % HERO_SHOTS.length)}
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20 transition-colors"
+                                        >
+                                            ▶
+                                        </button>
+                                    </div>
                                 </div>
-                            </GradientBorder>
-                        </div>
+                            </div>
+
+                            <div className="mt-6 max-w-[360px] mx-auto">
+                                <GradientBorder>
+                                    <div className="p-5">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="text-sm font-semibold text-black">En sala (señal)</div>
+                                                <div className="text-xs text-black/55">Actividad semanal</div>
+                                            </div>
+                                            <span className="text-xs text-black/55">Últimos 7 días</span>
+                                        </div>
+                                        <Sparkline data={spark} />
+                                        <div className="mt-2 text-xs text-black/55">Señal: sube a media mañana.</div>
+                                    </div>
+                                </GradientBorder>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 </div>
             </section>
@@ -2097,8 +2101,8 @@ export default function ZanooLanding() {
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
                             <span className="inline-flex items-center mx-2 align-middle">
-                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={180} height={72} className="h-[46px] md:h-[72px] w-auto object-contain hidden dark:block" />
-                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={180} height={80} className="h-[52px] md:h-[80px] w-auto object-contain dark:hidden" />
+                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={220} height={90} className="h-[60px] md:h-[100px] w-auto object-contain hidden dark:block" />
+                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={220} height={100} className="h-[64px] md:h-[110px] w-auto object-contain dark:hidden" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
