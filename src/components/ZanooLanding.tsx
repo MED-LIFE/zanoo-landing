@@ -1072,8 +1072,12 @@ function QuoteCarousel() {
 // Main
 // -----------------------------
 export default function ZanooLanding() {
-    const { scrollY } = useScroll();
-    const heroPhoneY = useTransform(scrollY, [0, 1000], [0, 150]);
+    const heroRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        offset: ["start start", "end start"]
+    });
+    const heroPhoneY = useTransform(scrollYProgress, [0, 1], [0, 100]); // Moves 100px down as you scroll through hero
     const fadeUp = useFadeUp();
 
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
@@ -1798,6 +1802,7 @@ export default function ZanooLanding() {
             </section>
 
             {/* DEMO (web) */}
+            {/* DEMO (web) */}
             <section id="demo" className="py-24">
                 <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
                     <motion.div {...fadeUp}>
@@ -2099,14 +2104,14 @@ export default function ZanooLanding() {
                     <motion.div {...fadeUp}>
                         <SectionBadge>Contacto</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
-                            <span>Si querés ver</span>
+                            <span>¿Listo para transformar</span>
                             <span className="inline-flex items-center mx-2 align-middle">
                                 <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={220} height={90} className="h-[60px] md:h-[100px] w-auto object-contain hidden dark:block" />
                                 <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={220} height={100} className="h-[64px] md:h-[110px] w-auto object-contain dark:hidden" />
                             </span>
-                            <span>en serio, te lo mostramos.</span>
+                            <span>la atención de tu centro?</span>
                         </h2>
-                        <p className="mt-4 text-black/60">Una demo corta, enfocada en tu realidad operativa.</p>
+                        <p className="mt-4 text-black/60">Agendá una demo corta, enfocada en tu realidad operativa.</p>
 
                         <div className="mt-8 flex items-center justify-center gap-3">
                             <Button
