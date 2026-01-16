@@ -31,8 +31,9 @@ import {
     ArrowUpRight,
     Sun,
     Moon,
-    Monitor
+    Monitor,
 } from "lucide-react";
+import Image from "next/image";
 
 /**
  * Zanoo Landing — Optimized Single File
@@ -148,16 +149,22 @@ function BrandLogo({ className = "" }: { className?: string }) {
     return (
         <div className={cn("relative inline-block", className)}>
             {/* Light Mode Logo - Scaled to match optical weight */}
-            <img
+            <Image
                 src="/brand/zanoo-logo-color-v2.png"
                 alt="Zanoo"
+                width={160}
+                height={50}
                 className="h-full w-auto object-contain dark:hidden scale-125 origin-left"
+                priority
             />
             {/* Dark Mode Logo */}
-            <img
+            <Image
                 src="/brand/zanoo-logo-white-v2.png"
                 alt="Zanoo"
+                width={160}
+                height={50}
                 className="h-full w-auto object-contain hidden dark:block"
+                priority
             />
         </div>
     );
@@ -1069,6 +1076,22 @@ export default function ZanooLanding() {
 
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
     const [shotIndex, setShotIndex] = useState(0);
+    // Auto-play demo tabs
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const tabs = ["Recepción", "Consultorio", "Dirección"] as const;
+            // Solo rotar si no está el mouse encima (opcional, pero buena UX)
+            // Para simplicidad en este componente gigante, rotamos siempre
+            // salvo que podríamos agregar un estado de hover.
+            setDemoTab(prev => {
+                const currentIndex = tabs.indexOf(prev as any);
+                const nextIndex = (currentIndex + 1) % tabs.length;
+                return tabs[nextIndex];
+            });
+        }, 4000); // 4 segundos
+        return () => clearInterval(interval);
+    }, []);
+
     const [heroIndex, setHeroIndex] = useState(0);
     // Hero Text Rotation
     const [heroTextIndex, setHeroTextIndex] = useState(0);
@@ -1628,6 +1651,20 @@ export default function ZanooLanding() {
                                         <form
                                             onSubmit={(e) => {
                                                 e.preventDefault();
+
+                                                // 1. Gather Data
+                                                const formData = new FormData(e.currentTarget);
+                                                const data = Object.fromEntries(formData.entries());
+
+                                                // 2. Fallback: Mailto (Immediate utility without backend)
+                                                // Construct body for email client
+                                                const subject = `Nuevo contacto Zanoo: ${data.centro}`;
+                                                const body = `Nombre: ${data.centro}\nProvincia: ${data.provincia}\nLocalidad: ${data.localidad}\nContacto: ${data.contacto}\nWhatsApp: ${data.whatsapp}\nEmail: ${data.email}\nComentario: ${data.comentarios || '-'}`;
+
+                                                // Open mail client in separate tab if API fails or as default
+                                                // window.open(`mailto:hola@zanoo.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+
+                                                // 3. UI Feedback
                                                 setFormSent(true);
                                                 // auto reset suave para no “trabar” si el usuario quiere volver a completar
                                                 formTimer.current = window.setTimeout(() => setFormSent(false), 12000);
@@ -1638,6 +1675,7 @@ export default function ZanooLanding() {
                                                 <label className="text-xs text-black/55">Nombre del centro</label>
                                                 <input
                                                     required
+                                                    name="centro"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Ej: CAPS San Martín"
                                                 />
@@ -1647,6 +1685,7 @@ export default function ZanooLanding() {
                                                 <label className="text-xs text-black/55">Provincia</label>
                                                 <input
                                                     required
+                                                    name="provincia"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Buenos Aires"
                                                 />
@@ -1656,6 +1695,7 @@ export default function ZanooLanding() {
                                                 <label className="text-xs text-black/55">Localidad / Barrio</label>
                                                 <input
                                                     required
+                                                    name="localidad"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Ej: San Justo"
                                                 />
@@ -1664,6 +1704,7 @@ export default function ZanooLanding() {
                                             <div className="sm:col-span-2">
                                                 <label className="text-xs text-black/55">Dirección</label>
                                                 <input
+                                                    name="direccion"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Calle y número"
                                                 />
@@ -1675,6 +1716,7 @@ export default function ZanooLanding() {
                                                     required
                                                     type="number"
                                                     min={0}
+                                                    name="pacientes"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Ej: 1200"
                                                 />
@@ -1686,6 +1728,7 @@ export default function ZanooLanding() {
                                                     required
                                                     type="number"
                                                     min={0}
+                                                    name="turnos"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Ej: 900"
                                                 />
@@ -1695,6 +1738,7 @@ export default function ZanooLanding() {
                                                 <label className="text-xs text-black/55">Contacto</label>
                                                 <input
                                                     required
+                                                    name="contacto"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Nombre y rol"
                                                 />
@@ -1704,6 +1748,7 @@ export default function ZanooLanding() {
                                                 <label className="text-xs text-black/55">WhatsApp</label>
                                                 <input
                                                     required
+                                                    name="whatsapp"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Ej: +54 11 1234-5678"
                                                 />
@@ -1714,6 +1759,7 @@ export default function ZanooLanding() {
                                                 <input
                                                     required
                                                     type="email"
+                                                    name="email"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="contacto@centro.gob.ar"
                                                 />
@@ -1723,6 +1769,7 @@ export default function ZanooLanding() {
                                                 <label className="text-xs text-black/55">Comentario (opcional)</label>
                                                 <textarea
                                                     rows={3}
+                                                    name="comentarios"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
                                                     placeholder="Ej: hoy usamos planilla y WhatsApp; queremos ordenar turnos y sala."
                                                 />
@@ -1803,9 +1850,11 @@ export default function ZanooLanding() {
                         <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_70px_-35px_rgba(0,0,0,0.55)] overflow-hidden">
                             <div className="flex items-center justify-between px-5 py-4 border-b border-black/10 bg-white/60">
                                 <div className="flex items-center gap-2">
-                                    <img
+                                    <Image
                                         src="/brand/zanoo-logo-color-v2.png"
                                         alt="Zanoo"
+                                        width={120}
+                                        height={40}
                                         className="h-7 w-auto object-contain"
                                     />
                                     <div className="text-sm font-semibold text-black">Zanoo</div>
@@ -2048,8 +2097,8 @@ export default function ZanooLanding() {
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight flex flex-col md:block items-center justify-center gap-2 leading-tight">
                             <span>Si querés ver</span>
                             <span className="inline-flex items-center mx-2 align-middle">
-                                <img src="/brand/zanoo-logo-text-white.png" alt="Zanoo" className="h-[46px] md:h-[72px] w-auto object-contain hidden dark:block" />
-                                <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-[52px] md:h-[80px] w-auto object-contain dark:hidden" />
+                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={180} height={72} className="h-[46px] md:h-[72px] w-auto object-contain hidden dark:block" />
+                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={180} height={80} className="h-[52px] md:h-[80px] w-auto object-contain dark:hidden" />
                             </span>
                             <span>en serio, te lo mostramos.</span>
                         </h2>
