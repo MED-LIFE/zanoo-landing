@@ -1096,8 +1096,8 @@ export default function ZanooLanding() {
         const cy = top + height / 2;
         const dx = (event.clientX - cx) / (width / 2); // -1 to 1
         const dy = (event.clientY - cy) / (height / 2); // -1 to 1
-        x.set(dx * 10); // Max tilt 10deg
-        y.set(dy * 10);
+        x.set(dx * 4); // Tuned down: Max tilt 4deg (was 10)
+        y.set(dy * 4);
     }
     // Auto-play demo tabs
     useEffect(() => {
@@ -1357,11 +1357,11 @@ export default function ZanooLanding() {
                                 rotateY: useTransform(mouseX, (v) => -v),
                             }}
                             animate={{
-                                y: [0, -15, 0], // Continuous Floating (Yoyo)
+                                y: [0, -10, 0], // Tuned down: Float 10px (was 15)
                             }}
                             transition={{
                                 y: {
-                                    duration: 4,
+                                    duration: 5, // Slower: 5s (was 4)
                                     repeat: Infinity,
                                     ease: "easeInOut"
                                 }
@@ -2170,7 +2170,7 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
 
-                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.5 Live)</div>
+                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.6 Tuned)</div>
                 </div>
             </section >
         </div >
