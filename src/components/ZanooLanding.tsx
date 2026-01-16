@@ -1083,6 +1083,22 @@ export default function ZanooLanding() {
 
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
     const [shotIndex, setShotIndex] = useState(0);
+
+    // 3D Tilt Logic
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const mouseX = useSpring(x, { stiffness: 50, damping: 20 });
+    const mouseY = useSpring(y, { stiffness: 50, damping: 20 });
+
+    function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+        const cx = left + width / 2;
+        const cy = top + height / 2;
+        const dx = (event.clientX - cx) / (width / 2); // -1 to 1
+        const dy = (event.clientY - cy) / (height / 2); // -1 to 1
+        x.set(dx * 10); // Max tilt 10deg
+        y.set(dy * 10);
+    }
     // Auto-play demo tabs
     useEffect(() => {
         const interval = setInterval(() => {
@@ -1326,29 +1342,11 @@ export default function ZanooLanding() {
                     </div>
 
                     {/* HERO: CELU + SLIDER REAL */}
-    // 3D Tilt Logic
-                    const x = useMotionValue(0);
-                    const y = useMotionValue(0);
-                    const mouseX = useSpring(x, {stiffness: 50, damping: 20 });
-                    const mouseY = useSpring(y, {stiffness: 50, damping: 20 });
-
-                    function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        const {left, top, width, height} = event.currentTarget.getBoundingClientRect();
-                    const cx = left + width / 2;
-                    const cy = top + height / 2;
-                    const dx = (event.clientX - cx) / (width / 2); // -1 to 1
-                    const dy = (event.clientY - cy) / (height / 2); // -1 to 1
-                    x.set(dx * 10); // Max tilt 10deg
-                    y.set(dy * 10);
-    }
-
-                    return (
-                    // ... (parent layout)
                     <motion.div
                         initial={{ opacity: 0, y: 30, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="relative perspective-1000" // CSS class or style
+                        className="relative perspective-1000"
                         style={{ perspective: 1200 }}
                         onMouseMove={handleMouseMove}
                         onMouseLeave={() => { x.set(0); y.set(0); }}
@@ -2172,7 +2170,7 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
 
-                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.1)</div>
+                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.5 Live)</div>
                 </div>
             </section >
         </div >
