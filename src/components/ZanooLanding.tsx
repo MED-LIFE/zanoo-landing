@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState, Suspense, isValidElement, cloneElement, ReactElement } from "react";
-import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "next-themes";
@@ -1326,14 +1326,49 @@ export default function ZanooLanding() {
                     </div>
 
                     {/* HERO: CELU + SLIDER REAL */}
+    // 3D Tilt Logic
+                    const x = useMotionValue(0);
+                    const y = useMotionValue(0);
+                    const mouseX = useSpring(x, {stiffness: 50, damping: 20 });
+                    const mouseY = useSpring(y, {stiffness: 50, damping: 20 });
+
+                    function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        const {left, top, width, height} = event.currentTarget.getBoundingClientRect();
+                    const cx = left + width / 2;
+                    const cy = top + height / 2;
+                    const dx = (event.clientX - cx) / (width / 2); // -1 to 1
+                    const dy = (event.clientY - cy) / (height / 2); // -1 to 1
+                    x.set(dx * 10); // Max tilt 10deg
+                    y.set(dy * 10);
+    }
+
+                    return (
+                    // ... (parent layout)
                     <motion.div
-                        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.65, ease: "easeOut" }}
-                        className="relative"
-                        style={{ perspective: 1000 }} // Add perspective for 3D rotation
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="relative perspective-1000" // CSS class or style
+                        style={{ perspective: 1200 }}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={() => { x.set(0); y.set(0); }}
                     >
-                        <motion.div style={{ y: heroPhoneY, rotateY: heroPhoneRotate }}>
+                        <motion.div
+                            style={{
+                                rotateX: mouseY, // Inverted? usually dy maps to rotateX
+                                rotateY: useTransform(mouseX, (v) => -v),
+                            }}
+                            animate={{
+                                y: [0, -15, 0], // Continuous Floating (Yoyo)
+                            }}
+                            transition={{
+                                y: {
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }
+                            }}
+                        >
                             <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
                                 {activeHeroShot.id === "inicio" ? (
                                     <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
@@ -2129,10 +2164,10 @@ export default function ZanooLanding() {
                             </Button>
                         </div>
 
-                        <div className="mt-12 flex justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                        <div className="mt-12 flex justify-center opacity-90 grayscale hover:grayscale-0 transition-all duration-500">
                             <span className="inline-flex items-center mx-2 align-middle">
-                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={160} height={70} className="h-[48px] w-auto object-contain hidden dark:block" />
-                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={160} height={70} className="h-[48px] w-auto object-contain dark:hidden" />
+                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={300} height={130} className="h-[90px] w-auto object-contain hidden dark:block" />
+                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={300} height={130} className="h-[90px] w-auto object-contain dark:hidden" />
                             </span>
                         </div>
                     </motion.div>
