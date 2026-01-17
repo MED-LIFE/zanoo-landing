@@ -83,7 +83,25 @@ function AnimatedCounter({ value, suffix = "" }: { value: number | string; suffi
 }
 
 // -----------------------------
-// Motion presets (respeta reduced motion)
+// Interactive Components
+// -----------------------------
+function ShimmerButton({ children, onClick, className }: { children: React.ReactNode; onClick?: () => void; className?: string }) {
+    return (
+        <button
+            onClick={onClick}
+            className={cn(
+                "group relative overflow-hidden rounded-full transition-all hover:scale-105 active:scale-95",
+                className
+            )}
+        >
+            <span className="relative z-10">{children}</span>
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+            {/* Auto shimmer every few seconds if not hovering? For now, hover-based or css keyframe loop */}
+            <span className="absolute inset-0 -translate-x-full animate-[shimmer_3s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
+        </button>
+    );
+}
+
 // -----------------------------
 function useFadeUp() {
     const reduced = useReducedMotion();
@@ -959,10 +977,33 @@ function TechBackground() {
                 }}
             />
 
-            {/* Soft Blobs */}
-            <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[100px]" />
-            <div className="absolute bottom-[20%] right-[-5%] h-[400px] w-[400px] rounded-full bg-purple-100/40 blur-[100px]" />
-            <div className="absolute top-[40%] left-[20%] h-[300px] w-[300px] rounded-full bg-cyan-100/30 blur-[80px]" />
+            {/* Soft Blobs (Animated) */}
+            <motion.div
+                animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                    x: [0, 20, 0],
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[100px]"
+            />
+            <motion.div
+                animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                    y: [0, -30, 0],
+                }}
+                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                className="absolute bottom-[20%] right-[-5%] h-[400px] w-[400px] rounded-full bg-purple-100/40 blur-[100px]"
+            />
+            <motion.div
+                animate={{
+                    scale: [1, 1.15, 1],
+                    x: [0, -20, 0],
+                }}
+                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+                className="absolute top-[40%] left-[20%] h-[300px] w-[300px] rounded-full bg-cyan-100/30 blur-[80px]"
+            />
         </div>
     );
 }
@@ -1318,9 +1359,12 @@ export default function ZanooLanding() {
 
                         <TechReveal direction="up" delay={0.4}>
                             <div className="flex flex-wrap gap-4">
-                                <Button size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-12 text-base">
+                                <ShimmerButton
+                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-12 text-base font-medium"
+                                    onClick={() => scrollToId("contacto")}
+                                >
                                     Pedí demo
-                                </Button>
+                                </ShimmerButton>
                                 <Button variant="outline" size="lg" className="rounded-full border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 h-12 px-8 text-base">
                                     Ver la app
                                 </Button>
@@ -2142,7 +2186,7 @@ export default function ZanooLanding() {
                                     key={s.t}
                                     className="relative"
                                     whileHover={{ scale: 1.05 }}
-                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 12 }}
                                 >
                                     <div className="absolute left-6 top-3 h-4 w-4 rounded-full bg-white border border-black/15 shadow-sm" />
                                     <Card className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
@@ -2170,12 +2214,12 @@ export default function ZanooLanding() {
                         <p className="mt-4 text-black/60">Agendá una demo corta, enfocada en tu realidad operativa.</p>
 
                         <div className="mt-8 flex items-center justify-center gap-3">
-                            <Button
-                                className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)]"
+                            <ShimmerButton
+                                className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)] px-8 h-12 text-base font-semibold"
                                 onClick={() => scrollToId("gratis")}
                             >
                                 Coordinar demo
-                            </Button>
+                            </ShimmerButton>
                             <Button
                                 variant="outline"
                                 className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
