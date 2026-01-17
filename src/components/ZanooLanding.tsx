@@ -683,6 +683,9 @@ function GridDecoration() {
 // -----------------------------
 // Tech Reveal (Exit Animation)
 // -----------------------------
+// -----------------------------
+// Tech Reveal (Exit Animation)
+// -----------------------------
 function TechReveal({
     children,
     direction = "up",
@@ -697,21 +700,21 @@ function TechReveal({
     const variants = {
         hidden: {
             opacity: 0,
-            y: direction === "up" ? 40 : direction === "down" ? -40 : 0,
-            x: direction === "left" ? -40 : direction === "right" ? 40 : 0,
-            scale: 0.95
+            y: direction === "up" ? 60 : direction === "down" ? -60 : 0,
+            x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
+            scale: 0.9
         },
         visible: {
             opacity: 1,
             y: 0,
             x: 0,
             scale: 1,
-            transition: { duration: 0.6, delay }
+            transition: { duration: 0.8, delay }
         },
         exit: {
             opacity: 0,
-            y: -60, // Slides UP
-            x: -80, // Slides LEFT
+            y: -60,
+            x: -80,
             scale: 0.9,
             transition: { duration: 0.5 }
         }
@@ -721,8 +724,7 @@ function TechReveal({
         <motion.div
             initial="hidden"
             whileInView="visible"
-            exit="exit" // Triggers inside AnimatePresence or manuel exit
-            viewport={{ once: false, margin: "-10%" }} // Re-triggers on scroll
+            viewport={{ once: true, margin: "-5%" }}
             variants={variants}
             className={className}
         >
@@ -730,6 +732,8 @@ function TechReveal({
         </motion.div>
     );
 }
+
+
 // -----------------------------
 // PhoneFrame + Replica
 // -----------------------------
@@ -1650,8 +1654,8 @@ export default function ZanooLanding() {
                                 className="transition-transform duration-100 ease-out"
                             >
                                 <motion.div
-                                    animate={{ y: [0, -12, 0] }}
-                                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                    animate={{ y: [0, -20, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                                 >
                                     <PhoneFrame label={activeShot.label} src={activeShot.src}>
                                         <ReplicaScreen
@@ -2246,7 +2250,7 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
 
-                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.8 Polished)</div>
+                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.9 Tuned)</div>
                 </div>
             </section >
         </div >
