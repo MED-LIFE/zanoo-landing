@@ -1649,13 +1649,18 @@ export default function ZanooLanding() {
                                 }}
                                 className="transition-transform duration-100 ease-out"
                             >
-                                <PhoneFrame label={activeShot.label} src={activeShot.src}>
-                                    <ReplicaScreen
-                                        title="Zanoo"
-                                        subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
-                                        mode={activeShot.mode || "list"}
-                                    />
-                                </PhoneFrame>
+                                <motion.div
+                                    animate={{ y: [0, -12, 0] }}
+                                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                >
+                                    <PhoneFrame label={activeShot.label} src={activeShot.src}>
+                                        <ReplicaScreen
+                                            title="Zanoo"
+                                            subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
+                                            mode={activeShot.mode || "list"}
+                                        />
+                                    </PhoneFrame>
+                                </motion.div>
                             </motion.div>
 
                             <div className="mt-6 max-w-[360px] mx-auto">
@@ -2144,16 +2149,17 @@ export default function ZanooLanding() {
                             { t: "↓ Tiempos de espera", d: "Operación más previsible" },
                             { t: "↓ Ausentismo", d: "Recordatorios y coordinación" },
                             { t: "↑ Continuidad clínica", d: "Información lista" },
-                        ].map((k) => (
-                            <Card
-                                key={k.t}
-                                className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]"
-                            >
-                                <CardContent className="p-6">
-                                    <div className="text-xl font-semibold text-black">{k.t}</div>
-                                    <div className="mt-2 text-sm text-black/60">{k.d}</div>
-                                </CardContent>
-                            </Card>
+                        ].map((k, i) => (
+                            <TechReveal key={k.t} direction={i === 0 ? "left" : i === 1 ? "up" : "right"} delay={0.2 * i}>
+                                <Card
+                                    className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]"
+                                >
+                                    <CardContent className="p-6">
+                                        <div className="text-xl font-semibold text-black">{k.t}</div>
+                                        <div className="mt-2 text-sm text-black/60">{k.d}</div>
+                                    </CardContent>
+                                </Card>
+                            </TechReveal>
                         ))}
                     </div>
                 </div>
@@ -2186,7 +2192,7 @@ export default function ZanooLanding() {
                                     key={s.t}
                                     className="relative"
                                     whileHover={{ scale: 1.05 }}
-                                    transition={{ type: "spring", stiffness: 400, damping: 12 }}
+                                    transition={{ duration: 0.2, ease: "easeOut" }}
                                 >
                                     <div className="absolute left-6 top-3 h-4 w-4 rounded-full bg-white border border-black/15 shadow-sm" />
                                     <Card className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
@@ -2209,7 +2215,7 @@ export default function ZanooLanding() {
                     <motion.div {...fadeUp}>
                         <SectionBadge>Contacto</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight text-center leading-tight">
-                            ¿Listo para transformar la atención de tu centro?
+                            ¿Listo para <span className="font-bold">transformar la atención</span> de tu centro?
                         </h2>
                         <p className="mt-4 text-black/60">Agendá una demo corta, enfocada en tu realidad operativa.</p>
 
@@ -2240,7 +2246,7 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
 
-                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.7 Motion)</div>
+                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.8 Polished)</div>
                 </div>
             </section >
         </div >
