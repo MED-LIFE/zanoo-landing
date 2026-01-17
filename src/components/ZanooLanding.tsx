@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState, Suspense, isValidElement, cloneElement, ReactElement } from "react";
-import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "next-themes";
@@ -54,6 +54,32 @@ function cn(...classes: Array<string | false | null | undefined>) {
 function scrollToId(id: string) {
     const el = document.getElementById(id);
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function AnimatedCounter({ value, suffix = "" }: { value: number | string; suffix?: string }) {
+    const ref = useRef<HTMLSpanElement>(null);
+    const motionValue = useMotionValue(0);
+    const springValue = useSpring(motionValue, { damping: 30, stiffness: 100 });
+    const isInView = useInView(ref, { once: true, margin: "-20px" });
+
+    // Extract numeric part safely
+    const numericValue = typeof value === "string" ? parseFloat(value.replace(/[^0-9.]/g, "")) : value;
+
+    useEffect(() => {
+        if (isInView) {
+            motionValue.set(numericValue);
+        }
+    }, [isInView, numericValue, motionValue]);
+
+    useEffect(() => {
+        return springValue.on("change", (latest) => {
+            if (ref.current) {
+                ref.current.textContent = Math.floor(latest).toLocaleString() + suffix;
+            }
+        });
+    }, [springValue, suffix]);
+
+    return <span ref={ref}>0{suffix}</span>;
 }
 
 // -----------------------------
@@ -187,7 +213,7 @@ function SectionBadge({ children }: { children: React.ReactNode }) {
     );
 }
 
-function MiniKpi({ label, value }: { label: string; value: string }) {
+function MiniKpi({ label, value }: { label: string; value: React.ReactNode }) {
     return (
         <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-white/40 dark:bg-white/5 px-4 py-3 backdrop-blur-sm">
             <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium truncate">{label}</div>
@@ -857,15 +883,15 @@ function ReplicaScreen({
                         <div className="mt-3 grid grid-cols-3 gap-2">
                             <div className="rounded-2xl border border-black/10 bg-white/70 px-3 py-2">
                                 <div className="text-[11px] text-black/55">Asistencia</div>
-                                <div className="text-sm font-semibold text-black">86%</div>
+                                <div className="text-sm font-semibold text-black"><AnimatedCounter value={86} suffix="%" /></div>
                             </div>
                             <div className="rounded-2xl border border-black/10 bg-white/70 px-3 py-2">
                                 <div className="text-[11px] text-black/55">Ausentismo</div>
-                                <div className="text-sm font-semibold text-black">14%</div>
+                                <div className="text-sm font-semibold text-black"><AnimatedCounter value={14} suffix="%" /></div>
                             </div>
                             <div className="rounded-2xl border border-black/10 bg-white/70 px-3 py-2">
                                 <div className="text-[11px] text-black/55">Espera</div>
-                                <div className="text-sm font-semibold text-black">18m</div>
+                                <div className="text-sm font-semibold text-black"><AnimatedCounter value={18} suffix="m" /></div>
                             </div>
                         </div>
                         <div className="mt-4 h-28 rounded-2xl border border-black/10 bg-white/70" />
@@ -882,7 +908,7 @@ function ReplicaScreen({
 // -----------------------------
 function Sparkline({ data }: { data: Array<{ x: string; v: number }> }) {
     return (
-        <div className="mt-4 h-16">
+        <div className="mt-4 h-16 w-full">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data} margin={{ top: 6, right: 4, left: -18, bottom: 0 }}>
                     <CartesianGrid vertical={false} strokeOpacity={0.12} />
@@ -897,7 +923,7 @@ function Sparkline({ data }: { data: Array<{ x: string; v: number }> }) {
 
 function DirectorBars({ data }: { data: Array<{ day: string; v: number }> }) {
     return (
-        <div className="h-40">
+        <div className="h-40 w-full">
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 8, right: 6, left: -18, bottom: 0 }}>
                     <CartesianGrid vertical={false} strokeOpacity={0.15} />
@@ -1941,8 +1967,8 @@ export default function ZanooLanding() {
                                         </div>
 
                                         <div className="mt-4 grid grid-cols-2 gap-3">
-                                            <MiniKpi label="En espera" value="7" />
-                                            <MiniKpi label="Tiempo prom." value="18 min" />
+                                            <MiniKpi label="En espera" value={<AnimatedCounter value={7} />} />
+                                            <MiniKpi label="Tiempo prom." value={<AnimatedCounter value={18} suffix=" min" />} />
                                         </div>
 
                                         <div className="mt-4 space-y-2">
@@ -2038,9 +2064,9 @@ export default function ZanooLanding() {
                                         </div>
 
                                         <div className="mt-4 grid grid-cols-3 gap-3">
-                                            <MiniKpi label="Asistencia" value="86%" />
-                                            <MiniKpi label="Ausentismo" value="14%" />
-                                            <MiniKpi label="Prom. espera" value="18 min" />
+                                            <MiniKpi label="Asistencia" value={<AnimatedCounter value={86} suffix="%" />} />
+                                            <MiniKpi label="Ausentismo" value={<AnimatedCounter value={14} suffix="%" />} />
+                                            <MiniKpi label="Prom. espera" value={<AnimatedCounter value={18} suffix=" min" />} />
                                         </div>
 
                                         <div className="mt-4 rounded-2xl border border-black/10 bg-white/70 p-4">
