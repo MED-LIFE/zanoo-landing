@@ -2240,7 +2240,7 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
 
-                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.6 Tuned)</div>
+                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.7 Motion)</div>
                 </div>
             </section >
         </div >
