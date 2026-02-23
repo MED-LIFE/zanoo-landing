@@ -1372,24 +1372,12 @@ export default function ZanooLanding() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="relative perspective-1000"
                         style={{ perspective: 1200 }}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={() => { x.set(0); y.set(0); }}
                     >
                         <motion.div
-                            style={{
-                                rotateX: mouseY, // Inverted? usually dy maps to rotateX
-                                rotateY: useTransform(mouseX, (v) => -v),
-                            }}
-                            animate={{
-                                y: [0, -10, 0], // Tuned down: Float 10px (was 15)
-                            }}
-                            transition={{
-                                y: {
-                                    duration: 5, // Slower: 5s (was 4)
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }
-                            }}
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                            className="relative perspective-1000"
                         >
                             <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
                                 {activeHeroShot.id === "inicio" ? (
@@ -1463,10 +1451,10 @@ export default function ZanooLanding() {
                         </motion.div>
                     </motion.div>
                 </div>
-            </section>
+            </section >
 
             {/* PROBLEMA + FOTOS (reales) */}
-            <section id="producto" className="py-24">
+            < section id="producto" className="py-24" >
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
@@ -1502,12 +1490,12 @@ export default function ZanooLanding() {
                         </p>
                     </motion.div>
                 </div>
-            </section>
+            </section >
 
             {/* APP REAL SECTION */}
-            <section id="app" className="py-24 relative">
+            < section id="app" className="py-24 relative" >
                 {/* Section Specific Background Spotlights */}
-                <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
+                < div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto px-6">
@@ -1605,19 +1593,10 @@ export default function ZanooLanding() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.7, ease: "easeOut" }}
-                            className="relative perspective-1000"
+                            className="relative"
                         >
-                            <motion.div
-                                style={{
-                                    y: useTransform(useScroll().scrollYProgress, [0, 1], [50, -50]),
-                                    rotateX: useTransform(useScroll().scrollYProgress, [0.2, 0.8], [5, -5]),
-                                }}
-                                className="transition-transform duration-100 ease-out"
-                            >
-                                <motion.div
-                                    animate={{ y: [0, -20, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                >
+                            <div className="transition-transform duration-100 ease-out">
+                                <div>
                                     <PhoneFrame label={activeShot.label} src={activeShot.src}>
                                         <ReplicaScreen
                                             title="Zanoo"
@@ -1625,8 +1604,8 @@ export default function ZanooLanding() {
                                             mode={activeShot.mode || "list"}
                                         />
                                     </PhoneFrame>
-                                </motion.div>
-                            </motion.div>
+                                </div>
+                            </div>
 
                             <div className="mt-6 max-w-[360px] mx-auto">
                                 <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:bg-white/10 dark:border-white/10">
@@ -1656,10 +1635,10 @@ export default function ZanooLanding() {
                         <QuoteCarousel />
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* GRATIS + APLICAR */}
-            <section id="gratis" className="py-24">
+            < section id="gratis" className="py-24" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid lg:grid-cols-2 gap-14 items-start">
                         <motion.div {...fadeUp}>
@@ -1874,7 +1853,7 @@ export default function ZanooLanding() {
                         </motion.div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* DEMO (web) */}
             {/* DEMO (web) */}
