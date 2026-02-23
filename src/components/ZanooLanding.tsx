@@ -575,91 +575,26 @@ function MetricsDashboard() {
 // Advanced Tech Background (Dynamic)
 // -----------------------------
 // -----------------------------
-// Advanced Tech Background (Dynamic - REDUCED/SUBTLE)
+// Advanced Tech Background (Static for Performance)
 // -----------------------------
 function AdvancedTechBackground() {
-    const { scrollY } = useScroll();
-
-    // Parallax layers (slower, more subtle movement)
-    const y1 = useTransform(scrollY, [0, 2000], [0, 300]);
-    const y2 = useTransform(scrollY, [0, 2000], [0, -200]);
-    const y3 = useTransform(scrollY, [0, 2000], [0, 100]);
-
     const { theme } = useTheme();
-    // Force specific backgrounds based on theme to prevent "black in light mode" issues
-    const bgColor = theme === "light" ? "#ffffff" : undefined;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const bgColor = mounted && theme === "light" ? "#ffffff" : undefined;
 
     return (
         <div
             className="fixed inset-0 z-[-1] overflow-hidden bg-white dark:bg-black transition-colors duration-500 pointer-events-none"
-            style={{ backgroundColor: bgColor }} // HAMMER FIX for light mode
+            style={{ backgroundColor: bgColor }}
         >
-            {/* Subtle Dot Grid (Replaces Lines) */}
-            {/* Aurora Blobs (Softer, less defined, better mobile perf) */}
-            <motion.div
-                className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-blue-500/10 dark:bg-blue-600/10 blur-[80px] md:blur-[120px]"
-                animate={{
-                    x: [0, 50, 0],
-                    y: [0, 30, 0],
-                    scale: [1, 1.1, 1],
-                }}
-                transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                }}
-                style={{ willChange: "transform" }}
-            />
-            <motion.div
-                className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-purple-500/10 dark:bg-purple-600/10 blur-[80px] md:blur-[120px]"
-                animate={{
-                    x: [0, -40, 0],
-                    y: [0, 60, 0],
-                    scale: [1, 1.2, 1],
-                }}
-                transition={{
-                    duration: 18,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2,
-                }}
-                style={{ willChange: "transform" }}
-            />
-            <motion.div
-                className="absolute bottom-[-10%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-cyan-500/10 dark:bg-cyan-600/10 blur-[80px] md:blur-[120px]"
-                animate={{
-                    x: [0, 30, 0],
-                    y: [0, -40, 0],
-                    scale: [1, 1.1, 1],
-                }}
-                transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 4,
-                }}
-                style={{ willChange: "transform" }}
-            />
-
-            {/* Aurora Blobs (Softer, less defined) */}
-            <motion.div
-                style={{ y: y1 }}
-                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.4, 0.3] }}
-                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-cyan-400/10 dark:bg-cyan-500/5 blur-[120px]"
-            />
-            <motion.div
-                style={{ y: y2 }}
-                animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
-                transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                className="absolute top-[30%] left-[-20%] h-[700px] w-[700px] rounded-full bg-blue-500/10 dark:bg-blue-600/5 blur-[120px]"
-            />
-            <motion.div
-                style={{ y: y3 }}
-                animate={{ scale: [1, 1.05, 1], opacity: [0.25, 0.35, 0.25] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-                className="absolute bottom-[-20%] right-[10%] h-[800px] w-[800px] rounded-full bg-purple-500/10 dark:bg-purple-600/5 blur-[120px]"
-            />
+            <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-blue-500/10 dark:bg-blue-600/10 blur-[80px] md:blur-[120px]" />
+            <div className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-purple-500/10 dark:bg-purple-600/10 blur-[80px] md:blur-[120px]" />
+            <div className="absolute bottom-[-10%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-cyan-500/10 dark:bg-cyan-600/10 blur-[80px] md:blur-[120px]" />
         </div>
     );
 }
@@ -1241,6 +1176,18 @@ export default function ZanooLanding() {
             <AdvancedTechBackground />
             <ScrollToTop />
 
+            {/* Sticky WhatsApp Mobile */}
+            <a
+                href="https://wa.me/5491130668588?text=Hola,%20quiero%20aplicar%20para%20mi%20salita%20%E2%80%93%20"
+                target="_blank"
+                rel="noreferrer"
+                className="fixed bottom-6 left-6 z-50 sm:hidden flex items-center gap-2 p-3 pl-4 rounded-full bg-[#25D366] text-white shadow-lg backdrop-blur hover:bg-[#1ebd5a] transition-colors"
+                aria-label="Contactar por WhatsApp"
+            >
+                <span className="font-semibold text-sm drop-shadow-md">📲 Aplicar</span>
+            </a>
+
+
             {/* MOBILE PERF: backdrop-blur-none on mobile, xl on md+ */}
             <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 dark:border-white/5 bg-white/80 dark:bg-black/80 backdrop-blur-none md:backdrop-blur-xl transition-all duration-300">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -1279,7 +1226,7 @@ export default function ZanooLanding() {
                             className="rounded-full bg-foreground text-background hover:bg-foreground/90 font-medium px-6"
                             onClick={() => scrollToId("contacto")}
                         >
-                            Pedí demo
+                            Aplicá ahora
                         </Button>
                     </div>
 
@@ -1325,7 +1272,7 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section id="top" className="pt-32 pb-24 relative overflow-hidden">
+            <section ref={heroRef} id="top" className="pt-32 pb-24 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_55%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.10),transparent_60%)]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
@@ -1333,6 +1280,9 @@ export default function ZanooLanding() {
                     <div className="space-y-8">
                         <TechReveal direction="up" delay={0.1}>
                             <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
+                            <div className="mt-4 animate-pulse inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-[11px] font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-widest">
+                                Convocatoria limitada — Solo 5 lugares
+                            </div>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.2}>
@@ -1367,7 +1317,7 @@ export default function ZanooLanding() {
                                     className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-12 text-base font-medium"
                                     onClick={() => scrollToId("contacto")}
                                 >
-                                    Pedí demo
+                                    Aplicá ahora
                                 </ShimmerButton>
                                 <Button variant="outline" size="lg" className="rounded-full border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 h-12 px-8 text-base">
                                     Ver la app
@@ -1545,6 +1495,12 @@ export default function ZanooLanding() {
                             </motion.div>
                         ))}
                     </div>
+
+                    <motion.div {...fadeUp} className="mt-16 text-center max-w-2xl mx-auto px-6">
+                        <p className="text-xl md:text-2xl font-medium text-black/70 dark:text-white/70">
+                            De este desorden diario... a una sola vista clara y en tiempo real para todo el equipo.
+                        </p>
+                    </motion.div>
                 </div>
             </section>
 
@@ -1633,6 +1589,11 @@ export default function ZanooLanding() {
                             </div>
 
                             <div className="mt-24">
+                                <motion.div {...fadeUp} className="mb-8">
+                                    <p className="text-lg md:text-xl font-medium text-black/70 dark:text-white/70">
+                                        Y los resultados se sienten rápido en la sala – mirá lo que reportan centros similares tras pocos meses.
+                                    </p>
+                                </motion.div>
                                 <MetricsDashboard />
                             </div>
 
@@ -1747,8 +1708,8 @@ export default function ZanooLanding() {
                                         className="h-9 object-contain"
                                     />
                                     <div>
-                                        <div className="text-sm font-semibold text-black">Aplicación para centros</div>
-                                        <div className="text-xs text-black/50">Formulario básico (contacto inicial)</div>
+                                        <div className="text-sm font-semibold text-black">Aplicá a la convocatoria gratuita</div>
+                                        <div className="text-xs text-black/50 mt-1 max-w-sm leading-tight text-balance">Revisamos fit en 48-72hs (priorizamos públicas con alto volumen/desorden). Datos protegidos Ley 25.326 AR.</div>
                                     </div>
                                 </div>
 
@@ -1921,6 +1882,9 @@ export default function ZanooLanding() {
                 <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Demo liviana (web)</SectionBadge>
+                        <p className="mt-4 text-lg font-medium text-blue-600 dark:text-blue-400">
+                            Mirá cómo se ve resuelto: todo lo importante en una pantalla, sin cambiar de sistema.
+                        </p>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
                             Una sola vista.
                             <br />
