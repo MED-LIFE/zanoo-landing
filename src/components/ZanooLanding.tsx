@@ -1176,18 +1176,6 @@ export default function ZanooLanding() {
             <AdvancedTechBackground />
             <ScrollToTop />
 
-            {/* Sticky WhatsApp Mobile */}
-            <a
-                href="https://wa.me/5491130668588?text=Hola,%20quiero%20aplicar%20para%20mi%20salita%20%E2%80%93%20"
-                target="_blank"
-                rel="noreferrer"
-                className="fixed bottom-6 left-6 z-50 sm:hidden flex items-center gap-2 p-3 pl-4 rounded-full bg-[#25D366] text-white shadow-lg backdrop-blur hover:bg-[#1ebd5a] transition-colors"
-                aria-label="Contactar por WhatsApp"
-            >
-                <span className="font-semibold text-sm drop-shadow-md">📲 Aplicar</span>
-            </a>
-
-
             {/* MOBILE PERF: backdrop-blur-none on mobile, xl on md+ */}
             <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 dark:border-white/5 bg-white/80 dark:bg-black/80 backdrop-blur-none md:backdrop-blur-xl transition-all duration-300">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -1280,87 +1268,29 @@ export default function ZanooLanding() {
                     <div className="space-y-8">
                         <TechReveal direction="up" delay={0.1}>
                             <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
-                            <div className="mt-4 animate-pulse inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-[11px] font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-widest">
-                                Convocatoria limitada — Solo 5 lugares
-                            </div>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.2}>
-                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl leading-tight min-h-[160px] md:min-h-[auto]">
-                                Ordenar la atención es <br />
-                                <AnimatePresence mode="wait">
-                                    <motion.span
-                                        key={heroTextIndex}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        transition={{ duration: 0.8, ease: "easeInOut" }}
-                                        className="inline-block bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent pb-1"
-                                    >
-                                        {heroPhrases[heroTextIndex]}.
-                                    </motion.span>
-                                </AnimatePresence>
+                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl leading-tight">
+                                Convocatoria limitada: solo 5 salitas <span className="bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent pb-1">GRATIS</span> <br className="hidden md:block" />
+                                <span className="text-3xl sm:text-4xl lg:text-5xl">— ordená tu atención YA</span>
                             </h1>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.3}>
                             <p className="max-w-xl text-lg text-muted-foreground leading-relaxed">
-                                Zanoo ayuda a centros de salud a gestionar <strong>turnos, pacientes e información clínica</strong> en un solo lugar.
-                                <br className="hidden sm:block" />
-                                <span className="text-foreground font-medium">Simple para el equipo. Claro para la gente.</span>
+                                De caos de papeles/WhatsApp a una sola vista en tiempo real para todo el equipo (recepción, consultorio, dirección).
                             </p>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.4}>
-                            <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-wrap gap-4 mt-6">
                                 <ShimmerButton
-                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-12 text-base font-medium"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-14 text-lg font-bold"
                                     onClick={() => scrollToId("contacto")}
                                 >
-                                    Aplicá ahora
+                                    Aplicá ahora (solo 5 lugares)
                                 </ShimmerButton>
-                                <Button variant="outline" size="lg" className="rounded-full border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 h-12 px-8 text-base">
-                                    Ver la app
-                                </Button>
-                            </div>
-
-                            <div className="mt-10 grid grid-cols-3 gap-3 max-w-xl">
-                                <MiniKpi label="Implementación" value="rápida" />
-                                <MiniKpi label="UX" value="sin fricción" />
-                                <MiniKpi label="Roadmap" value="IA-ready" />
-                            </div>
-
-                            <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-5 max-w-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
-                                <div className="text-sm font-semibold text-black">Lo que resuelve (sin vueltas)</div>
-                                <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                                    <TechReveal direction="left" delay={0.1}>
-                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                            <div className="text-xs text-black/55">Turnos y sala</div>
-                                            <div className="mt-1 text-sm font-semibold text-black">estados + llamados</div>
-                                        </div>
-                                    </TechReveal>
-                                    <TechReveal direction="right" delay={0.2}>
-                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                            <div className="text-xs text-black/55">Pacientes</div>
-                                            <div className="mt-1 text-sm font-semibold text-black">historia en un lugar</div>
-                                        </div>
-                                    </TechReveal>
-                                    <TechReveal direction="left" delay={0.3}>
-                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                            <div className="text-xs text-black/55">Equipo</div>
-                                            <div className="mt-1 text-sm font-semibold text-black">menos fricción diaria</div>
-                                        </div>
-                                    </TechReveal>
-                                    <TechReveal direction="right" delay={0.4}>
-                                        <div className="rounded-2xl border border-black/10 bg-white/70 px-4 py-3">
-                                            <div className="text-xs text-black/55">Gestión</div>
-                                            <div className="mt-1 text-sm font-semibold text-black">métricas y señal</div>
-                                        </div>
-                                    </TechReveal>
-                                </div>
-                                <div className="mt-3 text-xs text-black/45">
-                                    Nota: los indicadores son objetivos/benchmarks hasta cargar métricas reales.
-                                </div>
                             </div>
                         </TechReveal>
                     </div>
@@ -1451,10 +1381,10 @@ export default function ZanooLanding() {
                         </motion.div>
                     </motion.div>
                 </div>
-            </section >
+            </section>
 
             {/* PROBLEMA + FOTOS (reales) */}
-            < section id="producto" className="py-24" >
+            <section id="producto" className="py-24">
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
@@ -1489,369 +1419,6 @@ export default function ZanooLanding() {
                             De este desorden diario... a una sola vista clara y en tiempo real para todo el equipo.
                         </p>
                     </motion.div>
-                </div>
-            </section >
-
-            {/* APP REAL SECTION */}
-            < section id="app" className="py-24 relative" >
-                {/* Section Specific Background Spotlights */}
-                < div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
-
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-14 items-start">
-                        <motion.div {...fadeUp}>
-                            <SectionBadge>Dentro de la app (real)</SectionBadge>
-
-                            <div className="mt-4 flex items-center gap-3">
-                                <BrandLogo className="h-8 w-auto" />
-                                <div className="text-xs text-black/45 dark:text-white/50">Producto real · capturas reales</div>
-                            </div>
-
-                            <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                                Esto no es una promesa.
-                                <br />
-                                Es el <span className="relative inline-block">
-                                    <span className="relative z-10 font-extrabold tracking-tight text-4xl md:text-5xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                        PRODUCTO
-                                    </span>
-                                </span>.
-                            </h2>
-
-                            <p className="mt-4 text-black/60 max-w-xl">
-                                Acá se muestran capturas reales adentro de un celu. Si todavía no hay screenshot cargado, ves una réplica
-                                liviana.
-                            </p>
-
-                            <div className="mt-8 flex flex-wrap gap-2">
-                                {APP_SHOTS.map((s, i) => (
-                                    <button
-                                        key={s.id}
-                                        type="button"
-                                        onClick={() => setShotIndex(i)}
-                                        className={cn(
-                                            "px-4 py-2 rounded-full border text-sm transition-all",
-                                            shotIndex % APP_SHOTS.length === i
-                                                ? "border-black/15 bg-white text-black shadow-sm"
-                                                : "border-transparent bg-black/5 text-black/55 hover:bg-black/10 dark:bg-white/10 dark:text-white/70"
-                                        )}
-                                    >
-                                        {s.label}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div className="mt-10 grid sm:grid-cols-2 gap-4">
-                                <TechReveal direction="left" delay={0.1}>
-                                    <FeatureCard
-                                        title="↓ Tiempos de espera"
-                                        desc="Estudios confirman una reducción del 45% en demoras con agenda inteligente."
-                                        icon={<Zap />}
-                                        bg="from-cyan-400 via-blue-500 to-indigo-600"
-                                    />
-                                </TechReveal>
-                                <TechReveal direction="right" delay={0.2}>
-                                    <FeatureCard
-                                        title="↑ Continuidad clínica"
-                                        desc="El acceso inmediato al historial evita repeticiones y errores de medicación."
-                                        icon={<Layout />}
-                                        bg="from-blue-400 via-indigo-500 to-purple-600"
-                                    />
-                                </TechReveal>
-                                <TechReveal direction="left" delay={0.3}>
-                                    <FeatureCard
-                                        title="↓ Ausentismo"
-                                        desc="Recordatorios automáticos reducen el ausentismo un 30% en el primer mes."
-                                        icon={<BarChartIcon />}
-                                        bg="from-amber-400 via-orange-500 to-red-600"
-                                    />
-                                </TechReveal>
-                                <TechReveal direction="right" delay={0.4}>
-                                    <FeatureCard
-                                        title="↓ Fricción operativa"
-                                        desc="Alertas tempranas previenen cuellos de botella antes de que colapsen la sala."
-                                        icon={<Bell />}
-                                        bg="from-emerald-400 via-teal-500 to-cyan-600"
-                                    />
-                                </TechReveal>
-                            </div>
-
-                            <div className="mt-24">
-                                <motion.div {...fadeUp} className="mb-8">
-                                    <p className="text-lg md:text-xl font-medium text-black/70 dark:text-white/70">
-                                        Y los resultados se sienten rápido en la sala – mirá lo que reportan centros similares tras pocos meses.
-                                    </p>
-                                </motion.div>
-                                <MetricsDashboard />
-                            </div>
-
-
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.7, ease: "easeOut" }}
-                            className="relative"
-                        >
-                            <div className="transition-transform duration-100 ease-out">
-                                <div>
-                                    <PhoneFrame label={activeShot.label} src={activeShot.src}>
-                                        <ReplicaScreen
-                                            title="Zanoo"
-                                            subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
-                                            mode={activeShot.mode || "list"}
-                                        />
-                                    </PhoneFrame>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 max-w-[360px] mx-auto">
-                                <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:bg-white/10 dark:border-white/10">
-                                    <div className="text-xs text-black/55 dark:text-white/60">Siguiente/Anterior</div>
-                                    <div className="mt-3 flex gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => setShotIndex((prev) => (prev === 0 ? APP_SHOTS.length - 1 : prev - 1))}
-                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20"
-                                        >
-                                            ◀
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setShotIndex((prev) => (prev + 1) % APP_SHOTS.length)}
-                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20"
-                                        >
-                                            ▶
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-
-                    <div className="mt-20">
-                        <QuoteCarousel />
-                    </div>
-                </div>
-            </section >
-
-            {/* GRATIS + APLICAR */}
-            < section id="gratis" className="py-24" >
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-14 items-start">
-                        <motion.div {...fadeUp}>
-                            <SectionBadge>Para salitas y centros</SectionBadge>
-                            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                                Zanoo es <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent font-extrabold">GRATIS</span>
-                                <br />
-                                para las salitas.
-                            </h2>
-
-                            <p className="mt-4 text-black/60 max-w-xl">
-                                La misión es simple: ordenar la atención donde más se necesita. Si sos un centro con recursos limitados,
-                                aplicá y coordinamos un contacto inicial.
-                            </p>
-
-                            <div className="mt-8 grid sm:grid-cols-2 gap-4">
-                                <FeatureCard
-                                    title="Implementación cuidada"
-                                    desc="Arrancamos con lo esencial y dejamos el sistema andando con tu equipo."
-                                />
-                                <FeatureCard title="Soporte humano" desc="Acompañamiento en el arranque: recepción, consultorio y dirección." />
-                            </div>
-
-                            <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-6 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
-                                <div className="text-sm font-semibold text-black">Qué pedimos para arrancar</div>
-                                <ul className="mt-3 text-sm text-black/60 space-y-2 list-disc list-inside">
-                                    <li>Datos de contacto y ubicación del centro</li>
-                                    <li>Volumen aproximado (pacientes/mes, turnos/mes)</li>
-                                    <li>Cómo llevan hoy turnos e historia (papel / WhatsApp / cuaderno / sistema)</li>
-                                </ul>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-80px" }}
-                            transition={{ duration: 0.55, ease: "easeOut" }}
-                        >
-                            <div className="rounded-[32px] border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_30px_80px_-38px_rgba(0,0,0,0.65)] overflow-hidden">
-                                <div className="px-6 py-5 border-b border-black/10 bg-white/60 flex items-center gap-3">
-                                    {/* Logo for White Card - Always Full Color */}
-                                    <img
-                                        src="/brand/zanoo-logo-color-v2.png"
-                                        alt="Zanoo"
-                                        className="h-9 object-contain"
-                                    />
-                                    <div>
-                                        <div className="text-sm font-semibold text-black">Aplicá a la convocatoria gratuita</div>
-                                        <div className="text-xs text-black/50 mt-1 max-w-sm leading-tight text-balance">Revisamos fit en 48-72hs (priorizamos públicas con alto volumen/desorden). Datos protegidos Ley 25.326 AR.</div>
-                                    </div>
-                                </div>
-
-                                <div className="p-6">
-                                    {formSent ? (
-                                        <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
-                                            <div className="text-sm font-semibold text-black">Listo ✅</div>
-                                            <div className="mt-2 text-sm text-black/60">
-                                                Recibimos tu solicitud. Te contactamos para coordinar el primer paso.
-                                            </div>
-                                            <div className="mt-4">
-                                                <Button
-                                                    variant="outline"
-                                                    className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
-                                                    onClick={() => setFormSent(false)}
-                                                >
-                                                    Enviar otra
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <form
-                                            onSubmit={(e) => {
-                                                e.preventDefault();
-
-                                                // 1. Gather Data
-                                                const formData = new FormData(e.currentTarget);
-                                                const data = Object.fromEntries(formData.entries());
-
-                                                // 2. Fallback: Mailto (Immediate utility without backend)
-                                                // Construct body for email client
-                                                const subject = `Nuevo contacto Zanoo: ${data.centro}`;
-                                                const body = `Nombre: ${data.centro}\nProvincia: ${data.provincia}\nLocalidad: ${data.localidad}\nContacto: ${data.contacto}\nWhatsApp: ${data.whatsapp}\nEmail: ${data.email}\nComentario: ${data.comentarios || '-'}`;
-
-                                                // Open mail client in separate tab if API fails or as default
-                                                // window.open(`mailto:hola@zanoo.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-
-                                                // 3. UI Feedback
-                                                setFormSent(true);
-                                                // auto reset suave para no “trabar” si el usuario quiere volver a completar
-                                                formTimer.current = window.setTimeout(() => setFormSent(false), 12000);
-                                            }}
-                                            className="grid sm:grid-cols-2 gap-4"
-                                        >
-                                            <div className="sm:col-span-2">
-                                                <label className="text-xs text-black/55">Nombre del centro</label>
-                                                <input
-                                                    required
-                                                    name="centro"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: CAPS San Martín"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="text-xs text-black/55">Provincia</label>
-                                                <input
-                                                    required
-                                                    name="provincia"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Buenos Aires"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="text-xs text-black/55">Localidad / Barrio</label>
-                                                <input
-                                                    required
-                                                    name="localidad"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: San Justo"
-                                                />
-                                            </div>
-
-                                            <div className="sm:col-span-2">
-                                                <label className="text-xs text-black/55">Dirección</label>
-                                                <input
-                                                    name="direccion"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Calle y número"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="text-xs text-black/55">Personas atendidas / mes</label>
-                                                <input
-                                                    required
-                                                    type="number"
-                                                    min={0}
-                                                    name="pacientes"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: 1200"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="text-xs text-black/55">Turnos / mes</label>
-                                                <input
-                                                    required
-                                                    type="number"
-                                                    min={0}
-                                                    name="turnos"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: 900"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="text-xs text-black/55">Contacto</label>
-                                                <input
-                                                    required
-                                                    name="contacto"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Nombre y rol"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="text-xs text-black/55">WhatsApp</label>
-                                                <input
-                                                    required
-                                                    name="whatsapp"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: +54 11 1234-5678"
-                                                />
-                                            </div>
-
-                                            <div className="sm:col-span-2">
-                                                <label className="text-xs text-black/55">Correo</label>
-                                                <input
-                                                    required
-                                                    type="email"
-                                                    name="email"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="contacto@centro.gob.ar"
-                                                />
-                                            </div>
-
-                                            <div className="sm:col-span-2">
-                                                <label className="text-xs text-black/55">Comentario (opcional)</label>
-                                                <textarea
-                                                    rows={3}
-                                                    name="comentarios"
-                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: hoy usamos planilla y WhatsApp; queremos ordenar turnos y sala."
-                                                />
-                                            </div>
-
-                                            <div className="sm:col-span-2 flex items-center justify-between gap-3 pt-2">
-                                                <div className="text-xs text-black/45">Esto inicia el contacto. Coordinamos y vemos si aplica.</div>
-                                                <Button
-                                                    type="submit"
-                                                    className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white"
-                                                >
-                                                    Enviar aplicación
-                                                </Button>
-                                            </div>
-                                        </form>
-                                    )}
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
                 </div>
             </section >
 
@@ -2078,36 +1645,339 @@ export default function ZanooLanding() {
             </section >
 
             {/* IMPACTO */}
-            < section id="impacto" className="py-24" >
+            <section id="impacto" className="py-24">
                 <div className="max-w-5xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
-                        <SectionBadge>Impacto</SectionBadge>
+                        <SectionBadge>Impacto Real</SectionBadge>
                         <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                            Cuando el sistema está <span className="font-bold">al límite</span>, cada mejora cuenta.
+                            Esto no es una promesa.
+                            <br />
+                            Es el <span className="relative inline-block">
+                                <span className="relative z-10 font-extrabold tracking-tight text-4xl md:text-5xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    PRODUCTO
+                                </span>
+                            </span>.
                         </h2>
-                        <p className="mt-4 text-black/60 max-w-3xl mx-auto">
-                            Zanoo busca reducir daños colaterales del desorden: esperas innecesarias, duplicaciones, historias
-                            incompletas y desgaste del equipo.
+                        <p className="mt-6 text-xl font-medium text-black/80 dark:text-white/80 max-w-2xl mx-auto">
+                            ↓ Demoras 45% &nbsp; | &nbsp; -30% Ausentismo &nbsp; | &nbsp; +12% Pacientes &nbsp; | &nbsp; 92% Satisfacción
                         </p>
                     </motion.div>
 
-                    <div className="mt-12 grid md:grid-cols-3 gap-6">
-                        {[
-                            { t: "↓ Tiempos de espera", d: "Operación más previsible" },
-                            { t: "↓ Ausentismo", d: "Recordatorios y coordinación" },
-                            { t: "↑ Continuidad clínica", d: "Información lista" },
-                        ].map((k, i) => (
-                            <TechReveal key={k.t} direction={i === 0 ? "left" : i === 1 ? "up" : "right"} delay={0.2 * i}>
-                                <Card
-                                    className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]"
-                                >
-                                    <CardContent className="p-6">
-                                        <div className="text-xl font-semibold text-black">{k.t}</div>
-                                        <div className="mt-2 text-sm text-black/60">{k.d}</div>
-                                    </CardContent>
-                                </Card>
-                            </TechReveal>
-                        ))}
+                    <div className="mt-16">
+                        <MetricsDashboard />
+                        <div className="mt-6 text-xs text-black/45 dark:text-white/45">
+                            Nota: Basado en benchmarks sectoriales + pruebas iniciales propias. Próximamente: métricas reales con salitas pioneras.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* APP REAL SECTION */}
+            <section id="app" className="py-24 relative">
+                {/* Section Specific Background Spotlights */}
+                <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
+
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-14 items-center">
+                        <motion.div {...fadeUp}>
+                            <SectionBadge>Dentro de la app (real)</SectionBadge>
+
+                            <div className="mt-4 flex items-center gap-3">
+                                <BrandLogo className="h-8 w-auto" />
+                                <div className="text-xs text-black/45 dark:text-white/50">Producto real · capturas reales</div>
+                            </div>
+
+                            <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
+                                Validá cómo se ve la herramienta en el día a día.
+                            </h2>
+
+                            <p className="mt-4 text-black/60 max-w-xl">
+                                Acá se muestran capturas reales adentro de un celu. Si todavía no hay screenshot cargado, ves una réplica liviana.
+                            </p>
+
+                            <div className="mt-8 flex flex-wrap gap-2">
+                                {APP_SHOTS.map((s, i) => (
+                                    <button
+                                        key={s.id}
+                                        type="button"
+                                        onClick={() => setShotIndex(i)}
+                                        className={cn(
+                                            "px-4 py-2 rounded-full border text-sm transition-all",
+                                            shotIndex % APP_SHOTS.length === i
+                                                ? "border-black/15 bg-white text-black shadow-sm"
+                                                : "border-transparent bg-black/5 text-black/55 hover:bg-black/10 dark:bg-white/10 dark:text-white/70"
+                                        )}
+                                    >
+                                        {s.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.7, ease: "easeOut" }}
+                            className="relative"
+                        >
+                            <div className="transition-transform duration-100 ease-out">
+                                <div>
+                                    <PhoneFrame label={activeShot.label} src={activeShot.src}>
+                                        <ReplicaScreen
+                                            title="Zanoo"
+                                            subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
+                                            mode={activeShot.mode || "list"}
+                                        />
+                                    </PhoneFrame>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 max-w-[360px] mx-auto">
+                                <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:bg-white/10 dark:border-white/10">
+                                    <div className="text-xs text-black/55 dark:text-white/60">Siguiente/Anterior</div>
+                                    <div className="mt-3 flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShotIndex((prev) => (prev === 0 ? APP_SHOTS.length - 1 : prev - 1))}
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20"
+                                        >
+                                            ◀
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShotIndex((prev) => (prev + 1) % APP_SHOTS.length)}
+                                            className="flex-1 px-4 py-2 rounded-2xl border border-black/10 bg-white hover:bg-black/5 text-sm dark:bg-white/10 dark:border-white/10 dark:text-white dark:hover:bg-white/20"
+                                        >
+                                            ▶
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    <div className="mt-20">
+                        <QuoteCarousel />
+                    </div>
+                </div>
+            </section >
+
+            {/* GRATIS + APLICAR */}
+            < section id="gratis" className="py-24" >
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-14 items-start">
+                        <motion.div {...fadeUp}>
+                            <SectionBadge>Para salitas y centros</SectionBadge>
+                            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                                Zanoo es <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent font-extrabold">GRATIS</span>
+                                <br />
+                                para las salitas.
+                            </h2>
+
+                            <p className="mt-4 text-black/60 max-w-xl">
+                                La misión es simple: ordenar la atención donde más se necesita. Si sos un centro con recursos limitados,
+                                aplicá y coordinamos un contacto inicial.
+                            </p>
+
+                            <div className="mt-8 grid sm:grid-cols-2 gap-4">
+                                <FeatureCard
+                                    title="Implementación cuidada"
+                                    desc="Arrancamos con lo esencial y dejamos el sistema andando con tu equipo."
+                                />
+                                <FeatureCard title="Soporte humano" desc="Acompañamiento en el arranque: recepción, consultorio y dirección." />
+                            </div>
+
+                            <div className="mt-10 rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-6 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
+                                <div className="text-sm font-semibold text-black">Qué pedimos para arrancar</div>
+                                <ul className="mt-3 text-sm text-black/60 space-y-2 list-disc list-inside">
+                                    <li>Datos de contacto y ubicación del centro</li>
+                                    <li>Volumen aproximado (pacientes/mes, turnos/mes)</li>
+                                    <li>Cómo llevan hoy turnos e historia (papel / WhatsApp / cuaderno / sistema)</li>
+                                </ul>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-80px" }}
+                            transition={{ duration: 0.55, ease: "easeOut" }}
+                        >
+                            <div className="rounded-[32px] border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_30px_80px_-38px_rgba(0,0,0,0.65)] overflow-hidden">
+                                <div className="px-6 py-5 border-b border-black/10 bg-white/60 flex items-center gap-3">
+                                    {/* Logo for White Card - Always Full Color */}
+                                    <img
+                                        src="/brand/zanoo-logo-color-v2.png"
+                                        alt="Zanoo"
+                                        className="h-9 object-contain"
+                                    />
+                                    <div>
+                                        <div className="text-sm font-semibold text-black">Aplicá a los últimos lugares – solo 5</div>
+                                        <div className="text-xs text-black/50 mt-1 max-w-sm leading-tight text-balance">Revisamos fit en 48-72hs (priorizamos públicas con alto volumen/desorden). Datos protegidos Ley 25.326 AR.</div>
+                                    </div>
+                                </div>
+
+                                <div className="p-6">
+                                    {formSent ? (
+                                        <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
+                                            <div className="text-sm font-semibold text-black">Listo ✅</div>
+                                            <div className="mt-2 text-sm text-black/60">
+                                                Recibimos tu solicitud. Te contactamos para coordinar el primer paso.
+                                            </div>
+                                            <div className="mt-4">
+                                                <Button
+                                                    variant="outline"
+                                                    className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
+                                                    onClick={() => setFormSent(false)}
+                                                >
+                                                    Enviar otra
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <form
+                                            onSubmit={(e) => {
+                                                e.preventDefault();
+
+                                                // 1. Gather Data
+                                                const formData = new FormData(e.currentTarget);
+                                                const data = Object.fromEntries(formData.entries());
+
+                                                // 2. Fallback: Mailto (Immediate utility without backend)
+                                                // Construct body for email client
+                                                const subject = `Nuevo contacto Zanoo: ${data.centro}`;
+                                                const body = `Nombre: ${data.centro}\nProvincia: ${data.provincia}\nLocalidad: ${data.localidad}\nContacto: ${data.contacto}\nWhatsApp: ${data.whatsapp}\nEmail: ${data.email}\nComentario: ${data.comentarios || '-'}`;
+
+                                                // Open mail client in separate tab if API fails or as default
+                                                // window.open(`mailto:hola@zanoo.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+
+                                                // 3. UI Feedback
+                                                setFormSent(true);
+                                                // auto reset suave para no “trabar” si el usuario quiere volver a completar
+                                                formTimer.current = window.setTimeout(() => setFormSent(false), 12000);
+                                            }}
+                                            className="grid sm:grid-cols-2 gap-4"
+                                        >
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Nombre del centro</label>
+                                                <input
+                                                    required
+                                                    name="centro"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: CAPS San Martín"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Provincia</label>
+                                                <input
+                                                    required
+                                                    name="provincia"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Buenos Aires"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Localidad / Barrio</label>
+                                                <input
+                                                    required
+                                                    name="localidad"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: San Justo"
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Dirección</label>
+                                                <input
+                                                    name="direccion"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Calle y número"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Personas atendidas / mes</label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    min={0}
+                                                    name="pacientes"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: 1200"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Turnos / mes</label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    min={0}
+                                                    name="turnos"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: 900"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">Contacto</label>
+                                                <input
+                                                    required
+                                                    name="contacto"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Nombre y rol"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-xs text-black/55">WhatsApp</label>
+                                                <input
+                                                    required
+                                                    name="whatsapp"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: +54 11 1234-5678"
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Correo</label>
+                                                <input
+                                                    required
+                                                    type="email"
+                                                    name="email"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="contacto@centro.gob.ar"
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">Comentario (opcional)</label>
+                                                <textarea
+                                                    rows={3}
+                                                    name="comentarios"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: hoy usamos planilla y WhatsApp; queremos ordenar turnos y sala."
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2 flex items-center justify-between gap-3 pt-2">
+                                                <div className="text-xs text-black/45">Esto inicia el contacto. Coordinamos y vemos si aplica.</div>
+                                                <Button
+                                                    type="submit"
+                                                    className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white"
+                                                >
+                                                    Aplicá a los últimos lugares – solo 5
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </section >
@@ -2171,7 +2041,7 @@ export default function ZanooLanding() {
                                 className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)] px-8 h-12 text-base font-semibold"
                                 onClick={() => scrollToId("gratis")}
                             >
-                                Coordinar demo
+                                Aplicá ahora
                             </ShimmerButton>
                             <Button
                                 variant="outline"
@@ -2196,6 +2066,19 @@ export default function ZanooLanding() {
                     <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.9 Tuned)</div>
                 </div>
             </section >
+
+            {/* WHATSAPP STICKY (MOBILE) */}
+            <a
+                href="https://wa.me/5491130668588?text=Hola,%20quiero%20aplicar%20para%20mi%20salita%20%E2%80%93%20[cargo/provincia]"
+                target="_blank"
+                rel="noreferrer"
+                className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-5 py-3 font-semibold shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-green-600 transition-all border border-green-400/30"
+            >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.818-.728-1.372-1.626-1.533-1.924-.161-.298-.017-.459.132-.608.135-.135.297-.348.446-.521.15-.173.2-.297.298-.496.098-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 21.053h-.004c-1.656 0-3.28-.445-4.706-1.286l-.337-.199-3.498.917.933-3.411-.219-.348a8.96 8.96 0 0 1-1.383-4.838A9.022 9.022 0 0 1 12 2.943a9.046 9.046 0 0 1 9.034 9.053A9.045 9.045 0 0 1 12 21.053z" />
+                </svg>
+                Aplicar
+            </a>
         </div >
     );
 }
