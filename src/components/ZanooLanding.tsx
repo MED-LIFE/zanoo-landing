@@ -1271,25 +1271,35 @@ export default function ZanooLanding() {
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.2}>
-                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl leading-tight">
-                                Convocatoria limitada: solo 5 salitas <span className="bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent pb-1">GRATIS</span> <br className="hidden md:block" />
-                                <span className="text-3xl sm:text-4xl lg:text-5xl">— ordená tu atención YA</span>
+                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-tight text-balance">
+                                Gestión clínica-operativa <span className="bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent pb-1">gratuita</span> <br className="hidden md:block" />
+                                <span className="text-3xl sm:text-4xl lg:text-5xl">para centros en toda Argentina</span>
                             </h1>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.3}>
-                            <p className="max-w-xl text-lg text-muted-foreground leading-relaxed">
-                                De caos de papeles/WhatsApp a una sola vista en tiempo real para todo el equipo (recepción, consultorio, dirección).
-                            </p>
+                            <div className="space-y-4">
+                                <p className="max-w-xl text-lg text-foreground font-medium leading-relaxed">
+                                    Nuestro propósito es brindar un sistema completo para pacientes (turnos, estudios, historia clínica) de forma GRATUITA, priorizando salitas y centros con bajos recursos.
+                                </p>
+                                <p className="max-w-xl text-md text-muted-foreground leading-relaxed">
+                                    Zanoo no solo optimiza tiempo y recursos del equipo, sino que transforma la experiencia que viven los pacientes hoy: menos esperas, atención más humana y seguimiento real.
+                                </p>
+                                <div className="max-w-xl p-4 mt-2 bg-blue-50 dark:bg-blue-950/30 rounded-2xl border border-blue-100 dark:border-blue-900/50">
+                                    <p className="text-sm text-blue-800 dark:text-blue-200 leading-snug">
+                                        🔒 <span className="font-semibold">Privacidad garantizada:</span> Tus datos y los de tus pacientes están protegidos conforme a la <span className="font-medium">Ley 25.326</span> (Argentina), almacenados en servidores seguros de Google Cloud con encriptación. No compartimos ni vendemos información.
+                                    </p>
+                                </div>
+                            </div>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.4}>
-                            <div className="flex flex-wrap gap-4 mt-6">
+                            <div className="flex flex-wrap gap-4 mt-8">
                                 <ShimmerButton
                                     className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-14 text-lg font-bold"
                                     onClick={() => scrollToId("contacto")}
                                 >
-                                    Aplicá ahora (solo 5 lugares)
+                                    Aplicá para ser parte
                                 </ShimmerButton>
                             </div>
                         </TechReveal>
@@ -1384,7 +1394,7 @@ export default function ZanooLanding() {
             </section>
 
             {/* PROBLEMA + FOTOS (reales) */}
-            <section id="producto" className="py-24">
+            <section id="producto" className="py-32">
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
@@ -1424,7 +1434,7 @@ export default function ZanooLanding() {
 
             {/* DEMO (web) */}
             {/* DEMO (web) */}
-            <section id="demo" className="py-24">
+            <section id="demo" className="py-32">
                 <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Demo liviana (web)</SectionBadge>
@@ -1644,8 +1654,59 @@ export default function ZanooLanding() {
                 </div>
             </section >
 
+            {/* NUESTRO PROCESO */}
+            <section id="proceso" className="py-32 bg-black/[0.02] dark:bg-white/[0.02] border-y border-black/5 dark:border-white/5">
+                <div className="max-w-4xl mx-auto px-6">
+                    <motion.div {...fadeUp} className="text-center">
+                        <SectionBadge>Nuestro Proceso</SectionBadge>
+                        <h2 className="mt-6 text-3xl md:text-4xl font-semibold tracking-tight">
+                            Cómo funciona la convocatoria y el proceso
+                        </h2>
+                        <p className="mt-4 text-black/60 dark:text-white/60 max-w-2xl mx-auto">
+                            Buscamos centros comprometidos con mejorar la atención al paciente. Te contamos cómo avanzamos juntos, paso a paso.
+                        </p>
+                    </motion.div>
+
+                    <div className="mt-16 mx-auto max-w-2xl relative">
+                        {/* Vertical line connecting timeline dots */}
+                        <div className="absolute left-[27px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-blue-400 via-purple-500 to-cyan-400 opacity-20" />
+
+                        <div className="space-y-8">
+                            {[
+                                { t: "1. Convocatoria abierta", d: "Aplicás completando el formulario con los datos básicos de tu centro y volumen de atención." },
+                                { t: "2. Pre-selección", d: "Revisamos fit inicial. Priorizamos salitas públicas y centros con recursos limitados y altos desafíos operativos." },
+                                { t: "3. Investigación", d: "Analizamos tu volumen, necesidades reales reportadas y cómo llevás la operación actual." },
+                                { t: "4. 1er contacto", d: "Coordinamos una videollamada o reunión (nos contactaremos por WhatsApp, email o teléfono línea)." },
+                                { t: "5. Selección", d: "Elegimos las salitas que mejor encajan con las capacidades de implementación en esta ronda." },
+                                { t: "6. Anuncio y Setup", d: "Avisamos a los seleccionados y arrancamos la implementación guiada con soporte humano dedicado." },
+                            ].map((step, i) => (
+                                <TechReveal key={step.t} direction="up" delay={0.1 * i}>
+                                    <div className="relative flex gap-6">
+                                        {/* Timeline Dot */}
+                                        <div className="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-white dark:bg-black border-2 border-blue-500 shadow-md flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-lg">
+                                            {i + 1}
+                                        </div>
+                                        {/* Content Card */}
+                                        <div className="flex-1 rounded-2xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl p-6 shadow-sm">
+                                            <h3 className="text-lg font-semibold text-foreground">{step.t}</h3>
+                                            <p className="mt-2 text-sm text-muted-foreground">{step.d}</p>
+                                        </div>
+                                    </div>
+                                </TechReveal>
+                            ))}
+                        </div>
+
+                        <motion.div {...fadeUp} className="mt-12 p-5 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-center">
+                            <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
+                                Todo absolutamente transparente, sin compromiso ni costo comercial. Si tu centro no entra en esta ronda, te guardamos para la próxima con prioridad.
+                            </p>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
             {/* IMPACTO */}
-            <section id="impacto" className="py-24">
+            <section id="impacto" className="py-32">
                 <div className="max-w-5xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Impacto Real</SectionBadge>
@@ -1673,7 +1734,7 @@ export default function ZanooLanding() {
             </section>
 
             {/* APP REAL SECTION */}
-            <section id="app" className="py-24 relative">
+            <section id="app" className="py-32 relative">
                 {/* Section Specific Background Spotlights */}
                 <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
@@ -1765,7 +1826,7 @@ export default function ZanooLanding() {
             </section >
 
             {/* GRATIS + APLICAR */}
-            < section id="gratis" className="py-24" >
+            < section id="gratis" className="py-32" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid lg:grid-cols-2 gap-14 items-start">
                         <motion.div {...fadeUp}>
@@ -1809,12 +1870,13 @@ export default function ZanooLanding() {
                                 <div className="px-6 py-5 border-b border-black/10 bg-white/60 flex items-center gap-3">
                                     {/* Logo for White Card - Always Full Color */}
                                     <img
+                                        loading="lazy"
                                         src="/brand/zanoo-logo-color-v2.png"
                                         alt="Zanoo"
                                         className="h-9 object-contain"
                                     />
                                     <div>
-                                        <div className="text-sm font-semibold text-black">Aplicá a los últimos lugares – solo 5</div>
+                                        <div className="text-sm font-semibold text-black">Aplicá para ser parte de la convocatoria gratuita</div>
                                         <div className="text-xs text-black/50 mt-1 max-w-sm leading-tight text-balance">Revisamos fit en 48-72hs (priorizamos públicas con alto volumen/desorden). Datos protegidos Ley 25.326 AR.</div>
                                     </div>
                                 </div>
@@ -1860,6 +1922,10 @@ export default function ZanooLanding() {
                                             }}
                                             className="grid sm:grid-cols-2 gap-4"
                                         >
+                                            <div className="sm:col-span-2 mb-2 p-3 rounded-xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-xs text-blue-800 dark:text-blue-200">
+                                                Para avanzar rápido en el 1er contacto, por favor incluí todos los medios de comunicación posibles (WhatsApp, email, teléfono línea).
+                                            </div>
+
                                             <div className="sm:col-span-2">
                                                 <label className="text-xs text-black/55">Nombre del centro</label>
                                                 <input
@@ -1943,6 +2009,15 @@ export default function ZanooLanding() {
                                                 />
                                             </div>
 
+                                            <div>
+                                                <label className="text-xs text-black/55">Teléfono línea o fijo (opcional)</label>
+                                                <input
+                                                    name="telefono_fijo"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ayuda si WhatsApp no responde"
+                                                />
+                                            </div>
+
                                             <div className="sm:col-span-2">
                                                 <label className="text-xs text-black/55">Correo</label>
                                                 <input
@@ -1964,13 +2039,16 @@ export default function ZanooLanding() {
                                                 />
                                             </div>
 
-                                            <div className="sm:col-span-2 flex items-center justify-between gap-3 pt-2">
-                                                <div className="text-xs text-black/45">Esto inicia el contacto. Coordinamos y vemos si aplica.</div>
+                                            <div className="sm:col-span-2 flex flex-col gap-4 pt-4 border-t border-black/5 mt-2">
+                                                <div className="text-xs text-black/50 leading-relaxed text-balance">
+                                                    Al enviar, iniciamos revisión. Te contactamos en 48-72hs con próximo paso (o feedback si no califica esta ronda). <br /><br />
+                                                    <span className="font-semibold text-black/60">Tus datos están protegidos por la Ley 25.326 AR</span>, en servidores seguros de Google Cloud con encriptación – solo usamos para este proceso, nunca compartidos ni vendidos.
+                                                </div>
                                                 <Button
                                                     type="submit"
-                                                    className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white"
+                                                    className="rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white w-full sm:w-auto self-end px-8"
                                                 >
-                                                    Aplicá a los últimos lugares – solo 5
+                                                    Enviar aplicación
                                                 </Button>
                                             </div>
                                         </form>
@@ -1983,7 +2061,7 @@ export default function ZanooLanding() {
             </section >
 
             {/* ROADMAP */}
-            < section id="roadmap" className="py-24" >
+            < section id="roadmap" className="py-32" >
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Roadmap</SectionBadge>
@@ -2069,7 +2147,7 @@ export default function ZanooLanding() {
 
             {/* WHATSAPP STICKY (MOBILE) */}
             <a
-                href="https://wa.me/5491130668588?text=Hola,%20quiero%20aplicar%20para%20mi%20salita%20%E2%80%93%20[cargo/provincia]"
+                href="https://wa.me/5491130668588?text=Hola,%20quiero%20ser%20parte%20de%20Zanoo%20para%20mi%20salita%20%E2%80%93%20[cargo/provincia]"
                 target="_blank"
                 rel="noreferrer"
                 className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-5 py-3 font-semibold shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-green-600 transition-all border border-green-400/30"
