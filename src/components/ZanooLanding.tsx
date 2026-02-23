@@ -143,22 +143,25 @@ const APP_SHOTS: Array<{
 const PROBLEM_TILES = [
     {
         tone: "blue" as const,
-        title: "Papeles, WhatsApps, cuadernos.",
-        desc: "La información queda dispersa y se pierde.",
+        title: "Papeles y WhatsApps",
+        desc: "Información fragmentada.",
         imageSrc: "/photos/papeles-whatsapp-cuaderno.jpg",
+        popupText: "En salitas argentinas esto genera estrés, errores y horas perdidas. Zanoo digitaliza y sincroniza todo de forma segura."
     },
     {
         tone: "violet" as const,
-        title: "Turnos duplicados y filas eternas.",
-        desc: "Nadie sabe qué sigue, y la atención se satura.",
+        title: "Turnos duplicados",
+        desc: "Filas eternas en recepción.",
         imageSrc: "/photos/fila-turnos-duplicados.jpg",
+        popupText: "La sobre-escritura en cuadernos causa molestias al paciente y al profesional. El control unificado previene cuellos de botella instantáneamente."
     },
     {
         tone: "amber" as const,
-        title: "Historia clínica incompleta.",
+        title: "Historia clínica incompleta",
         desc: "Cada consulta empieza de cero.",
         imageSrc: "/photos/historia-clinica-incompleta.jpg",
-    },
+        popupText: "No saber el historial del paciente retrasa la atención clínica. Zanoo ofrece un registro electrónico simple y rápido validado por normativas nacionales."
+    }
 ];
 
 // -----------------------------
@@ -272,13 +275,16 @@ function PhotoTile({
     desc,
     tone = "blue",
     imageSrc,
+    popupText,
 }: {
     title: string;
     desc: string;
     tone?: "blue" | "violet" | "amber";
     imageSrc?: string;
+    popupText?: string;
 }) {
     const [imgError, setImgError] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const showImage = Boolean(imageSrc) && !imgError;
 
     const toneMap: Record<string, string> = {
@@ -288,7 +294,10 @@ function PhotoTile({
     };
 
     return (
-        <Card className="group relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-purple-500/10">
+        <Card
+            className={`group relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-purple-500/10 transition-all duration-300 ${popupText ? 'cursor-pointer hover:border-blue-500/30 hover:shadow-xl hover:-translate-y-1' : ''}`}
+            onClick={() => popupText && setIsOpen(!isOpen)}
+        >
             <div className="relative h-44">
                 {showImage ? (
                     <>
@@ -316,19 +325,34 @@ function PhotoTile({
                 )}
             </div>
 
-            <CardContent className="p-6 relative z-10">
+            <CardContent className="p-6 relative z-10 transition-colors">
                 <div className="flex items-start justify-between gap-3">
                     <div>
                         <h3 className="text-lg font-semibold text-foreground leading-snug">{title}</h3>
                         <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
                     </div>
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/35 to-purple-600/35 border border-black/10 dark:border-white/10 shadow-sm" />
+                    {popupText && (
+                        <div className={`flex flex-col items-center justify-center shrink-0 w-8 h-8 rounded-full border transition-all ${isOpen ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
+                            <span className="text-xl font-light leading-none">{isOpen ? '−' : '+'}</span>
+                        </div>
+                    )}
                 </div>
             </CardContent>
 
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <div className="absolute -inset-12 bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-600/10 blur-2xl" />
-            </div>
+            <AnimatePresence>
+                {isOpen && popupText && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden bg-blue-50/50 dark:bg-blue-900/20 border-t border-blue-100/50 dark:border-blue-800/50"
+                    >
+                        <div className="px-6 pb-6 pt-2 text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                            {popupText}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </Card>
     );
 }
@@ -484,11 +508,11 @@ function MetricsDashboard() {
                                 <Sparkles className="h-3 w-3" /> Impacto Real
                             </div>
                             <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                                Resultados que se <br />
-                                <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-purple-600 dark:from-blue-400 dark:via-purple-400 dark:to-purple-500 bg-clip-text text-transparent">sienten en la sala.</span>
+                                Resultados reales que se <br />
+                                <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-purple-600 dark:from-blue-400 dark:via-purple-400 dark:to-purple-500 bg-clip-text text-transparent">sienten en la sala:</span>
                             </h3>
-                            <p className="mt-4 text-muted-foreground max-w-sm mx-auto md:mx-0">
-                                Métricas promedio reportada por centros tras 3 meses de implementación.
+                            <p className="mt-4 text-sm font-semibold text-foreground/80 max-w-sm mx-auto md:mx-0">
+                                ↓ Demoras 45% &nbsp;|&nbsp; -30% Ausentismo &nbsp;|&nbsp; +12% Pacientes &nbsp;|&nbsp; 92% Satisfacción
                             </p>
                         </div>
 
@@ -751,7 +775,7 @@ function ReplicaScreen({
                     {/* Restored logo for fallback view */}
                     {/* Restored logo for fallback view - Aligned Row */}
                     <div className="flex items-center gap-2">
-                        <img src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-5 w-auto object-contain" />
+                        <img loading="lazy" src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" className="h-5 w-auto object-contain" />
                         <div className="text-[15px] font-semibold text-black leading-tight translate-y-[1px]">{title}</div>
                         <div className="h-4 w-[1px] bg-black/10 mx-1" />
                         <div className="text-xs text-black/45 translate-y-[1px]">{subtitle}</div>
@@ -1260,10 +1284,10 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="pt-32 pb-24 relative overflow-hidden">
+            <section ref={heroRef} id="top" className="pt-40 pb-24 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_55%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.10),transparent_60%)]" />
 
-                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
+                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
                     {/* Hero Text */}
                     <div className="space-y-8">
                         <TechReveal direction="up" delay={0.1}>
@@ -1419,15 +1443,20 @@ export default function ZanooLanding() {
                     <div className="mt-12 grid md:grid-cols-3 gap-8">
                         {PROBLEM_TILES.map((t, idx) => (
                             <motion.div key={t.title} {...fadeUp} transition={{ ...(fadeUp as any).transition, delay: 0.05 * idx }}>
-                                <PhotoTile title={t.title} desc={t.desc} tone={t.tone} imageSrc={t.imageSrc} />
+                                <PhotoTile title={t.title} desc={t.desc} tone={t.tone as any} imageSrc={t.imageSrc} popupText={t.popupText} />
                             </motion.div>
                         ))}
                     </div>
 
-                    <motion.div {...fadeUp} className="mt-16 text-center max-w-2xl mx-auto px-6">
-                        <p className="text-xl md:text-2xl font-medium text-black/70 dark:text-white/70">
+                    <motion.div {...fadeUp} className="mt-24 text-center max-w-3xl mx-auto px-6 border-y border-black/5 dark:border-white/5 py-12 bg-blue-50/30 dark:bg-blue-900/5 rounded-[40px]">
+                        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
                             De este desorden diario... a una sola vista clara y en tiempo real para todo el equipo.
-                        </p>
+                        </h3>
+                        <div className="flex justify-center flex-col items-center">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mt-2 group hover:scale-110 transition-transform cursor-pointer" onClick={() => scrollToId('demo')}>
+                                <ArrowUpRight className="rotate-45 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                        </div>
                     </motion.div>
                 </div>
             </section >
@@ -1673,12 +1702,11 @@ export default function ZanooLanding() {
 
                         <div className="space-y-8">
                             {[
-                                { t: "1. Convocatoria abierta", d: "Aplicás completando el formulario con los datos básicos de tu centro y volumen de atención." },
-                                { t: "2. Pre-selección", d: "Revisamos fit inicial. Priorizamos salitas públicas y centros con recursos limitados y altos desafíos operativos." },
-                                { t: "3. Investigación", d: "Analizamos tu volumen, necesidades reales reportadas y cómo llevás la operación actual." },
-                                { t: "4. 1er contacto", d: "Coordinamos una videollamada o reunión (nos contactaremos por WhatsApp, email o teléfono línea)." },
-                                { t: "5. Selección", d: "Elegimos las salitas que mejor encajan con las capacidades de implementación en esta ronda." },
-                                { t: "6. Anuncio y Setup", d: "Avisamos a los seleccionados y arrancamos la implementación guiada con soporte humano dedicado." },
+                                { t: "Convocatoria abierta", d: "Aplicás con datos de tu centro." },
+                                { t: "Pre-selección", d: "Revisamos fit (priorizamos bajos recursos y alto desorden)." },
+                                { t: "Investigación y análisis", d: "Estudiamos tu operación actual." },
+                                { t: "1er contacto", d: "Coordinamos por WhatsApp, email o teléfono línea (por eso pedimos todos los medios)." },
+                                { t: "Selección y anuncio", d: "Elegimos y avisamos para implementar con soporte humano." },
                             ].map((step, i) => (
                                 <TechReveal key={step.t} direction="up" delay={0.1 * i}>
                                     <div className="relative flex gap-6">
@@ -1698,7 +1726,7 @@ export default function ZanooLanding() {
 
                         <motion.div {...fadeUp} className="mt-12 p-5 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-center">
                             <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
-                                Todo absolutamente transparente, sin compromiso ni costo comercial. Si tu centro no entra en esta ronda, te guardamos para la próxima con prioridad.
+                                Transparente, sin costo ni compromiso. Si no entra esta ronda, te reservamos prioridad.
                             </p>
                         </motion.div>
                     </div>
@@ -1719,15 +1747,12 @@ export default function ZanooLanding() {
                                 </span>
                             </span>.
                         </h2>
-                        <p className="mt-6 text-xl font-medium text-black/80 dark:text-white/80 max-w-2xl mx-auto">
-                            ↓ Demoras 45% &nbsp; | &nbsp; -30% Ausentismo &nbsp; | &nbsp; +12% Pacientes &nbsp; | &nbsp; 92% Satisfacción
-                        </p>
                     </motion.div>
 
                     <div className="mt-16">
                         <MetricsDashboard />
                         <div className="mt-6 text-xs text-black/45 dark:text-white/45">
-                            Nota: Basado en benchmarks sectoriales + pruebas iniciales propias. Próximamente: métricas reales con salitas pioneras.
+                            Basado en benchmarks sectoriales OMS/LATAM + pruebas iniciales propias. Próximamente métricas reales de salitas pioneras.
                         </div>
                     </div>
                 </div>
@@ -1922,8 +1947,8 @@ export default function ZanooLanding() {
                                             }}
                                             className="grid sm:grid-cols-2 gap-4"
                                         >
-                                            <div className="sm:col-span-2 mb-2 p-3 rounded-xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-xs text-blue-800 dark:text-blue-200">
-                                                Para avanzar rápido en el 1er contacto, por favor incluí todos los medios de comunicación posibles (WhatsApp, email, teléfono línea).
+                                            <div className="sm:col-span-2 mb-2 p-3 rounded-xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-xs text-blue-800 dark:text-blue-200 font-medium">
+                                                Incluí todos tus medios de contacto para avanzar rápido en el primer contacto.
                                             </div>
 
                                             <div className="sm:col-span-2">
@@ -2040,9 +2065,8 @@ export default function ZanooLanding() {
                                             </div>
 
                                             <div className="sm:col-span-2 flex flex-col gap-4 pt-4 border-t border-black/5 mt-2">
-                                                <div className="text-xs text-black/50 leading-relaxed text-balance">
-                                                    Al enviar, iniciamos revisión. Te contactamos en 48-72hs con próximo paso (o feedback si no califica esta ronda). <br /><br />
-                                                    <span className="font-semibold text-black/60">Tus datos están protegidos por la Ley 25.326 AR</span>, en servidores seguros de Google Cloud con encriptación – solo usamos para este proceso, nunca compartidos ni vendidos.
+                                                <div className="text-xs text-black/50 leading-relaxed text-balance font-medium">
+                                                    Revisión en 48-72hs. Datos protegidos Ley 25.326 AR, Google Cloud encriptado – solo para este proceso.
                                                 </div>
                                                 <Button
                                                     type="submit"
