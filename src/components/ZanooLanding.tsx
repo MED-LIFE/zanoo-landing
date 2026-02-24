@@ -29,6 +29,7 @@ import {
     BarChart as BarChartIcon, // Renamed to avoid conflict with Recharts BarChart
     Bell,
     ArrowUpRight,
+    ArrowDown,
     Sun,
     Moon,
     Monitor,
@@ -700,11 +701,13 @@ function TechReveal({
     children,
     direction = "up",
     delay = 0,
+    duration = 0.8,
     className
 }: {
     children: React.ReactNode;
     direction?: "left" | "right" | "up" | "down";
     delay?: number;
+    duration?: number;
     className?: string;
 }) {
     const variants = {
@@ -719,7 +722,7 @@ function TechReveal({
             y: 0,
             x: 0,
             scale: 1,
-            transition: { duration: 0.8, delay }
+            transition: { duration: duration, delay }
         },
         exit: {
             opacity: 0,
@@ -1524,26 +1527,26 @@ export default function ZanooLanding() {
                         ))}
                     </div>
 
-                    <div className="mt-48 text-center max-w-5xl mx-auto px-6 py-20 relative">
-                        {/* Background glow for transition */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 dark:via-cyan-400/5 to-transparent blur-3xl rounded-full" />
+                    <div className="mt-40 md:mt-48 text-center max-w-4xl mx-auto px-6 py-24 md:py-32 relative">
+                        {/* Background glow for transition - extremely subtle */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b5cf6]/5 dark:via-[#8b5cf6]/5 to-transparent blur-3xl rounded-full" />
 
-                        <h2 className="text-4xl md:text-6xl lg:text-[5rem] font-extrabold text-foreground mb-12 leading-[1.1] relative z-10 flex flex-col gap-2 md:gap-4 items-center justify-center text-balance">
-                            <TechReveal direction="up" delay={0.2}>
-                                <span>De este <span className="text-cyan-500 dark:text-cyan-400 font-black tracking-tight">desorden diario</span>...</span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold text-foreground mb-12 leading-[1.25] relative z-10 flex flex-col gap-3 md:gap-5 items-center justify-center text-balance tracking-tight">
+                            <TechReveal direction="up" delay={0.2} duration={0.7}>
+                                <span className="text-foreground/80">De este <span className="text-[#0ea5e9] font-black tracking-normal">desorden diario</span>...</span>
                             </TechReveal>
-                            <TechReveal direction="up" delay={0.5}>
-                                <span>a una <span className="text-blue-600 dark:text-blue-400 font-black tracking-tight">sola vista clara</span></span>
+                            <TechReveal direction="up" delay={0.4} duration={0.7}>
+                                <span className="text-foreground/80">a una <span className="text-[#8b5cf6] font-black tracking-normal">sola vista clara</span></span>
                             </TechReveal>
-                            <TechReveal direction="up" delay={0.8}>
-                                <span>y en <span className="underline decoration-wavy decoration-cyan-500/50 dark:decoration-cyan-400/50 underline-offset-8">tiempo real</span> para tu equipo.</span>
+                            <TechReveal direction="up" delay={0.6} duration={0.7}>
+                                <span className="text-foreground/80">y en <span className="text-blue-900 dark:text-blue-300 font-black tracking-normal">tiempo real</span> para tu equipo.</span>
                             </TechReveal>
                         </h2>
 
-                        <TechReveal direction="up" delay={1.1}>
-                            <div className="flex justify-center flex-col items-center relative z-10 mt-8">
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-b from-cyan-500/10 to-transparent flex items-center justify-center group hover:scale-110 transition-transform cursor-pointer shadow-xl border border-cyan-500/20 backdrop-blur-sm" onClick={() => scrollToId('demo')}>
-                                    <ArrowUpRight className="rotate-45 h-10 w-10 text-cyan-500 dark:text-cyan-400" />
+                        <TechReveal direction="up" delay={0.9} duration={0.7}>
+                            <div className="flex justify-center flex-col items-center relative z-10 mt-12">
+                                <div className="w-14 h-14 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center group hover:scale-105 hover:bg-black/10 dark:hover:bg-white/10 transition-all cursor-pointer shadow-sm border border-black/5 dark:border-white/5 backdrop-blur-md" onClick={() => scrollToId('demo')}>
+                                    <ArrowDown className="h-6 w-6 text-foreground/50 group-hover:text-foreground transition-colors" />
                                 </div>
                             </div>
                         </TechReveal>
