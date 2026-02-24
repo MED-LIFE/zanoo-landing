@@ -1526,24 +1526,24 @@ export default function ZanooLanding() {
 
                     <div className="mt-48 text-center max-w-5xl mx-auto px-6 py-20 relative">
                         {/* Background glow for transition */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0ea5e9]/5 dark:via-[#0ea5e9]/10 to-transparent blur-3xl rounded-full" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 dark:via-cyan-400/5 to-transparent blur-3xl rounded-full" />
 
                         <h2 className="text-4xl md:text-6xl lg:text-[5rem] font-extrabold text-foreground mb-12 leading-[1.1] relative z-10 flex flex-col gap-2 md:gap-4 items-center justify-center text-balance">
                             <TechReveal direction="up" delay={0.2}>
-                                <span>De este <span className="text-[#0ea5e9] font-black tracking-tight">desorden diario</span>...</span>
+                                <span>De este <span className="text-cyan-500 dark:text-cyan-400 font-black tracking-tight">desorden diario</span>...</span>
                             </TechReveal>
                             <TechReveal direction="up" delay={0.5}>
-                                <span>a una <span className="text-[#8b5cf6] font-black tracking-tight">sola vista clara</span></span>
+                                <span>a una <span className="text-blue-600 dark:text-blue-400 font-black tracking-tight">sola vista clara</span></span>
                             </TechReveal>
                             <TechReveal direction="up" delay={0.8}>
-                                <span>y en <span className="underline decoration-wavy decoration-[#0ea5e9]/50 underline-offset-8">tiempo real</span> para tu equipo.</span>
+                                <span>y en <span className="underline decoration-wavy decoration-cyan-500/50 dark:decoration-cyan-400/50 underline-offset-8">tiempo real</span> para tu equipo.</span>
                             </TechReveal>
                         </h2>
 
                         <TechReveal direction="up" delay={1.1}>
                             <div className="flex justify-center flex-col items-center relative z-10 mt-8">
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-b from-[#0ea5e9]/10 to-transparent flex items-center justify-center group hover:scale-110 transition-transform cursor-pointer shadow-xl border border-[#0ea5e9]/20 backdrop-blur-sm" onClick={() => scrollToId('demo')}>
-                                    <ArrowUpRight className="rotate-45 h-10 w-10 text-[#0ea5e9]" />
+                                <div className="w-20 h-20 rounded-full bg-gradient-to-b from-cyan-500/10 to-transparent flex items-center justify-center group hover:scale-110 transition-transform cursor-pointer shadow-xl border border-cyan-500/20 backdrop-blur-sm" onClick={() => scrollToId('demo')}>
+                                    <ArrowUpRight className="rotate-45 h-10 w-10 text-cyan-500 dark:text-cyan-400" />
                                 </div>
                             </div>
                         </TechReveal>
