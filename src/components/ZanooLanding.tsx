@@ -294,66 +294,113 @@ function PhotoTile({
     };
 
     return (
-        <Card
-            className={`group relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-purple-500/10 transition-all duration-300 ${popupText ? 'cursor-pointer hover:border-blue-500/30 hover:shadow-xl hover:-translate-y-1' : ''}`}
-            onClick={() => popupText && setIsOpen(!isOpen)}
-        >
-            <div className="relative h-44">
-                {showImage ? (
-                    <>
-                        <img
-                            src={imageSrc}
-                            alt={title}
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            loading="lazy"
-                            onError={() => setImgError(true)}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/92 via-white/30 to-transparent dark:from-zinc-900/95 dark:via-zinc-900/50" />
-                    </>
-                ) : (
-                    <>
-                        <div className={"absolute inset-0 bg-gradient-to-br " + toneMap[tone]} />
-                        <div
-                            className="absolute inset-0 opacity-[0.25]"
-                            style={{
-                                backgroundImage:
-                                    "radial-gradient(circle at 20% 10%, rgba(0,0,0,0.14) 0, rgba(0,0,0,0) 45%), radial-gradient(circle at 80% 35%, rgba(0,0,0,0.12) 0, rgba(0,0,0,0) 40%), radial-gradient(circle at 35% 90%, rgba(0,0,0,0.10) 0, rgba(0,0,0,0) 42%)",
-                            }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-zinc-900 dark:via-zinc-900/40" />
-                    </>
-                )}
-            </div>
-
-            <CardContent className="p-6 relative z-10 transition-colors">
-                <div className="flex items-start justify-between gap-3">
-                    <div>
-                        <h3 className="text-lg font-semibold text-foreground leading-snug">{title}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
-                    </div>
-                    {popupText && (
-                        <div className={`flex flex-col items-center justify-center shrink-0 w-8 h-8 rounded-full border transition-all ${isOpen ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
-                            <span className="text-xl font-light leading-none">{isOpen ? '−' : '+'}</span>
-                        </div>
+        <>
+            <Card
+                className={`group relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:shadow-purple-500/10 transition-all duration-300 ${popupText ? 'cursor-pointer hover:border-blue-500/30 hover:shadow-xl hover:-translate-y-1' : ''}`}
+                onClick={() => popupText && setIsOpen(true)}
+            >
+                <div className="relative h-44">
+                    {showImage ? (
+                        <>
+                            <img
+                                src={imageSrc}
+                                alt={title}
+                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                loading="lazy"
+                                onError={() => setImgError(true)}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-white/92 via-white/30 to-transparent dark:from-zinc-900/95 dark:via-zinc-900/50" />
+                        </>
+                    ) : (
+                        <>
+                            <div className={"absolute inset-0 bg-gradient-to-br " + toneMap[tone]} />
+                            <div
+                                className="absolute inset-0 opacity-[0.25]"
+                                style={{
+                                    backgroundImage:
+                                        "radial-gradient(circle at 20% 10%, rgba(0,0,0,0.14) 0, rgba(0,0,0,0) 45%), radial-gradient(circle at 80% 35%, rgba(0,0,0,0.12) 0, rgba(0,0,0,0) 40%), radial-gradient(circle at 35% 90%, rgba(0,0,0,0.10) 0, rgba(0,0,0,0) 42%)",
+                                }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-zinc-900 dark:via-zinc-900/40" />
+                        </>
                     )}
                 </div>
-            </CardContent>
+
+                <CardContent className="p-6 relative z-10 transition-colors">
+                    <div className="flex items-start justify-between gap-3">
+                        <div>
+                            <h3 className="text-lg font-semibold text-foreground leading-snug">{title}</h3>
+                            <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+                        </div>
+                        {popupText && (
+                            <div className="flex flex-col items-center justify-center shrink-0 w-8 h-8 rounded-full border bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                                <span className="text-xl font-light leading-none">+</span>
+                            </div>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
 
             <AnimatePresence>
                 {isOpen && popupText && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden bg-blue-50/50 dark:bg-blue-900/20 border-t border-blue-100/50 dark:border-blue-800/50"
-                    >
-                        <div className="px-6 pb-6 pt-2 text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
-                            {popupText}
-                        </div>
-                    </motion.div>
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+                        {/* Overlay backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsOpen(false)}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60"
+                        />
+
+                        {/* Modal Container */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 shadow-2xl"
+                        >
+                            {/* Modal Header/Image */}
+                            <div className="relative h-32 sm:h-40 w-full">
+                                {showImage ? (
+                                    <>
+                                        <img src={imageSrc} alt={title} className="absolute inset-0 h-full w-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent dark:from-zinc-900 dark:via-zinc-900/60" />
+                                    </>
+                                ) : (
+                                    <div className={"absolute inset-0 bg-gradient-to-br " + toneMap[tone]} />
+                                )}
+
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full bg-black/10 dark:bg-white/10 backdrop-blur-md text-black dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition-colors z-10"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            {/* Modal Content */}
+                            <div className="px-6 pb-8 pt-2 relative z-10">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-4">
+                                    El problema real
+                                </div>
+                                <h3 className="text-2xl font-bold text-foreground mb-2">{title}</h3>
+                                <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                    {popupText}
+                                </p>
+                                <Button
+                                    className="w-full mt-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-black dark:hover:bg-slate-200"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    Entendido
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
-        </Card>
+        </>
     );
 }
 
@@ -1284,12 +1331,12 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="pt-40 pb-24 relative overflow-hidden">
+            <section ref={heroRef} id="top" className="pt-32 pb-24 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_55%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.10),transparent_60%)]" />
 
-                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
+                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-12">
                     {/* Hero Text */}
-                    <div className="space-y-8">
+                    <div className="space-y-8 flex flex-col justify-start">
                         <TechReveal direction="up" delay={0.1}>
                             <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
                         </TechReveal>
@@ -1304,16 +1351,8 @@ export default function ZanooLanding() {
                         <TechReveal direction="up" delay={0.3}>
                             <div className="space-y-4">
                                 <p className="max-w-xl text-lg text-foreground font-medium leading-relaxed">
-                                    Nuestro propósito es brindar un sistema completo para pacientes (turnos, estudios, historia clínica) de forma GRATUITA, priorizando salitas y centros con bajos recursos.
+                                    Zanoo optimiza tiempo y recursos del equipo, y transforma la experiencia que viven los pacientes hoy: menos esperas, atención más humana, seguimiento real. Tus datos y los de tus pacientes están protegidos por la Ley 25.326 de Protección de Datos Personales (Argentina), almacenados en servidores seguros de Google Cloud con encriptación en tránsito y en reposo – no compartimos ni vendemos información.
                                 </p>
-                                <p className="max-w-xl text-md text-muted-foreground leading-relaxed">
-                                    Zanoo no solo optimiza tiempo y recursos del equipo, sino que transforma la experiencia que viven los pacientes hoy: menos esperas, atención más humana y seguimiento real.
-                                </p>
-                                <div className="max-w-xl p-4 mt-2 bg-blue-50 dark:bg-blue-950/30 rounded-2xl border border-blue-100 dark:border-blue-900/50">
-                                    <p className="text-sm text-blue-800 dark:text-blue-200 leading-snug">
-                                        🔒 <span className="font-semibold">Privacidad garantizada:</span> Tus datos y los de tus pacientes están protegidos conforme a la <span className="font-medium">Ley 25.326</span> (Argentina), almacenados en servidores seguros de Google Cloud con encriptación. No compartimos ni vendemos información.
-                                    </p>
-                                </div>
                             </div>
                         </TechReveal>
 
@@ -1448,13 +1487,13 @@ export default function ZanooLanding() {
                         ))}
                     </div>
 
-                    <motion.div {...fadeUp} className="mt-24 text-center max-w-3xl mx-auto px-6 border-y border-black/5 dark:border-white/5 py-12 bg-blue-50/30 dark:bg-blue-900/5 rounded-[40px]">
-                        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-                            De este desorden diario... a una sola vista clara y en tiempo real para todo el equipo.
+                    <motion.div {...fadeUp} className="mt-28 text-center max-w-4xl mx-auto px-6 py-12">
+                        <h3 className="text-2xl md:text-4xl font-extrabold text-foreground mb-4">
+                            De este desorden diario... <br className="hidden md:block" />a una sola vista clara y en tiempo real para todo el equipo.
                         </h3>
                         <div className="flex justify-center flex-col items-center">
-                            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mt-2 group hover:scale-110 transition-transform cursor-pointer" onClick={() => scrollToId('demo')}>
-                                <ArrowUpRight className="rotate-45 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mt-4 group hover:scale-110 transition-transform cursor-pointer shadow-sm border border-blue-200 dark:border-blue-800" onClick={() => scrollToId('demo')}>
+                                <ArrowUpRight className="rotate-45 h-6 w-6 text-blue-600 dark:text-blue-400" />
                             </div>
                         </div>
                     </motion.div>
@@ -1702,11 +1741,11 @@ export default function ZanooLanding() {
 
                         <div className="space-y-8">
                             {[
-                                { t: "Convocatoria abierta", d: "Aplicás con datos de tu centro." },
-                                { t: "Pre-selección", d: "Revisamos fit (priorizamos bajos recursos y alto desorden)." },
-                                { t: "Investigación y análisis", d: "Estudiamos tu operación actual." },
+                                { t: "Convocatoria abierta", d: "Aplicás con datos básicos de tu centro." },
+                                { t: "Pre-selección", d: "Revisamos fit (priorizamos salitas y centros con bajos recursos y alto desorden)." },
+                                { t: "Investigación y análisis", d: "Estudiamos tu volumen y operación actual." },
                                 { t: "1er contacto", d: "Coordinamos por WhatsApp, email o teléfono línea (por eso pedimos todos los medios)." },
-                                { t: "Selección y anuncio", d: "Elegimos y avisamos para implementar con soporte humano." },
+                                { t: "Selección y anuncio", d: "Elegimos y avisamos para implementar con soporte humano dedicado." },
                             ].map((step, i) => (
                                 <TechReveal key={step.t} direction="up" delay={0.1 * i}>
                                     <div className="relative flex gap-6">
@@ -2066,7 +2105,7 @@ export default function ZanooLanding() {
 
                                             <div className="sm:col-span-2 flex flex-col gap-4 pt-4 border-t border-black/5 mt-2">
                                                 <div className="text-xs text-black/50 leading-relaxed text-balance font-medium">
-                                                    Revisión en 48-72hs. Datos protegidos Ley 25.326 AR, Google Cloud encriptado – solo para este proceso.
+                                                    Revisión en 48-72hs. Datos protegidos por Ley 25.326 AR, Google Cloud encriptado – solo para este proceso, nunca compartidos.
                                                 </div>
                                                 <Button
                                                     type="submit"
@@ -2171,7 +2210,7 @@ export default function ZanooLanding() {
 
             {/* WHATSAPP STICKY (MOBILE) */}
             <a
-                href="https://wa.me/5491130668588?text=Hola,%20quiero%20ser%20parte%20de%20Zanoo%20para%20mi%20salita%20%E2%80%93%20[cargo/provincia]"
+                href="https://wa.me/5491130668588?text=Hola,%20quiero%20ser%20parte%20de%20Zanoo%20para%20mi%20centro%20%E2%80%93%20[cargo/provincia]"
                 target="_blank"
                 rel="noreferrer"
                 className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-5 py-3 font-semibold shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-green-600 transition-all border border-green-400/30"
