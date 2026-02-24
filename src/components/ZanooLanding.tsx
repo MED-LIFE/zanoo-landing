@@ -32,6 +32,10 @@ import {
     Sun,
     Moon,
     Monitor,
+    Calendar,
+    Heart,
+    Lock,
+    Users,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -146,7 +150,7 @@ const PROBLEM_TILES = [
         title: "Papeles y WhatsApps",
         desc: "Información fragmentada.",
         imageSrc: "/photos/papeles-whatsapp-cuaderno.jpg",
-        popupText: "En salitas argentinas esto genera estrés, errores y horas perdidas. Zanoo digitaliza y sincroniza todo de forma segura."
+        popupText: "En salitas esto genera estrés – Zanoo sincroniza seguro."
     },
     {
         tone: "violet" as const,
@@ -1336,30 +1340,63 @@ export default function ZanooLanding() {
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-12">
                     {/* Hero Text */}
-                    <div className="space-y-8 flex flex-col justify-start">
+                    <div className="space-y-10 flex flex-col justify-start">
                         <TechReveal direction="up" delay={0.1}>
                             <SectionBadge>Sistema clínico-operativo para centros de salud</SectionBadge>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.2}>
-                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-tight text-balance">
-                                Gestión clínica-operativa <span className="bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent pb-1">gratuita</span> <br className="hidden md:block" />
-                                <span className="text-3xl sm:text-4xl lg:text-5xl">para centros en toda Argentina</span>
+                            <h1 className="text-5xl font-extrabold tracking-tight text-foreground md:text-[5rem] lg:text-[5.5rem] leading-[1.05] text-balance">
+                                Zanoo <span className="bg-gradient-to-r from-sky-500 to-cyan-400 dark:from-sky-400 dark:to-cyan-300 bg-clip-text text-transparent pb-2">GRATIS</span> <br className="hidden md:block" />
+                                <span className="text-4xl md:text-6xl text-foreground">para salitas y centros con bajos recursos</span>
                             </h1>
                         </TechReveal>
 
                         <TechReveal direction="up" delay={0.3}>
-                            <div className="space-y-4">
-                                <p className="max-w-xl text-lg text-foreground font-medium leading-relaxed">
-                                    Zanoo optimiza tiempo y recursos del equipo, y transforma la experiencia que viven los pacientes hoy: menos esperas, atención más humana, seguimiento real. Tus datos y los de tus pacientes están protegidos por la Ley 25.326 de Protección de Datos Personales (Argentina), almacenados en servidores seguros de Google Cloud con encriptación en tránsito y en reposo – no compartimos ni vendemos información.
-                                </p>
-                            </div>
+                            <p className="max-w-xl text-xl text-foreground/70 font-medium leading-relaxed mb-8 text-balance">
+                                Sistema completo para turnos, estudios e historia clínica – transforma la atención de pacientes.
+                            </p>
+
+                            <ul className="space-y-5 max-w-xl">
+                                <TechReveal direction="up" delay={0.4}>
+                                    <li className="flex items-start gap-4">
+                                        <div className="mt-0.5 bg-black/5 dark:bg-white/10 p-2 rounded-lg flex-shrink-0">
+                                            <Calendar className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                        </div>
+                                        <span className="text-lg text-foreground/90 font-medium leading-snug">Menos caos diario y horas perdidas.</span>
+                                    </li>
+                                </TechReveal>
+                                <TechReveal direction="up" delay={0.5}>
+                                    <li className="flex items-start gap-4">
+                                        <div className="mt-0.5 bg-black/5 dark:bg-white/10 p-2 rounded-lg flex-shrink-0">
+                                            <Heart className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                        </div>
+                                        <span className="text-lg text-foreground/90 font-medium leading-snug">Atención más humana y seguimiento real.</span>
+                                    </li>
+                                </TechReveal>
+                                <TechReveal direction="up" delay={0.6}>
+                                    <li className="flex items-start gap-4">
+                                        <div className="mt-0.5 bg-black/5 dark:bg-white/10 p-2 rounded-lg flex-shrink-0">
+                                            <Lock className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                        </div>
+                                        <span className="text-lg text-foreground/90 font-medium leading-snug">Datos protegidos Ley 25.326 AR + Google Cloud encriptado.</span>
+                                    </li>
+                                </TechReveal>
+                                <TechReveal direction="up" delay={0.7}>
+                                    <li className="flex items-start gap-4">
+                                        <div className="mt-0.5 bg-black/5 dark:bg-white/10 p-2 rounded-lg flex-shrink-0">
+                                            <Users className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                        </div>
+                                        <span className="text-lg text-foreground/90 font-medium leading-snug">Uso ilimitado para todo el equipo de la salita sin costo.</span>
+                                    </li>
+                                </TechReveal>
+                            </ul>
                         </TechReveal>
 
-                        <TechReveal direction="up" delay={0.4}>
-                            <div className="flex flex-wrap gap-4 mt-8">
+                        <TechReveal direction="up" delay={0.9}>
+                            <div className="flex flex-col sm:flex-row gap-4 mt-8">
                                 <ShimmerButton
-                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 px-8 h-14 text-lg font-bold"
+                                    className="bg-sky-500 hover:bg-sky-600 text-white shadow-xl shadow-sky-500/25 px-10 h-14 text-lg font-bold transition-transform hover:scale-105"
                                     onClick={() => scrollToId("contacto")}
                                 >
                                     Aplicá para ser parte
@@ -1457,7 +1494,7 @@ export default function ZanooLanding() {
             </section>
 
             {/* PROBLEMA + FOTOS (reales) */}
-            <section id="producto" className="py-32">
+            <section id="producto" className="py-48">
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div {...fadeUp}>
                         <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
@@ -1487,22 +1524,36 @@ export default function ZanooLanding() {
                         ))}
                     </div>
 
-                    <motion.div {...fadeUp} className="mt-28 text-center max-w-4xl mx-auto px-6 py-12">
-                        <h3 className="text-2xl md:text-4xl font-extrabold text-foreground mb-4">
-                            De este desorden diario... <br className="hidden md:block" />a una sola vista clara y en tiempo real para todo el equipo.
-                        </h3>
-                        <div className="flex justify-center flex-col items-center">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mt-4 group hover:scale-110 transition-transform cursor-pointer shadow-sm border border-blue-200 dark:border-blue-800" onClick={() => scrollToId('demo')}>
-                                <ArrowUpRight className="rotate-45 h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    <div className="mt-48 text-center max-w-5xl mx-auto px-6 py-20 relative">
+                        {/* Background glow for transition */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0ea5e9]/5 dark:via-[#0ea5e9]/10 to-transparent blur-3xl rounded-full" />
+
+                        <h2 className="text-4xl md:text-6xl lg:text-[5rem] font-extrabold text-foreground mb-12 leading-[1.1] relative z-10 flex flex-col gap-2 md:gap-4 items-center justify-center text-balance">
+                            <TechReveal direction="up" delay={0.2}>
+                                <span>De este <span className="text-[#0ea5e9] font-black tracking-tight">desorden diario</span>...</span>
+                            </TechReveal>
+                            <TechReveal direction="up" delay={0.5}>
+                                <span>a una <span className="text-[#8b5cf6] font-black tracking-tight">sola vista clara</span></span>
+                            </TechReveal>
+                            <TechReveal direction="up" delay={0.8}>
+                                <span>y en <span className="underline decoration-wavy decoration-[#0ea5e9]/50 underline-offset-8">tiempo real</span> para tu equipo.</span>
+                            </TechReveal>
+                        </h2>
+
+                        <TechReveal direction="up" delay={1.1}>
+                            <div className="flex justify-center flex-col items-center relative z-10 mt-8">
+                                <div className="w-20 h-20 rounded-full bg-gradient-to-b from-[#0ea5e9]/10 to-transparent flex items-center justify-center group hover:scale-110 transition-transform cursor-pointer shadow-xl border border-[#0ea5e9]/20 backdrop-blur-sm" onClick={() => scrollToId('demo')}>
+                                    <ArrowUpRight className="rotate-45 h-10 w-10 text-[#0ea5e9]" />
+                                </div>
                             </div>
-                        </div>
-                    </motion.div>
+                        </TechReveal>
+                    </div>
                 </div>
             </section >
 
             {/* DEMO (web) */}
             {/* DEMO (web) */}
-            <section id="demo" className="py-32">
+            <section id="demo" className="py-48">
                 <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Demo liviana (web)</SectionBadge>
@@ -1889,8 +1940,71 @@ export default function ZanooLanding() {
                 </div>
             </section >
 
+            {/* WALL OF LOVE (Testimonials) */}
+            <section id="wall-of-love" className="py-48 bg-zinc-50/50 dark:bg-zinc-900/20 border-y border-black/5 dark:border-white/5">
+                <div className="max-w-7xl mx-auto px-6">
+                    <motion.div {...fadeUp} className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+                            Wall of love
+                        </h2>
+                        <p className="mt-4 text-xl text-foreground/60 max-w-2xl mx-auto">
+                            Lo que dicen los directores y médicos de las salitas que ya ordenaron su atención.
+                        </p>
+                    </motion.div>
+
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {[
+                            {
+                                quote: "Antes perdíamos horas buscando historias clínicas en papel. Ahora con Zanoo todo el equipo tiene la misma vista al instante. Un alivio total.",
+                                name: "Dra. Laura Gómez",
+                                handle: "@directoraSalitaSur",
+                                avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Laura"
+                            },
+                            {
+                                quote: "Los turnos se superponían y la sala de espera era un caos. Desde que usamos Zanoo, la satisfacción de los pacientes subió muchísimo y nosotros trabajamos en paz.",
+                                name: "Dr. Martín Pérez",
+                                handle: "@medicoProvincia",
+                                avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Martin"
+                            },
+                            {
+                                quote: "El sistema es tan intuitivo que los secretarios lo aprendieron a usar el primer día. Literalmente nos devolvió el orden.",
+                                name: "Lic. Andrea Ruiz",
+                                handle: "@coordAdministrativa",
+                                avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Andrea"
+                            }
+                        ].map((t, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-50px" }}
+                                transition={{ duration: 0.5, delay: idx * 0.15 }}
+                                className="group relative rounded-3xl p-8 bg-white dark:bg-zinc-900/50 border border-black/5 dark:border-white/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                            >
+                                <p className="text-lg text-foreground/80 font-medium mb-6 leading-relaxed">
+                                    "{t.quote}"
+                                </p>
+                                <div className="flex items-center gap-4">
+                                    <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full border border-black/10 dark:border-white/10" loading="lazy" />
+                                    <div>
+                                        <div className="font-bold text-foreground">{t.name}</div>
+                                        <div className="text-sm text-foreground/50">{t.handle}</div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    <motion.div {...fadeUp} className="mt-16 flex justify-center">
+                        <button className="rounded-full px-8 py-3 bg-zinc-100 dark:bg-zinc-800 text-foreground font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                            Leer más historias
+                        </button>
+                    </motion.div>
+                </div>
+            </section>
+
             {/* GRATIS + APLICAR */}
-            < section id="gratis" className="py-32" >
+            < section id="gratis" className="py-48" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid lg:grid-cols-2 gap-14 items-start">
                         <motion.div {...fadeUp}>
