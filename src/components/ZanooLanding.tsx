@@ -1428,17 +1428,18 @@ export default function ZanooLanding() {
             <section id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative sticky top-0 z-0">
                 <motion.div 
                     style={{
-                        opacity: useTransform(useScroll().scrollYProgress, [0.35, 0.45], [1, 0]),
-                        scale: useTransform(useScroll().scrollYProgress, [0.35, 0.45], [1, 0.95]),
+                        opacity: useTransform(useScroll().scrollYProgress, [0.05, 0.15], [1, 0]),
+                        y: useTransform(useScroll().scrollYProgress, [0.05, 0.2], [0, -100]),
+                        scale: useTransform(useScroll().scrollYProgress, [0.05, 0.2], [1, 0.9]),
                     }}
                     className="max-w-7xl mx-auto px-6 text-center"
                 >
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[10rem] font-black tracking-tighter leading-[0.8] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[9rem] font-black tracking-tighter leading-[0.8] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
                         Del desorden <span className="text-blue-600">diario</span>
                         <br />
-                        <span className="text-black/40 dark:text-white/40 font-light italic">a una sola</span> <span className="relative inline-block">
-                            <span className="text-blue-600">vista clara</span>
-                            <span className="absolute bottom-4 left-0 w-full h-3 bg-blue-600/20 rounded-full -z-10" />
+                        <span className="text-black/40 dark:text-white/40 font-light italic">a una sola</span> <span className="relative inline-block px-2">
+                            <span className="text-blue-600 relative z-10">vista clara</span>
+                            <span className="absolute bottom-[10%] left-0 w-full h-[15%] bg-blue-600/15 rounded-full z-0" />
                         </span>
                         <br />
                         y en <span className="text-blue-600 italic">tiempo real</span>
