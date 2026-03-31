@@ -1085,12 +1085,19 @@ function QuoteCarousel() {
 // -----------------------------
 export default function ZanooLanding() {
     const heroRef = useRef<HTMLElement>(null);
-    const { scrollYProgress } = useScroll({
+    const { scrollYProgress: heroScroll } = useScroll({
         target: heroRef,
         offset: ["start start", "end start"]
     });
-    const heroPhoneY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-    const heroPhoneRotate = useTransform(scrollYProgress, [0, 1], [0, -12]); // Rotates 12deg as you scroll
+    
+    const productoRef = useRef<HTMLElement>(null);
+    const { scrollYProgress: productoScroll } = useScroll({
+        target: productoRef,
+        offset: ["start start", "end start"]
+    });
+
+    const heroPhoneY = useTransform(heroScroll, [0, 1], [0, 120]);
+    const heroPhoneRotate = useTransform(heroScroll, [0, 1], [0, -12]); // Rotates 12deg as you scroll
     const fadeUp = useFadeUp();
 
     const [demoTab, setDemoTab] = useState<"Recepción" | "Consultorio" | "Dirección">("Recepción");
@@ -1425,12 +1432,12 @@ export default function ZanooLanding() {
             </section>
 
             {/* PROBLEMA (Rediseñado) */}
-            <section id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative sticky top-0 z-0">
+            <section ref={productoRef} id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative">
                 <motion.div 
                     style={{
-                        opacity: useTransform(useScroll().scrollYProgress, [0.05, 0.15], [1, 0]),
-                        y: useTransform(useScroll().scrollYProgress, [0.05, 0.2], [0, -100]),
-                        scale: useTransform(useScroll().scrollYProgress, [0.05, 0.2], [1, 0.9]),
+                        opacity: useTransform(productoScroll, [0, 0.1], [1, 0]),
+                        y: useTransform(productoScroll, [0, 0.15], [0, -80]),
+                        scale: useTransform(productoScroll, [0, 0.15], [1, 0.92]),
                     }}
                     className="max-w-7xl mx-auto px-6 text-center"
                 >
