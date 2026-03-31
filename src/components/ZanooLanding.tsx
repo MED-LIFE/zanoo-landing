@@ -130,8 +130,9 @@ const APP_SHOTS: Array<{
     src?: string;
     mode?: "list" | "detail" | "metrics";
 }> = [
-        { id: "inicio", label: "Inicio (Paciente)", src: "/shots/inicio-paciente.png", mode: "detail" },
-        { id: "turnos", label: "Turnos (Recepción)", src: "/shots/turnos-recepcion.png", mode: "list" },
+        { id: "inicio", label: "Inicio (Paciente)", src: "/shots/drawer-julian.png", mode: "detail" },
+        { id: "turnos", label: "Sacar Turnos (Paciente)", src: "/shots/sacar-turno.png", mode: "list" },
+        { id: "historia", label: "Historia Clínica (Paciente)", src: "/shots/historia-clinica.png", mode: "detail" },
         {
             id: "metricas",
             label: "Métricas (Dirección)",
@@ -1260,7 +1261,7 @@ export default function ZanooLanding() {
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center gap-6">
                         <div className="hidden md:flex gap-6 text-sm font-medium text-muted-foreground">
-                            {["Producto", "App real", "Gratis", "Impacto", "Roadmap"].map((item) => (
+                            {["Producto", "App real", "Gratis", "Impacto"].map((item) => (
                                 <button
                                     key={item}
                                     className="hover:text-foreground transition-colors"
@@ -1306,7 +1307,7 @@ export default function ZanooLanding() {
                             className="overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border md:hidden"
                         >
                             <div className="flex flex-col p-6 space-y-4">
-                                {["Producto", "App real", "Gratis", "Impacto", "Roadmap", "Contacto"].map((item) => (
+                                {["Producto", "App real", "Gratis", "Impacto", "Contacto"].map((item) => (
                                     <button
                                         key={item}
                                         className="text-lg font-medium text-foreground text-left py-2 border-b border-border/50 last:border-0"
@@ -1515,36 +1516,26 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-            {/* PROBLEMA + FOTOS (reales) */}
-            <section id="producto" className="py-24">
-                <div className="max-w-6xl mx-auto px-6">
-                    <motion.div {...fadeUp}>
-                        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">
-                            Lo que hoy te <span className="font-bold italic">frena</span> no es la falta de médicos.
+            {/* PROBLEMA (Rediseñado) */}
+            <section id="producto" className="min-h-[85vh] flex items-center justify-center py-24 bg-white overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, ease: "circOut" }}
+                        className="text-center"
+                    >
+                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-black">
+                            De este <span className="text-blue-600">desorden diario</span>
                             <br />
-                            Es el <span className="text-blue-600 dark:text-blue-400">desorden</span>.
+                            <span className="text-black/40 font-light italic">a una sola</span> <span className="text-blue-600 underline decoration-blue-600/30 underline-offset-8">vista clara</span>
+                            <br />
+                            y en <span className="text-blue-600 italic">tiempo real</span>
+                            <br />
+                            <span className="text-black/90">para tu equipo.</span>
                         </h2>
-                        <motion.p
-                            className="mt-4 text-black/60 dark:text-white/60 max-w-3xl text-lg"
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                        >
-                            En el día a día, el problema aparece como fricción: papeles, mensajes y filas.
-                            <br />
-                            <span className="block mt-4 font-semibold text-foreground flex items-center gap-3">
-                                Mirá cómo lo resolvemos <ArrowUpRight className="rotate-180 h-4 w-4 text-blue-600 dark:text-blue-400" />
-                            </span>
-                        </motion.p>
                     </motion.div>
-
-                    <div className="mt-12 grid md:grid-cols-3 gap-8">
-                        {PROBLEM_TILES.map((t, idx) => (
-                            <motion.div key={t.title} {...fadeUp} transition={{ ...(fadeUp as any).transition, delay: 0.05 * idx }}>
-                                <PhotoTile title={t.title} desc={t.desc} tone={t.tone} imageSrc={t.imageSrc} />
-                            </motion.div>
-                        ))}
-                    </div>
                 </div>
             </section>
 
@@ -1565,11 +1556,11 @@ export default function ZanooLanding() {
                             </div>
 
                             <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                                Esto no es una promesa.
+                                Validá cómo se ve la
                                 <br />
-                                Es el <span className="relative inline-block">
+                                herramienta en el <span className="relative inline-block">
                                     <span className="relative z-10 font-extrabold tracking-tight text-4xl md:text-5xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                        PRODUCTO
+                                        DÍA A DÍA
                                     </span>
                                 </span>.
                             </h2>
@@ -1692,6 +1683,7 @@ export default function ZanooLanding() {
                     </div>
 
                     <div className="mt-20">
+                        <SectionBadge>Lo que dicen los centros</SectionBadge>
                         <QuoteCarousel />
                     </div>
                 </div>
@@ -1916,7 +1908,6 @@ export default function ZanooLanding() {
             </section>
 
             {/* DEMO (web) */}
-            {/* DEMO (web) */}
             <section id="demo" className="py-24">
                 <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start">
                     <motion.div {...fadeUp}>
@@ -2052,10 +2043,6 @@ export default function ZanooLanding() {
                                                 </div>
                                             ))}
                                         </div>
-
-                                        <div className="mt-4 rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-xs text-black/60">
-                                            Notificación: “Faltan 2 pacientes para tu turno”.
-                                        </div>
                                     </div>
                                 )}
 
@@ -2132,7 +2119,7 @@ export default function ZanooLanding() {
                         </div>
                     </motion.div>
                 </div>
-            </section >
+            </section>
 
             {/* IMPACTO */}
             < section id="impacto" className="py-24" >
@@ -2165,50 +2152,6 @@ export default function ZanooLanding() {
                                 </Card>
                             </TechReveal>
                         ))}
-                    </div>
-                </div>
-            </section >
-
-            {/* ROADMAP */}
-            < section id="roadmap" className="py-24" >
-                <div className="max-w-6xl mx-auto px-6">
-                    <motion.div {...fadeUp}>
-                        <SectionBadge>Roadmap</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">De gestión a <span className="font-bold">inteligencia sanitaria</span>.</h2>
-                        <p className="mt-4 text-black/60 max-w-3xl">
-                            Arrancás por orden operativo. Después se habilita coordinación, predicción y capas de IA cuando el
-                            ecosistema ya tiene señal.
-                        </p>
-                    </motion.div>
-
-                    <div className="mt-12 relative">
-                        <div className="absolute left-0 right-0 top-5 h-[2px] bg-gradient-to-r from-cyan-500/40 via-blue-500/35 to-purple-600/35 rounded-full" />
-
-                        <div className="grid md:grid-cols-5 gap-6">
-                            {[
-                                { t: "Orden operativo", d: "Turnos · pacientes · historia" },
-                                { t: "Coordinación", d: "Derivaciones · recordatorios" },
-                                { t: "Predicción", d: "Demanda · ausentismo · alertas" },
-                                { t: "Ecosistema", d: "Red de instituciones" },
-                                { t: "IA aplicada", d: "Resumen · señales · asistentes" },
-                            ].map((s, i) => (
-                                <motion.div
-                                    key={s.t}
-                                    className="relative"
-                                    whileHover={{ scale: 1.05 }}
-                                    transition={{ duration: 0.2, ease: "easeOut" }}
-                                >
-                                    <div className="absolute left-6 top-3 h-4 w-4 rounded-full bg-white border border-black/15 shadow-sm" />
-                                    <Card className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)]">
-                                        <CardContent className="p-6">
-                                            <div className="text-xs text-black/50">Etapa {i + 1}</div>
-                                            <div className="mt-2 text-sm font-semibold text-black">{s.t}</div>
-                                            <div className="mt-2 text-sm text-black/60">{s.d}</div>
-                                        </CardContent>
-                                    </Card>
-                                </motion.div>
-                            ))}
-                        </div>
                     </div>
                 </div>
             </section >
