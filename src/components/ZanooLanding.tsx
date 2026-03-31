@@ -1273,7 +1273,7 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="pt-32 pb-24 relative overflow-hidden">
+            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-32 pb-24 relative overflow-hidden z-10">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.05),transparent_60%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.05),transparent_65%)]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-12">
@@ -1432,7 +1432,7 @@ export default function ZanooLanding() {
             </section>
 
             {/* PROBLEMA (Rediseñado) */}
-            <section ref={productoRef} id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative">
+            <section ref={productoRef} id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative z-0">
                 <motion.div 
                     style={{
                         opacity: useTransform(productoScroll, [0, 0.1], [1, 0]),
