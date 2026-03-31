@@ -1441,7 +1441,7 @@ export default function ZanooLanding() {
                     }}
                     className="max-w-7xl mx-auto px-6 text-center"
                 >
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[9rem] font-black tracking-tighter leading-[0.8] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
+                    <h2 className="text-4xl sm:text-4xl md:text-6xl lg:text-[6.5rem] font-black tracking-tighter leading-[0.9] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
                         Del desorden <span className="text-blue-600">diario</span>
                         <br />
                         <span className="text-black/40 dark:text-white/40 font-light italic">a una sola</span> <span className="relative inline-block px-2">
