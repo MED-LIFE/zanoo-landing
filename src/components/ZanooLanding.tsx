@@ -1423,27 +1423,29 @@ export default function ZanooLanding() {
                     </motion.div>
                 </div>
             </section>
+
             {/* PROBLEMA (Rediseñado) */}
-            <section id="producto" className="min-h-screen flex items-center justify-center py-24 bg-white dark:bg-black overflow-hidden relative">
-                <div className="max-w-7xl mx-auto px-6">
-                    <motion.div 
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, ease: "circOut" }}
-                        className="text-center"
-                    >
-                        <h2 className="text-4xl sm:text-5xl md:text-8xl lg:text-[11rem] font-black tracking-tighter leading-[0.85] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
-                            Del desorden <span className="text-blue-600">diario</span>
-                            <br />
-                            <span className="text-black/40 dark:text-white/40 font-light italic">a una sola</span> <span className="text-blue-600 underline decoration-blue-600/30 underline-offset-8">vista clara</span>
-                            <br />
-                            y en <span className="text-blue-600 italic">tiempo real</span>
-                            <br />
-                            <span className="text-black/90 dark:text-white/90">para tu equipo.</span>
-                        </h2>
-                    </motion.div>
-                </div>
+            <section id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative sticky top-0 z-0">
+                <motion.div 
+                    style={{
+                        opacity: useTransform(useScroll().scrollYProgress, [0.35, 0.45], [1, 0]),
+                        scale: useTransform(useScroll().scrollYProgress, [0.35, 0.45], [1, 0.95]),
+                    }}
+                    className="max-w-7xl mx-auto px-6 text-center"
+                >
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[10rem] font-black tracking-tighter leading-[0.8] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
+                        Del desorden <span className="text-blue-600">diario</span>
+                        <br />
+                        <span className="text-black/40 dark:text-white/40 font-light italic">a una sola</span> <span className="relative inline-block">
+                            <span className="text-blue-600">vista clara</span>
+                            <span className="absolute bottom-4 left-0 w-full h-3 bg-blue-600/20 rounded-full -z-10" />
+                        </span>
+                        <br />
+                        y en <span className="text-blue-600 italic">tiempo real</span>
+                        <br />
+                        <span className="text-black/90 dark:text-white/90">para tu equipo.</span>
+                    </h2>
+                </motion.div>
             </section>
  
             {/* APP REAL SECTION */}
