@@ -671,9 +671,19 @@ function AdvancedTechBackground() {
             className="fixed inset-0 z-[-1] overflow-hidden transition-colors duration-500 pointer-events-none"
             style={{ backgroundColor: bgColor }}
         >
-            <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-blue-500/10 dark:bg-blue-600/10 blur-[80px] md:blur-[120px]" />
-            <div className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-purple-500/10 dark:bg-purple-600/10 blur-[80px] md:blur-[120px]" />
-            <div className="absolute bottom-[-10%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-cyan-500/10 dark:bg-cyan-600/10 blur-[80px] md:blur-[120px]" />
+            {/* Glassy Spotlights - Reduced on mobile/light for clarity */}
+            <div className={cn(
+                "absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full blur-[80px] md:blur-[120px] transition-opacity duration-1000",
+                isLight ? "bg-blue-400/5 opacity-50 md:opacity-100" : "bg-blue-600/10 opacity-100"
+            )} />
+            <div className={cn(
+                "absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full blur-[80px] md:blur-[120px] transition-opacity duration-1000",
+                isLight ? "bg-purple-400/5 opacity-50 md:opacity-100" : "bg-purple-600/10 opacity-100"
+            )} />
+            <div className={cn(
+                "absolute bottom-[-10%] left-[20%] w-[80vw] h-[80vw] rounded-full blur-[80px] md:blur-[120px] transition-opacity duration-1000",
+                isLight ? "bg-cyan-400/5 opacity-50 md:opacity-100" : "bg-cyan-600/10 opacity-100"
+            )} />
         </div>
     );
 }
@@ -1168,7 +1178,7 @@ export default function ZanooLanding() {
     const activeHeroShot = HERO_SHOTS[heroIndex % HERO_SHOTS.length];
 
     return (
-        <div className="font-sans text-foreground selection:bg-primary/20 overflow-x-hidden bg-white dark:bg-black">
+        <div className="font-sans text-foreground selection:bg-primary/20 overflow-x-hidden bg-white dark:bg-zinc-950">
             <AdvancedTechBackground />
             <ScrollToTop />
 
@@ -1257,7 +1267,7 @@ export default function ZanooLanding() {
 
             {/* HERO */}
             <section ref={heroRef} id="top" className="pt-32 pb-24 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.10),transparent_55%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.10),transparent_60%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.05),transparent_60%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.05),transparent_65%)]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-12">
                     {/* Hero Text */}
@@ -1423,7 +1433,7 @@ export default function ZanooLanding() {
                         transition={{ duration: 0.8, ease: "circOut" }}
                         className="text-center"
                     >
-                        <h2 className="text-6xl md:text-9xl lg:text-[12rem] font-black tracking-tighter leading-[0.8] text-black dark:text-white transition-colors duration-500 text-balance">
+                        <h2 className="text-4xl sm:text-5xl md:text-8xl lg:text-[11rem] font-black tracking-tighter leading-[0.85] text-black dark:text-white transition-colors duration-500 text-balance uppercase">
                             Del desorden <span className="text-blue-600">diario</span>
                             <br />
                             <span className="text-black/40 dark:text-white/40 font-light italic">a una sola</span> <span className="text-blue-600 underline decoration-blue-600/30 underline-offset-8">vista clara</span>
