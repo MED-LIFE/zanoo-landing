@@ -26,10 +26,9 @@ import {
     Sparkles,
     Zap,
     Layout,
-    BarChart as BarChartIcon, // Renamed to avoid conflict with Recharts BarChart
+    BarChart3 as BarChartIcon,
     Bell,
     ArrowUpRight,
-    ArrowDown,
     Sun,
     Moon,
     Monitor,
@@ -37,6 +36,9 @@ import {
     Heart,
     Lock,
     Users,
+    ExternalLink,
+    Mail,
+    ShieldCheck
 } from "lucide-react";
 import Image from "next/image";
 
@@ -540,7 +542,176 @@ function CircularMetric({ value, label, sub, color = "blue" }: { value: number; 
     );
 }
 
-function MetricsDashboard() {
+// -----------------------------
+// Sticky Navbar
+// -----------------------------
+function Navbar() {
+    const [scrolled, setScrolled] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 50);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const navLinks = [
+        { name: "Cómo funciona", id: "producto" },
+        { name: "Beneficios", id: "appreal" },
+        { name: "Métricas", id: "impacto" },
+        { name: "Testimonios", id: "testimonios" },
+        { name: "FAQ", id: "faq" },
+    ];
+
+    const scrollToId = (id: string) => {
+        const el = document.getElementById(id);
+        if (el) {
+            const offset = 80;
+            const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top, behavior: "smooth" });
+        }
+        setIsMenuOpen(false);
+    };
+
+    return (
+        <nav 
+            className={cn(
+                "fixed top-0 left-0 right-0 z-[100] transition-all duration-500",
+                scrolled 
+                    ? "py-3 bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-black/5 dark:border-white/5 shadow-sm" 
+                    : "py-6 bg-transparent"
+            )}
+        >
+            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                <div 
+                    className="flex items-center gap-2 cursor-pointer group"
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                >
+                    <BrandLogo className="h-8 w-auto group-hover:scale-105 transition-transform" />
+                    <span className="hidden sm:block font-black text-xl tracking-tighter uppercase italic bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Zanoo</span>
+                </div>
+
+                {/* Desktop Menu */}
+                <div className="hidden md:flex items-center gap-8">
+                    {navLinks.map((link) => (
+                        <button
+                            key={link.id}
+                            onClick={() => scrollToId(link.id)}
+                            className="text-xs font-bold uppercase tracking-widest text-black/60 dark:text-white/60 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        >
+                            {link.name}
+                        </button>
+                    ))}
+                    <ShimmerButton 
+                        className="h-10 px-6 text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white"
+                        onClick={() => scrollToId("gratis")}
+                    >
+                        Pedi tu Demo
+                    </ShimmerButton>
+                </div>
+
+                {/* Mobile Toggle */}
+                <button 
+                    className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/5"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+            </div>
+
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-black border-b border-black/5 dark:border-white/5 p-6 space-y-6 shadow-2xl"
+                    >
+                        {navLinks.map((link) => (
+                            <button
+                                key={link.id}
+                                onClick={() => scrollToId(link.id)}
+                                className="block w-full text-left text-lg font-black uppercase tracking-tighter border-b border-black/5 dark:border-white/5 pb-2"
+                            >
+                                {link.name}
+                            </button>
+                        ))}
+                        <Button 
+                            className="w-full h-14 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white font-black uppercase tracking-widest"
+                            onClick={() => scrollToId("gratis")}
+                        >
+                            Aplicar ahora
+                        </Button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </nav>
+    );
+}
+
+function MetricsDashboard({ 
+    mode,
+    title,
+    subtitle,
+    badge,
+    stats,
+    kpis,
+    chartTitle,
+    chartSubtitle,
+    chartGrowth,
+    chartData,
+    chartLabels,
+    gaugeValue,
+    gaugeLabel
+}: {
+    mode?: "tactical" | "strategic";
+    title?: string;
+    subtitle?: string;
+    badge?: string;
+    stats?: { label: string; val: string; icon: string }[];
+    kpis?: { val: string; label: string }[];
+    chartTitle?: string;
+    chartSubtitle?: string;
+    chartGrowth?: string;
+    chartData?: number[];
+    chartLabels?: string[];
+    gaugeValue?: number;
+    gaugeLabel?: string;
+}) {
+    // Provide internal defaults if props are missing
+    const _mode = mode || "strategic";
+    const _badge = badge || (_mode === "strategic" ? "Impacto Real" : "Operación Diaria");
+    const _title = title || (_mode === "strategic" ? "Resultados reales" : "Control total");
+    const _subtitle = subtitle || (_mode === "strategic" ? "que se sienten en la sala:" : "de lo que pasa en tu sala:");
+    
+    const _stats = stats || (_mode === "strategic" ? [
+        { label: "Demoras", val: "45%", icon: "↓" },
+        { label: "Ausentismo", val: "-30%", icon: "↓" },
+        { label: "Pacientes", val: "+12%", icon: "↑" },
+        { label: "Satisfacción", val: "92%", icon: "★" },
+    ] : [
+        { label: "En espera", val: "12", icon: "👤" },
+        { label: "T. Promedio", val: "14m", icon: "⏱" },
+        { label: "Box ocupados", val: "85%", icon: "🏥" },
+        { label: "Urgencias", val: "0", icon: "🚨" },
+    ]);
+
+    const _kpis = kpis || (_mode === "strategic" ? [
+        { val: "+45%", label: "Recupero de costos" },
+        { val: "-30%", label: "Ausentismo" }
+    ] : [
+        { val: "14 min", label: "Espera promedio" },
+        { val: "88%", label: "Eficiencia diaria" }
+    ]);
+
+    const _chartTitle = chartTitle || (_mode === "strategic" ? "Pacientes Atendidos" : "Flujo de Pacientes");
+    const _chartSubtitle = chartSubtitle || (_mode === "strategic" ? "Últimos 6 meses" : "Hoy (por hora)");
+    const _chartGrowth = chartGrowth || (_mode === "strategic" ? "+12%" : "+8%");
+    const _chartData = chartData || (_mode === "strategic" ? [35, 45, 40, 60, 75, 85] : [20, 45, 65, 80, 55, 30]);
+    const _chartLabels = chartLabels || (_mode === "strategic" ? ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN"] : ["08h", "10h", "12h", "14h", "16h", "18h"]);
+    const _gaugeValue = gaugeValue || (_mode === "strategic" ? 92 : 88);
+    const _gaugeLabel = gaugeLabel || (_mode === "strategic" ? "Satisfacción" : "Eficiencia");
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -558,26 +729,30 @@ function MetricsDashboard() {
                     <div className="flex-1 space-y-6 text-center md:text-left">
                         <div>
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider mb-3">
-                                <Sparkles className="h-3 w-3" /> Impacto Real
+                                <Sparkles className="h-3 w-3" /> {_badge}
                             </div>
-                            <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                                Resultados reales que se <br />
-                                <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-purple-600 dark:from-blue-400 dark:via-purple-400 dark:to-purple-500 bg-clip-text text-transparent">sienten en la sala:</span>
+                            <h3 className="text-3xl md:text-5xl font-black text-foreground leading-tight tracking-tighter uppercase">
+                                {_title} <br />
+                                <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-purple-600 dark:from-blue-400 dark:via-purple-400 dark:to-purple-500 bg-clip-text text-transparent italic">{_subtitle}</span>
                             </h3>
-                            <p className="mt-4 text-sm font-semibold text-foreground/80 max-w-sm mx-auto md:mx-0">
-                                ↓ Demoras 45% &nbsp;|&nbsp; -30% Ausentismo &nbsp;|&nbsp; +12% Pacientes &nbsp;|&nbsp; 92% Satisfacción
-                            </p>
+                            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 justify-center md:justify-start">
+                                {_stats.map((stat) => (
+                                    <div key={stat.label} className="flex items-center gap-2 text-sm font-bold text-foreground">
+                                        <span className="text-blue-600 dark:text-blue-400 text-lg">{stat.icon}</span>
+                                        <span>{stat.label} <span className="text-blue-600 dark:text-blue-400">{stat.val}</span></span>
+                                        <span className="last:hidden hidden sm:block text-black/10 dark:text-white/10 ml-2">|</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                            <div className="p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 backdrop-blur-md">
-                                <div className="text-3xl font-bold tracking-tighter text-foreground">+45%</div>
-                                <div className="text-xs text-muted-foreground font-medium uppercase mt-1">Recupero de costos</div>
-                            </div>
-                            <div className="p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 backdrop-blur-md">
-                                <div className="text-3xl font-bold tracking-tighter text-foreground">-30%</div>
-                                <div className="text-xs text-muted-foreground font-medium uppercase mt-1">Ausentismo</div>
-                            </div>
+                            {_kpis.map((kpi, i) => (
+                                <div key={i} className="p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 backdrop-blur-md">
+                                    <div className="text-3xl font-bold tracking-tighter text-foreground">{kpi.val}</div>
+                                    <div className="text-xs text-muted-foreground font-medium uppercase mt-1">{kpi.label}</div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -588,18 +763,18 @@ function MetricsDashboard() {
                             {/* Header */}
                             <div className="flex justify-between items-end mb-6">
                                 <div>
-                                    <div className="text-sm font-semibold text-foreground">Pacientes Atendidos</div>
-                                    <div className="text-xs text-muted-foreground">Últimos 6 meses</div>
+                                    <div className="text-sm font-semibold text-foreground">{_chartTitle}</div>
+                                    <div className="text-xs text-muted-foreground">{_chartSubtitle}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-2xl font-bold text-green-500">+12%</div>
+                                    <div className="text-2xl font-bold text-green-500">{_chartGrowth}</div>
                                     <div className="text-[10px] text-muted-foreground">vs. periodo anterior</div>
                                 </div>
                             </div>
 
                             {/* Bar Chart */}
                             <div className="h-48 flex items-end justify-between gap-3 px-2">
-                                {[35, 45, 40, 60, 75, 85].map((h, i) => (
+                                {_chartData.map((h, i) => (
                                     <motion.div
                                         key={i}
                                         initial={{ height: 0, opacity: 0 }}
@@ -609,12 +784,12 @@ function MetricsDashboard() {
                                     >
                                         <div className={cn(
                                             "w-full h-full rounded-t-lg bg-gradient-to-t opacity-90 transition-all group-hover:opacity-100",
-                                            i === 5 ? "from-purple-600 to-blue-500" : "from-blue-500/40 to-cyan-400/40"
+                                            i === _chartData.length - 1 ? "from-purple-600 to-blue-500" : "from-blue-500/40 to-cyan-400/40"
                                         )} />
 
                                         {/* Tooltip */}
                                         <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 text-white text-[10px] px-2 py-1 rounded pointer-events-none">
-                                            {h * 15}
+                                            {Math.round(h * 1.5)}
                                         </div>
                                     </motion.div>
                                 ))}
@@ -622,7 +797,7 @@ function MetricsDashboard() {
 
                             {/* Labels */}
                             <div className="flex justify-between mt-3 px-2 border-t border-black/5 dark:border-white/5 pt-3">
-                                {["ENE", "FEB", "MAR", "ABR", "MAY", "JUN"].map((m) => (
+                                {_chartLabels.map((m) => (
                                     <span key={m} className="text-[10px] font-medium text-muted-foreground">{m}</span>
                                 ))}
                             </div>
@@ -637,7 +812,7 @@ function MetricsDashboard() {
                         >
                             <div className="p-1 rounded-[20px] bg-gradient-to-br from-white/20 to-transparent backdrop-blur-lg border border-white/20 shadow-xl">
                                 <div className="bg-white/80 dark:bg-black/80 rounded-[18px] p-2">
-                                    <CircularMetric value={92} label="Satisfacción" color="pink" />
+                                    <CircularMetric value={_gaugeValue} label={_gaugeLabel} color={_mode === "tactical" ? "blue" : "pink"} />
                                 </div>
                             </div>
                         </motion.div>
@@ -1190,82 +1365,92 @@ export default function ZanooLanding() {
             <ScrollToTop />
 
             {/* MOBILE PERF: backdrop-blur-none on mobile, xl on md+ */}
-            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 dark:border-white/5 bg-white/80 dark:bg-black/80 backdrop-blur-none md:backdrop-blur-xl transition-all duration-300">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <button
-                        type="button"
-                        onClick={() => scrollToId("top")}
-                        className="flex items-center gap-2 group"
-                    >
-                        {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
-                        {/* Logo adapts to theme via CSS filters or separate assets if needed, using text for now or simple SVG */}
-                        <BrandLogo className="h-9 w-auto" />
-                        {/* <span className="text-xl font-bold tracking-tight text-foreground group-hover:opacity-80 transition-opacity">
-                            Zanoo
-                        </span> */}
-                    </button>
+            <nav
+                className={cn(
+                    "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b",
+                    scrollY > 50
+                        ? "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-black/5 dark:border-white/10 py-3 shadow-lg translate-y-0"
+                        : "bg-transparent border-transparent py-6 -translate-y-2 md:translate-y-0"
+                )}
+            >
+                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                    <div className="flex items-center gap-10">
+                        <button onClick={() => scrollToId("top")} className="hover:opacity-80 transition-opacity flex items-center gap-2">
+                            <BrandLogo className="h-8 w-auto" />
+                            <span className="text-xl font-black tracking-tighter text-foreground">ZANOO</span>
+                        </button>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center gap-6">
-                        <div className="hidden md:flex gap-6 text-sm font-medium text-muted-foreground">
-                            {["Producto", "App real", "Gratis", "Impacto"].map((item) => (
+                        {/* Desktop Menu */}
+                        <div className="hidden lg:flex items-center gap-8">
+                            {[
+                                { name: "Cómo funciona", id: "producto" },
+                                { name: "Beneficios", id: "gratis" },
+                                { name: "Testimonios", id: "testimonios" },
+                                { name: "FAQ", id: "faq" },
+                            ].map((item) => (
                                 <button
-                                    key={item}
-                                    className="hover:text-foreground transition-colors"
-                                    onClick={() => scrollToId(item.toLowerCase().replace(" ", ""))}
+                                    key={item.name}
+                                    onClick={() => scrollToId(item.id)}
+                                    className="text-[11px] uppercase tracking-[0.2em] font-bold text-foreground/50 hover:text-blue-600 transition-colors"
                                 >
-                                    {item}
+                                    {item.name}
                                 </button>
                             ))}
                         </div>
-
-                        <div className="h-4 w-[1px] bg-border mx-2" />
-
-                        <ThemeToggle />
-
-                        <Button
-                            className="rounded-full bg-foreground text-background hover:bg-foreground/90 font-medium px-6"
-                            onClick={() => scrollToId("contacto")}
-                        >
-                            Aplicá ahora
-                        </Button>
                     </div>
 
-                    {/* Mobile Menu Toggle + Theme */}
-                    <div className="flex items-center gap-3 md:hidden">
-                        <ThemeToggle />
+                    <div className="flex items-center gap-4">
+                        <div className="hidden md:block">
+                            <ThemeToggle />
+                        </div>
+                        <div className="hidden sm:block h-4 w-[1px] bg-black/10 dark:bg-white/10 mx-2" />
+                        <ShimmerButton
+                            className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-6 h-11 text-xs uppercase tracking-tighter font-black shadow-xl shadow-blue-500/20"
+                            onClick={() => scrollToId("gratis")}
+                        >
+                            Aplicar ahora
+                        </ShimmerButton>
+
                         <button
-                            type="button"
-                            className="p-2 text-foreground"
+                            className="lg:hidden p-3 rounded-2xl bg-black/5 dark:bg-white/10 hover:bg-black/10 transition-colors"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
-                            {mobileMenuOpen ? <X /> : <Menu />}
+                            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </button>
                     </div>
                 </div>
 
-                {/* Mobile Menu Dropdown */}
                 <AnimatePresence>
                     {mobileMenuOpen && (
                         <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border md:hidden"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="absolute top-full left-0 right-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-2xl border-b border-black/10 dark:border-white/10 lg:hidden overflow-hidden shadow-2xl"
                         >
-                            <div className="flex flex-col p-6 space-y-4">
-                                {["Producto", "App real", "Gratis", "Impacto", "Contacto"].map((item) => (
+                            <div className="flex flex-col p-8 space-y-6">
+                                {[
+                                    { name: "Cómo funciona", id: "producto" },
+                                    { name: "Beneficios", id: "gratis" },
+                                    { name: "Testimonios", id: "testimonios" },
+                                    { name: "FAQ", id: "faq" },
+                                    { name: "Aplicar ahora", id: "gratis" },
+                                ].map((item) => (
                                     <button
-                                        key={item}
-                                        className="text-lg font-medium text-foreground text-left py-2 border-b border-border/50 last:border-0"
+                                        key={item.name}
+                                        className="text-2xl font-black uppercase tracking-tighter text-foreground text-left py-2 border-b border-black/5 dark:border-white/5 last:border-0"
                                         onClick={() => {
-                                            scrollToId(item.toLowerCase().replace(" ", ""));
+                                            scrollToId(item.id);
                                             setMobileMenuOpen(false);
                                         }}
                                     >
-                                        {item}
+                                        {item.name}
                                     </button>
                                 ))}
+                                <div className="pt-4 flex items-center justify-between">
+                                    <span className="text-xs font-bold uppercase tracking-widest text-foreground/40">Cambiar tema</span>
+                                    <ThemeToggle />
+                                </div>
                             </div>
                         </motion.div>
                     )}
@@ -1292,7 +1477,7 @@ export default function ZanooLanding() {
 
                         <TechReveal direction="up" delay={0.3}>
                             <p className="max-w-xl text-xl text-foreground/70 font-medium leading-relaxed mb-8 text-balance">
-                                Sistema completo para turnos, estudios e historia clínica – transforma la atención de pacientes.
+                                La primer plataforma gratuita de gestión de pacientes para centros de salud públicos en Latinoamérica.
                             </p>
 
                             <ul className="space-y-5 max-w-xl">
@@ -1537,9 +1722,7 @@ export default function ZanooLanding() {
                                 </TechReveal>
                             </div>
 
-                            <div className="mt-24">
-                                <MetricsDashboard />
-                            </div>
+
                         </motion.div>
 
                         <motion.div
@@ -1595,7 +1778,32 @@ export default function ZanooLanding() {
                     </div>
 
                     <div className="mt-20">
-                        <QuoteCarousel />
+                        <MetricsDashboard 
+                            mode="tactical"
+                            badge="Operación Diaria"
+                            title="Control total"
+                            subtitle="de lo que pasa en tu sala:"
+                            stats={[
+                                { label: "En espera", val: "12", icon: "👤" },
+                                { label: "T. Promedio", val: "14m", icon: "⏱" },
+                                { label: "Box ocupados", val: "85%", icon: "🏥" },
+                                { label: "Urgencias", val: "0", icon: "🚨" },
+                            ]}
+                            kpis={[
+                                { val: "14 min", label: "Espera promedio" },
+                                { val: "88%", label: "Eficiencia diaria" }
+                            ]}
+                            chartTitle="Flujo de Pacientes"
+                            chartSubtitle="Hoy (por hora)"
+                            chartGrowth="+8%"
+                            chartData={[20, 45, 65, 80, 55, 30]}
+                            chartLabels={["08h", "10h", "12h", "14h", "16h", "18h"]}
+                            gaugeValue={88}
+                            gaugeLabel="Eficiencia"
+                        />
+                        <div className="mt-10">
+                            <QuoteCarousel />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1867,26 +2075,21 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-            {/* IMPACTO */}
-            <section id="impacto" className="py-32">
-                <div className="max-w-5xl mx-auto px-6 text-center">
+            {/* IMPACTO (MetricsDashboard only) */}
+            <section id="impacto" className="py-32 bg-zinc-50/50 dark:bg-zinc-950/30">
+                <div className="max-w-6xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Impacto Real</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight">
-                            Esto no es una promesa.
-                            <br />
-                            Es el <span className="relative inline-block">
-                                <span className="relative z-10 font-extrabold tracking-tight text-4xl md:text-5xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                    PRODUCTO
-                                </span>
-                            </span>.
+                        <h2 className="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter text-center leading-[0.9]">
+                            Esto no es una promesa.<br />
+                            Es el <span className="text-blue-600 italic">Producto funcionando.</span>
                         </h2>
                     </motion.div>
 
-                    <div className="mt-16">
-                        <MetricsDashboard />
-                        <div className="mt-6 text-xs text-black/45 dark:text-white/45">
-                            Basado en benchmarks sectoriales OMS/LATAM + pruebas iniciales propias. Próximamente métricas reales de salitas pioneras.
+                    <div className="mt-20">
+                        <MetricsDashboard mode="strategic" />
+                        <div className="mt-10 text-[10px] text-black/30 dark:text-white/20 uppercase tracking-[0.2em] font-medium max-w-2xl mx-auto">
+                            Basado en benchmarks sectoriales OMS/LATAM + pruebas iniciales. Próximamente métricas reales de salitas pioneras en Red Federal.
                         </div>
                     </div>
                 </div>
@@ -2172,12 +2375,12 @@ export default function ZanooLanding() {
                                             </div>
 
                                             <div className="sm:col-span-2 flex flex-col gap-4 pt-4 border-t border-black/5 mt-2">
-                                                <div className="text-xs text-black/50 leading-relaxed text-balance font-medium">
-                                                    Revisión en 48-72hs. Datos protegidos por Ley 25.326 AR, Google Cloud encriptado – solo para este proceso, nunca compartidos.
+                                                <div className="text-[10px] text-black/50 leading-relaxed text-balance font-medium">
+                                                    Seguridad y Privacidad: El tratamiento de datos personales en Zanoo se realiza en cumplimiento con la Ley Nº 25.326. Los centros actúan como Responsables de Archivo y Zanoo como Procesador de Datos bajo protocolos AES-256 en Google Cloud. Inscripción AAIP en trámite.
                                                 </div>
                                                 <Button
                                                     type="submit"
-                                                    className="rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white w-full sm:w-auto self-end px-8"
+                                                    className="rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white w-full sm:w-auto self-end px-8 font-bold uppercase tracking-tighter"
                                                 >
                                                     Enviar aplicación
                                                 </Button>
@@ -2191,58 +2394,253 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-            {/* CTA */}
+            {/* QUIÉNES SOMOS */}
+            <section id="quienes-somos" className="py-32 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[120px] -mr-48 -mt-48" />
+                
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-20 items-center">
+                        <motion.div {...fadeUp}>
+                            <SectionBadge>Quiénes Somos</SectionBadge>
+                            <h2 className="mt-8 text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none mb-8">
+                                Un equipo con <br /><span className="text-blue-600">propósito humano</span>
+                            </h2>
+                            <p className="text-xl text-foreground/70 leading-relaxed mb-8">
+                                Zanoo nace de la necesidad de cerrar la brecha digital en la salud pública. No somos solo desarrolladores; somos un equipo comprometido con que cada paciente, sin importar su recurso, reciba una atención ordenada y digna.
+                            </p>
+                            
+                            <div className="space-y-6">
+                                <div className="flex gap-4 items-start">
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-600/10 flex items-center justify-center shrink-0">
+                                        <Users className="w-6 h-6 text-blue-600" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-lg">Misión Social</h4>
+                                        <p className="text-foreground/60 text-sm">Nuestra tecnología es gratuita para el sector público para garantizar la continuidad del cuidado.</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-4 items-start">
+                                    <div className="w-12 h-12 rounded-2xl bg-purple-600/10 flex items-center justify-center shrink-0">
+                                        <Zap className="w-6 h-6 text-purple-600" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-lg">Agilidad Operativa</h4>
+                                        <p className="text-foreground/60 text-sm">Entendemos el desorden de las salitas porque caminamos el territorio con los directores.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            className="relative group focus:outline-none"
+                        >
+                            <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-[40px] opacity-10 blur-2xl group-hover:opacity-20 transition-opacity" />
+                            <div className="relative rounded-[32px] border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl p-10 overflow-hidden">
+                                <div className="flex flex-col items-center text-center">
+                                    <div className="w-32 h-32 rounded-full border-4 border-white dark:border-zinc-800 shadow-2xl mb-6 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+                                        <img 
+                                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Juli" 
+                                            alt="Fundador" 
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <h3 className="text-2xl font-black uppercase tracking-tighter italic">"La salud pública merece tecnología de punta, no descartes."</h3>
+                                    <div className="mt-8">
+                                        <div className="font-bold text-lg">Julián A.</div>
+                                        <div className="text-xs uppercase tracking-[0.2em] text-blue-600 font-black">Founder & Lead Dev</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section id="faq" className="py-32 bg-zinc-50 dark:bg-zinc-950/50">
+                <div className="max-w-4xl mx-auto px-6">
+                    <div className="text-center mb-20">
+                        <SectionBadge>FAQ</SectionBadge>
+                        <h2 className="mt-8 text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-4">
+                            Respuestas <br /><span className="text-blue-600 italic">directas</span>
+                        </h2>
+                    </div>
+                    
+                    <div className="space-y-4">
+                        {[
+                            {
+                                q: "¿Funciona sin internet?",
+                                a: "Zanoo requiere conexión para sincronizar en tiempo real, pero su diseño ultraliviano está optimizado para funcionar estable incluso con conexiones 3G/4G inestables en zonas periféricas."
+                            },
+                            {
+                                q: "¿Cuánto tarda la implementación real?",
+                                a: "La configuración técnica toma 48hs. La capacitación de tu equipo (recepción y médicos) se hace en una sola mañana para no interrumpir la atención del centro."
+                            },
+                            {
+                                q: "¿Qué pasa si ya uso Excel, WhatsApp o cuadernos?",
+                                a: "Zanoo reemplaza el desorden. Podemos importar tus listados de pacientes desde Excel para que no cargues nada a mano y arranques operando el primer día."
+                            },
+                            {
+                                q: "¿Hay capacitación o soporte humano real?",
+                                a: "Sí. No somos un bot. Tenemos un equipo en Buenos Aires que te acompaña por WhatsApp y videollamada durante el arranque crítico para que todo el equipo se sienta seguro."
+                            },
+                            {
+                                q: "¿Puedo probarlo antes de decidir?",
+                                a: "¡Claro! Podés agendar una demo en vivo donde te mostramos cómo se adapta a tu volumen de pacientes y a la realidad de tu salita sin ningún compromiso."
+                            },
+                            {
+                                q: "¿Mis datos están seguros y cumplen la ley?",
+                                a: "Absolutamente. Cumplimos con la Ley 25.326 de Protección de Datos. La información viaje encriptada y se aloja en servidores de Google Cloud con redundancia médica."
+                            },
+                            {
+                                q: "¿Es interoperable con el Ministerio de Salud?",
+                                a: "Sí. Zanoo está diseñado bajo estándares HL7 FHIR y terminología SNOMED CT, preparándonos para integrarnos a la Estrategia Nacional de Salud Digital."
+                            }
+                        ].map((faq, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="rounded-3xl border border-black/5 dark:border-white/5 bg-white dark:bg-zinc-900/50 overflow-hidden hover:shadow-xl transition-shadow group"
+                            >
+                                <details className="group">
+                                    <summary className="w-full p-8 text-left flex justify-between items-center cursor-pointer list-none">
+                                        <span className="font-bold text-xl md:text-2xl tracking-tight text-foreground transition-colors group-hover:text-blue-600">{faq.q}</span>
+                                        <div className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center group-open:rotate-180 transition-transform">
+                                            <ChevronRight className="h-5 w-5 text-muted-foreground rotate-90" />
+                                        </div>
+                                    </summary>
+                                    <div className="px-8 pb-8 text-lg text-foreground/60 leading-relaxed border-t border-black/5 dark:border-white/5 pt-6">
+                                        {faq.a}
+                                    </div>
+                                </details>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CONTACTO CTA */}
             <section id="contacto" className="py-28" >
                 <div className="max-w-4xl mx-auto px-6 text-center">
                     <motion.div {...fadeUp}>
                         <SectionBadge>Contacto</SectionBadge>
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight text-center leading-tight">
-                            ¿Listo para <span className="font-bold">transformar la atención</span> de tu centro?
+                        <h2 className="mt-6 text-4xl md:text-5xl font-extrabold tracking-tighter text-center leading-[1.1] uppercase">
+                            ¿Listo para <span className="text-blue-600 italic">ordenar</span> la atención de tu centro?
                         </h2>
-                        <p className="mt-4 text-black/60">Agendá una demo corta, enfocada en tu realidad operativa.</p>
+                        <p className="mt-6 text-foreground/60 max-w-xl mx-auto">Agendá una demo corta, enfocada en tu realidad operativa y el volumen de tu centro.</p>
 
-                        <div className="mt-8 flex items-center justify-center gap-3">
+                        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <ShimmerButton
-                                className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-[0_18px_50px_-25px_rgba(59,130,246,0.95)] px-8 h-12 text-base font-semibold"
+                                className="bg-black text-white dark:bg-white dark:text-black shadow-2xl px-10 h-14 text-sm font-black uppercase tracking-tight"
                                 onClick={() => scrollToId("gratis")}
                             >
-                                Aplicá ahora
+                                Aplicar ahora
                             </ShimmerButton>
                             <Button
                                 variant="outline"
-                                className="rounded-full border-black/15 bg-white/70 text-black hover:bg-black/5"
+                                className="rounded-full border-black/10 h-14 px-8 bg-white/70 text-black hover:bg-black/5 font-bold"
                                 onClick={() => {
-                                    // reemplazá por tu link real
-                                    window.open("https://wa.me/", "_blank");
+                                    window.open("https://wa.me/5491130668588", "_blank");
                                 }}
                             >
                                 Escribir por WhatsApp
                             </Button>
                         </div>
-
-                        <div className="mt-12 flex justify-center opacity-90 grayscale hover:grayscale-0 transition-all duration-500">
-                            <span className="inline-flex items-center mx-2 align-middle">
-                                <Image src="/brand/zanoo-logo-text-white.png" alt="Zanoo" width={300} height={130} className="h-[90px] w-auto object-contain hidden dark:block" />
-                                <Image src="/brand/zanoo-logo-color-v2.png" alt="Zanoo" width={300} height={130} className="h-[90px] w-auto object-contain dark:hidden" />
-                            </span>
-                        </div>
                     </motion.div>
 
-                    <div className="mt-10 text-xs text-black/40">© {new Date().getFullYear()} Zanoo — Landing (v2.9 Tuned)</div>
+                    <div className="mt-24 border-t border-black/5 dark:border-white/5 pt-16 text-left">
+                        <div className="grid md:grid-cols-4 gap-12">
+                            <div className="md:col-span-1">
+                                <BrandLogo className="h-8 w-auto mb-6" />
+                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                    Inteligencia sanitaria diseñada para elevar la calidad de atención en el sector público de Latinoamérica. Tecnología de punta para quienes más la necesitan.
+                                </p>
+                                <div className="mt-6 p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30">
+                                    <div className="text-[10px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-300">Estado del Sistema</div>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                        <span className="text-[10px] font-bold text-foreground/60 uppercase">Operativo (v2026.1)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Legal y Salud</h4>
+                                <nav className="flex flex-col gap-3">
+                                    <a href="#" className="text-xs font-bold text-foreground/60 hover:text-blue-600 transition-colors uppercase tracking-widest">Términos de Uso</a>
+                                    <a href="#" className="text-xs font-bold text-foreground/60 hover:text-blue-600 transition-colors uppercase tracking-widest">Política de Privacidad</a>
+                                    <a href="#" className="text-xs font-bold text-foreground/60 hover:text-blue-600 transition-colors uppercase tracking-widest">Ley 25.326 AR</a>
+                                    <a href="#" className="text-xs font-bold text-foreground/60 hover:text-blue-600 transition-colors uppercase tracking-widest">Protocolo HL7 FHIR</a>
+                                </nav>
+                                <p className="text-[9px] text-muted-foreground leading-relaxed pt-2">
+                                    En proceso de homologación ante el ReNaPDiS (Res. MSAL 278/2024).
+                                </p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Contacto</h4>
+                                <div className="space-y-3">
+                                    <a href="mailto:hola@zanoo.com.ar" className="flex items-center gap-3 text-xs font-bold text-foreground/60 hover:text-blue-600 transition-colors">
+                                        <Mail className="w-4 h-4" />
+                                        hola@zanoo.com.ar
+                                    </a>
+                                    <a href="https://wa.me/5491130668588" target="_blank" className="flex items-center gap-3 text-xs font-bold text-foreground/60 hover:text-blue-600 transition-colors">
+                                        <BrandLogo className="w-4 h-4 grayscale opacity-60" />
+                                        WhatsApp Oficial
+                                    </a>
+                                    <div className="flex gap-4 pt-4">
+                                        <a href="https://linkedin.com" target="_blank" className="w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                                            <Users className="w-4 h-4" />
+                                        </a>
+                                        <a href="https://instagram.com" target="_blank" className="w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all shadow-sm">
+                                            <Heart className="w-4 h-4" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Plataforma</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="text-[9px] px-2 py-1 bg-black/5 dark:bg-white/5 rounded border border-black/5 dark:border-white/5 font-black uppercase tracking-tighter">SNOMED CT</span>
+                                    <span className="text-[9px] px-2 py-1 bg-black/5 dark:bg-white/5 rounded border border-black/5 dark:border-white/5 font-black uppercase tracking-tighter">AES-256</span>
+                                    <span className="text-[9px] px-2 py-1 bg-black/5 dark:bg-white/5 rounded border border-black/5 dark:border-white/5 font-black uppercase tracking-tighter">Google Cloud</span>
+                                    <span className="text-[9px] px-2 py-1 bg-black/5 dark:bg-white/5 rounded border border-black/5 dark:border-white/5 font-black uppercase tracking-tighter">ReNaPDiS</span>
+                                </div>
+                                <div className="mt-4 flex items-center gap-2 p-3 rounded-xl bg-green-500/5 border border-green-500/10">
+                                    <ShieldCheck className="w-4 h-4 text-green-600" />
+                                    <span className="text-[10px] font-bold text-green-700 dark:text-green-400 uppercase">Seguridad Certificada</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-20 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-black/5 dark:border-white/5 pt-10">
+                        <div className="text-[10px] text-black/40 dark:text-white/30 uppercase tracking-[0.4em] font-black italic">
+                            © {new Date().getFullYear()} ZANOO — TECNOLOGÍA SANITARIA FEDERAL
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-foreground/40">Buenos Aires, Argentina</span>
+                        </div>
+                    </div>
                 </div>
-            </section >
+            </section>
 
             {/* WHATSAPP STICKY (MOBILE) */}
             <a
                 href="https://wa.me/5491130668588?text=Hola,%20quiero%20ser%20parte%20de%20Zanoo%20para%20mi%20centro%20%E2%80%93%20[cargo/provincia]"
                 target="_blank"
                 rel="noreferrer"
-                className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-5 py-3 font-semibold shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-green-600 transition-all border border-green-400/30"
+                className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center gap-2 rounded-full bg-green-500 text-white px-5 py-4 font-black uppercase tracking-tighter text-xs shadow-[0_15px_45px_-10px_rgba(0,0,0,0.3)] hover:scale-105 active:scale-95 transition-all border border-white/20"
             >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.818-.728-1.372-1.626-1.533-1.924-.161-.298-.017-.459.132-.608.135-.135.297-.348.446-.521.15-.173.2-.297.298-.496.098-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 21.053h-.004c-1.656 0-3.28-.445-4.706-1.286l-.337-.199-3.498.917.933-3.411-.219-.348a8.96 8.96 0 0 1-1.383-4.838A9.022 9.022 0 0 1 12 2.943a9.046 9.046 0 0 1 9.034 9.053A9.045 9.045 0 0 1 12 21.053z" />
-                </svg>
-                Aplicar
+                <BrandLogo className="w-5 h-5 mr-2 brightness-0 invert" />
+                Pedir Demo
             </a>
         </div>
     );
