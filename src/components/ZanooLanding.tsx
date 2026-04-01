@@ -550,7 +550,11 @@ function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
+        const handleScroll = () => {
+            if (typeof window !== "undefined") {
+                setScrolled(window.scrollY > 50);
+            }
+        };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
@@ -564,6 +568,7 @@ function Navbar() {
     ];
 
     const scrollToId = (id: string) => {
+        if (typeof window === "undefined" || typeof document === "undefined") return;
         const el = document.getElementById(id);
         if (el) {
             const offset = 80;
@@ -585,7 +590,11 @@ function Navbar() {
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
                 <div 
                     className="flex items-center gap-2 cursor-pointer group"
-                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    onClick={() => {
+                        if (typeof window !== "undefined") {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                    }}
                 >
                     <BrandLogo className="h-8 w-auto group-hover:scale-105 transition-transform" />
                     <span className="hidden sm:block font-black text-xl tracking-tighter uppercase italic bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Zanoo</span>
