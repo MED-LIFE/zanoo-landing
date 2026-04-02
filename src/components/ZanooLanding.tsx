@@ -421,6 +421,7 @@ function ScrollToTop() {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         return scrollY.on("change", (latest) => {
             setVisible(latest > 600);
         });
@@ -1377,7 +1378,7 @@ export default function ZanooLanding() {
             <nav
                 className={cn(
                     "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b",
-                    scrollY > 50
+                    (typeof window !== "undefined" && window.scrollY > 50)
                         ? "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-black/5 dark:border-white/10 py-3 shadow-lg translate-y-0"
                         : "bg-transparent border-transparent py-6 -translate-y-2 md:translate-y-0"
                 )}
@@ -2057,20 +2058,7 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-            {/* IMPACTO (MetricsDashboard only) */}
-            <section id="impacto" className="py-32 bg-zinc-50/50 dark:bg-zinc-950/30">
-                <div className="max-w-6xl mx-auto px-6 text-center">
-                    <motion.div {...fadeUp}>
-                        <SectionBadge>Impacto Real</SectionBadge>
-                        <h2 className="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter text-center leading-[0.9]">
-                            Esto no es una promesa.<br />
-                            Es el <span className="text-blue-600 italic">Producto funcionando.</span>
-                        </h2>
-                    </motion.div>
 
-
-                </div>
-            </section>
 
 
 
