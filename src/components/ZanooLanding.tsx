@@ -1786,34 +1786,7 @@ export default function ZanooLanding() {
                         </motion.div>
                     </div>
 
-                    <div className="mt-20">
-                        <MetricsDashboard 
-                            mode="tactical"
-                            badge="Operación Diaria"
-                            title="Control total"
-                            subtitle="de lo que pasa en tu sala:"
-                            stats={[
-                                { label: "En espera", val: "12", icon: "👤" },
-                                { label: "T. Promedio", val: "14m", icon: "⏱" },
-                                { label: "Box ocupados", val: "85%", icon: "🏥" },
-                                { label: "Urgencias", val: "0", icon: "🚨" },
-                            ]}
-                            kpis={[
-                                { val: "14 min", label: "Espera promedio" },
-                                { val: "88%", label: "Eficiencia diaria" }
-                            ]}
-                            chartTitle="Flujo de Pacientes"
-                            chartSubtitle="Hoy (por hora)"
-                            chartGrowth="+8%"
-                            chartData={[20, 45, 65, 80, 55, 30]}
-                            chartLabels={["08h", "10h", "12h", "14h", "16h", "18h"]}
-                            gaugeValue={88}
-                            gaugeLabel="Eficiencia"
-                        />
-                        <div className="mt-10">
-                            <QuoteCarousel />
-                        </div>
-                    </div>
+
                 </div>
             </section>
 
