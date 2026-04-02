@@ -2068,12 +2068,7 @@ export default function ZanooLanding() {
                         </h2>
                     </motion.div>
 
-                    <div className="mt-20">
-                        <MetricsDashboard mode="strategic" />
-                        <div className="mt-10 text-[10px] text-black/30 dark:text-white/20 uppercase tracking-[0.2em] font-medium max-w-2xl mx-auto">
-                            Basado en benchmarks sectoriales OMS/LATAM + pruebas iniciales. Próximamente métricas reales de salitas pioneras en Red Federal.
-                        </div>
-                    </div>
+
                 </div>
             </section>
 
