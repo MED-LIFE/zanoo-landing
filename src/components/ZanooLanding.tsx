@@ -1017,7 +1017,8 @@ function PhoneFrame({
         </div>
     );
 }
-
+function ReplicaScreen({
+    title,
     subtitle,
     mode = "list",
 }: {
