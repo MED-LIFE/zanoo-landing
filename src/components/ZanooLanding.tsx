@@ -127,8 +127,8 @@ function useFadeUp() {
 // Content
 // -----------------------------
 const HERO_SHOTS = [
-    { id: "medicos", label: "Mis médicos", src: "/shots/mis-medicos-real.png" },
     { id: "inicio", label: "Inicio (Paciente)", src: "/shots/inicio-paciente.png" },
+    { id: "medicos", label: "Mis médicos", src: "/shots/mis-medicos-real.png" },
 ] as const;
 
 const APP_SHOTS: Array<{
@@ -978,17 +978,25 @@ function PhoneFrame({
                         {/* Eliminated top blur overlay to prevent dark muddy gradient on mobile */}
                         {/* <div className="absolute -top-12 left-1/2 -translate-x-1/2 h-32 w-64 rounded-full bg-gradient-to-r from-cyan-400/22 via-blue-500/18 to-purple-600/18 blur-2xl" /> */}
 
-                        {showImage ? (
-                            <img
-                                src={src}
-                                alt={alt || "Captura de Zanoo"}
-                                className="block w-full h-full object-cover"
-                                loading="lazy"
-                                onError={() => setImgError(true)}
-                            />
-                        ) : (
-                            <div className="relative h-[690px] bg-[#f6f7fb]">{children}</div>
-                        )}
+                        {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
+                        <div className="relative h-[690px] bg-[#f6f7fb]">
+                            {showImage && (
+                                <div className="absolute inset-0 z-0">
+                                    <img
+                                        src={src}
+                                        alt={alt || "Captura de Zanoo"}
+                                        className="w-full h-full object-cover"
+                                        loading="lazy"
+                                        onError={() => setImgError(true)}
+                                    />
+                                    {/* Overlay sutil para mejorar legibilidad de los elementos UI encima */}
+                                    <div className="absolute inset-0 bg-black/5 dark:bg-black/20" />
+                                </div>
+                            )}
+                            <div className="relative z-10 h-full overflow-y-auto">
+                                {children}
+                            </div>
+                        </div>
 
                         {label ? (
                             <div className="absolute left-4 right-4 bottom-4">
