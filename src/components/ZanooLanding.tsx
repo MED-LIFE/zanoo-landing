@@ -1386,7 +1386,6 @@ export default function ZanooLanding() {
                     <div className="flex items-center gap-10">
                         <button onClick={() => scrollToId("top")} className="hover:opacity-80 transition-opacity flex items-center gap-2">
                             <BrandLogo className="h-8 w-auto" />
-                            <span className="text-xl font-black tracking-tighter text-foreground">ZANOO</span>
                         </button>
 
                         {/* Desktop Menu */}
@@ -1467,10 +1466,10 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-32 pb-24 relative overflow-hidden z-10">
+            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-20 pb-20 relative overflow-hidden z-10">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.05),transparent_60%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.05),transparent_65%)]" />
 
-                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-12">
+                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-8">
                     {/* Hero Text */}
                     <div className="space-y-10 flex flex-col justify-start">
                         <TechReveal direction="up" delay={0.1}>
@@ -1796,8 +1795,8 @@ export default function ZanooLanding() {
                     <motion.div {...fadeUp} className="text-center mb-16">
                         <SectionBadge>Impacto Real</SectionBadge>
                         <h2 className="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
-                            Esto no es una promesa.<br />
-                            Es el <span className="text-blue-600 italic">Producto funcionando.</span>
+                            Resultados que cuentan<br />
+                            <span className="text-blue-600 italic">historias de orden.</span>
                         </h2>
                     </motion.div>
 
@@ -2411,25 +2410,49 @@ export default function ZanooLanding() {
                         </motion.div>
 
                         <motion.div 
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="relative group focus:outline-none"
+                            className="space-y-6"
                         >
-                            <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-[40px] opacity-10 blur-2xl group-hover:opacity-20 transition-opacity" />
-                            <div className="relative rounded-[32px] border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl p-10 overflow-hidden">
-                                <div className="flex flex-col items-center text-center">
-                                    <div className="w-32 h-32 rounded-full border-4 border-white dark:border-zinc-800 shadow-2xl mb-6 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
-                                        <img 
-                                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Juli" 
-                                            alt="Fundador" 
-                                            className="w-full h-full object-cover"
-                                        />
+                            {/* Card: Julián */}
+                            <div className="relative group p-8 rounded-[32px] border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-20 h-20 rounded-full border-2 border-white dark:border-zinc-800 shadow-xl overflow-hidden bg-zinc-100">
+                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Juli" alt="Julian" className="w-full h-full object-cover" />
                                     </div>
-                                    <h3 className="text-2xl font-black uppercase tracking-tighter italic">"La salud pública merece tecnología de punta, no descartes."</h3>
-                                    <div className="mt-8">
-                                        <div className="font-bold text-lg">Julián A.</div>
-                                        <div className="text-xs uppercase tracking-[0.2em] text-blue-600 font-black">Founder & Lead Dev</div>
+                                    <div>
+                                        <h3 className="text-xl font-black uppercase tracking-tighter italic">"TECNOLOGÍA DE PUNTA, NO DESCARTES."</h3>
+                                        <div className="font-bold">Julián A.</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-blue-600 font-black">Founder & Lead Dev</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Card: Catriel */}
+                            <div className="relative group p-8 rounded-[32px] border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-20 h-20 rounded-full border-2 border-white dark:border-zinc-800 shadow-xl overflow-hidden bg-zinc-100">
+                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Catriel" alt="Catriel" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black uppercase tracking-tighter italic">"SISTEMAS ROBUSTOS PARA EL PUEBLO."</h3>
+                                        <div className="font-bold">Catriel Stringaro</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-blue-600 font-black">CTO</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Card: Gabriela */}
+                            <div className="relative group p-8 rounded-[32px] border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-20 h-20 rounded-full border-2 border-white dark:border-zinc-800 shadow-xl overflow-hidden bg-zinc-100">
+                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Gabriela" alt="Gabriela" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black uppercase tracking-tighter italic">"PROTECCIÓN Y TRANSPARENCIA LEGAL."</h3>
+                                        <div className="font-bold">Gabriela Alejandra Lespiaucq</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-blue-600 font-black">Legal & Compliance</div>
                                     </div>
                                 </div>
                             </div>
