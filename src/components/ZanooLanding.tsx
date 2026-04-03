@@ -127,8 +127,8 @@ function useFadeUp() {
 // Content
 // -----------------------------
 const HERO_SHOTS = [
+    { id: "medicos", label: "Mis médicos", src: "/shots/mis-medicos-real.png" },
     { id: "inicio", label: "Inicio (Paciente)", src: "/shots/inicio-paciente.png" },
-    { id: "medicos", label: "Mis médicos", src: "/shots/mis-medicos.png" },
 ] as const;
 
 const APP_SHOTS: Array<{
@@ -1466,10 +1466,10 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-20 pb-20 relative overflow-hidden z-10">
+            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-16 pb-16 relative overflow-hidden z-10">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.05),transparent_60%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.05),transparent_65%)]" />
 
-                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-8">
+                <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-6">
                     {/* Hero Text */}
                     <div className="space-y-10 flex flex-col justify-start">
                         <TechReveal direction="up" delay={0.1}>
@@ -1551,10 +1551,10 @@ export default function ZanooLanding() {
                             className="relative perspective-1000"
                         >
                             <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
-                                {activeHeroShot.id === "inicio" ? (
-                                    <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
-                                ) : (
+                                {activeHeroShot.id === "medicos" ? (
                                     <ReplicaScreen title="Zanoo" subtitle="Mis médicos" mode="list" />
+                                ) : (
+                                    <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
                                 )}
                             </PhoneFrame>
 
@@ -1648,8 +1648,43 @@ export default function ZanooLanding() {
                     </h2>
                 </motion.div>
             </section>
+
+            {/* IMPACTO (Movido ARRIBA de App Real) */}
+            <section id="impacto" className="py-32 bg-zinc-50/50 dark:bg-zinc-950/30">
+                <div className="max-w-6xl mx-auto px-6">
+                    <motion.div {...fadeUp} className="text-center mb-16">
+                        <SectionBadge>Impacto Real</SectionBadge>
+                        <h2 className="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
+                            Resultados que cuentan<br />
+                            <span className="text-blue-600 italic">historias de orden.</span>
+                        </h2>
+                        
+                        <div className="mt-12 grid md:grid-cols-3 gap-8">
+                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
+                                <div className="text-5xl font-black text-blue-600 mb-2">8.000+</div>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">CAPS y Salitas de 1er nivel</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El corazón de la salud pública argentina. Donde el desorden administrativo impacta directo en la vida de los vecinos.</p>
+                            </div>
+                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
+                                <div className="text-5xl font-black text-blue-600 mb-2">12M+</div>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Consultas Anuales</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">Un volumen masivo que hoy se gestiona, en gran parte, con planillas de papel, WhatsApp y cuadernos manuscritos.</p>
+                            </div>
+                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
+                                <div className="text-5xl font-black text-blue-600 mb-2">45%</div>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Reducción de Espera</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El impacto medido al digitalizar el primer contacto. Menos colas al sol, más tiempo de calidad en el consultorio.</p>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    <div className="mt-20">
+                        <MetricsDashboard />
+                    </div>
+                </div>
+            </section>
  
-            {/* APP REAL SECTION */}
+            {/* APP REAL SECTION (Movido ABAJO de Impacto) */}
             <section id="appreal" className="py-32 relative">
                 {/* Section Specific Background Spotlights */}
                 <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
@@ -1674,7 +1709,7 @@ export default function ZanooLanding() {
                             </h2>
 
                             <p className="mt-4 text-black/60 dark:text-white/60 max-w-xl transition-colors duration-500">
-                                Acá se muestran capturas reales adentro de un celu. Si todavía no hay screenshot cargado, ves una réplica liviana.
+                                Acá se muestran capturas reales adentro de un celu. La misma tecnología que ya está transformando la atención.
                             </p>
 
                             <div className="mt-8 flex flex-wrap gap-2">
@@ -1789,40 +1824,7 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-            {/* IMPACTO (Restaurada una sola instancia) */}
-            <section id="impacto" className="py-32 bg-zinc-50/50 dark:bg-zinc-950/30">
-                <div className="max-w-6xl mx-auto px-6">
-                    <motion.div {...fadeUp} className="text-center mb-16">
-                        <SectionBadge>Impacto Real</SectionBadge>
-                        <h2 className="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
-                            Resultados que cuentan<br />
-                            <span className="text-blue-600 italic">historias de orden.</span>
-                        </h2>
-                        
-                        <div className="mt-12 grid md:grid-cols-3 gap-8">
-                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
-                                <div className="text-5xl font-black text-blue-600 mb-2">8.000+</div>
-                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">CAPS y Salitas de 1er nivel</div>
-                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El corazón de la salud pública argentina. Donde el desorden administrativo impacta directo en la vida de los vecinos.</p>
-                            </div>
-                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
-                                <div className="text-5xl font-black text-blue-600 mb-2">12M+</div>
-                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Consultas Anuales</div>
-                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">Un volumen masivo que hoy se gestiona, en gran parte, con planillas de papel, WhatsApp y cuadernos manuscritos.</p>
-                            </div>
-                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
-                                <div className="text-5xl font-black text-blue-600 mb-2">45%</div>
-                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Reducción de Espera</div>
-                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El impacto medido al digitalizar el primer contacto. Menos colas al sol, más tiempo de calidad en el consultorio.</p>
-                            </div>
-                        </div>
-                    </motion.div>
 
-                    <div className="mt-20">
-                        <MetricsDashboard />
-                    </div>
-                </div>
-            </section>
 
             {/* DEMO (web) */}
             <section id="demo" className="py-24">
@@ -2095,15 +2097,13 @@ export default function ZanooLanding() {
 
 
 
-            {/* TESTIMONIOS */}
-            <section id="testimonios" className="py-48 bg-zinc-50/50 dark:bg-zinc-900/20 border-y border-black/5 dark:border-white/5">
-                <div className="max-w-7xl mx-auto px-6">
                     <motion.div {...fadeUp} className="text-center mb-16">
+                        <SectionBadge>Historias de Éxito</SectionBadge>
                         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
-                            Lo que dicen los centros
+                            Sé la próxima historia de éxito
                         </h2>
                         <p className="mt-4 text-xl text-foreground/60 max-w-2xl mx-auto">
-                            Lo que dicen los directores y médicos de las salitas que ya ordenaron su atención.
+                            Zanoo está naciendo para transformar la salud pública. Unite a los centros que ya están diseñando el futuro de la atención junto a nosotros.
                         </p>
                     </motion.div>
 
@@ -2151,8 +2151,11 @@ export default function ZanooLanding() {
                     </div>
 
                     <motion.div {...fadeUp} className="mt-16 flex justify-center">
-                        <button className="rounded-full px-8 py-3 bg-zinc-100 dark:bg-zinc-800 text-foreground font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
-                            Leer más historias
+                        <button 
+                            onClick={() => scrollToId("gratis")}
+                            className="rounded-full px-8 py-3 bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
+                        >
+                            Aplicá para ser el siguiente
                         </button>
                     </motion.div>
                 </div>
