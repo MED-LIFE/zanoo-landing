@@ -589,6 +589,15 @@ function Navbar() {
             )}
         >
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                <div 
+                    className="flex items-center gap-2 cursor-pointer group"
+                    onClick={() => {
+                        if (typeof window !== "undefined") {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                    }}
+                >
+                    <BrandLogo className="h-8 w-auto group-hover:scale-105 transition-transform" />
                 </div>
 
                 {/* Desktop Menu */}
