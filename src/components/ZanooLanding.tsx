@@ -2093,10 +2093,9 @@ export default function ZanooLanding() {
                 </div>
             </section>
 
-
-
-
-
+            {/* TESTIMONIOS */}
+            <section id="testimonios" className="py-48 bg-zinc-50/50 dark:bg-zinc-900/20 border-y border-black/5 dark:border-white/5">
+                <div className="max-w-7xl mx-auto px-6">
                     <motion.div {...fadeUp} className="text-center mb-16">
                         <SectionBadge>Historias de Éxito</SectionBadge>
                         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
