@@ -1018,17 +1018,15 @@ function PhoneFrame({
     );
 }
 
-function ReplicaScreen({
-    title,
     subtitle,
     mode = "list",
 }: {
     title: string;
     subtitle: string;
-    mode?: "list" | "detail" | "metrics";
+    mode?: "list" | "detail" | "metrics" | "dashboard";
 }) {
     return (
-        <div className="h-full px-5 pt-5 pb-6 bg-[#fbfbfe]">
+        <div className="h-full px-5 pt-5 pb-6 bg-[#fbfbfe] overflow-hidden">
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                     {/* Restored logo for fallback view */}
@@ -1047,6 +1045,45 @@ function ReplicaScreen({
                 <MiniKpi label="Hoy" value="operativo" />
                 <MiniKpi label="Estado" value="en vivo" />
             </div>
+
+            {mode === "dashboard" && (
+                <div className="mt-6 space-y-5">
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="p-3 rounded-2xl bg-white border border-black/5 shadow-sm flex flex-col items-center">
+                            <Heart className="h-4 w-4 text-pink-500 mb-1" />
+                            <div className="text-[10px] font-bold text-pink-600">3 Médicos</div>
+                        </div>
+                        <div className="p-3 rounded-2xl bg-white border border-black/5 shadow-sm flex flex-col items-center">
+                            <PlusSquareIcon className="h-4 w-4 text-emerald-500 mb-1" />
+                            <div className="text-[10px] font-bold text-emerald-600">2 Disp.</div>
+                        </div>
+                        <div className="p-3 rounded-2xl bg-white border border-black/5 shadow-sm flex flex-col items-center">
+                            <Monitor className="h-4 w-4 text-blue-500 mb-1" />
+                            <div className="text-[10px] font-bold text-blue-600">1 Nuevo</div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-white border border-black/5 shadow-sm">
+                        <div className="text-[13px] font-bold text-slate-800 mb-3">Próximos Turnos</div>
+                        <div className="flex flex-col items-center justify-center py-4 border-2 border-dashed border-slate-100 rounded-xl">
+                            <Calendar className="h-6 w-6 text-slate-200 mb-2" />
+                            <div className="text-[11px] text-slate-400">No tenés turnos próximos</div>
+                            <div className="text-[11px] font-bold text-blue-600 mt-1 cursor-pointer">Sacar Turno Nuevo</div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div className="text-[13px] font-bold text-slate-800">Accesos Rápidos</div>
+                        <div className="grid grid-cols-4 gap-2">
+                            {[FileText, Calendar, User, ShoppingBag].map((Icon, i) => (
+                                <div key={i} className="aspect-square rounded-xl bg-blue-50 flex items-center justify-center">
+                                    <Icon className="h-5 w-5 text-blue-500" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {mode === "list" && (
                 <div className="mt-5 space-y-3">
@@ -1562,7 +1599,7 @@ export default function ZanooLanding() {
                                 {activeHeroShot.id === "medicos" ? (
                                     <ReplicaScreen title="Zanoo" subtitle="Mis médicos" mode="list" />
                                 ) : (
-                                    <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="detail" />
+                                    <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="dashboard" />
                                 )}
                             </PhoneFrame>
 
