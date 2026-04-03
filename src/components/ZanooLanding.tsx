@@ -1628,9 +1628,9 @@ export default function ZanooLanding() {
             <section ref={productoRef} id="producto" className="h-screen flex items-center justify-center bg-white dark:bg-black overflow-hidden relative z-0">
                 <motion.div 
                     style={{
-                        opacity: useTransform(productoScroll, [0, 0.1], [1, 0]),
-                        y: useTransform(productoScroll, [0, 0.15], [0, -80]),
-                        scale: useTransform(productoScroll, [0, 0.15], [1, 0.92]),
+                        opacity: useTransform(productoScroll, [0, 0.3], [1, 0]),
+                        y: useTransform(productoScroll, [0, 0.4], [0, -80]),
+                        scale: useTransform(productoScroll, [0, 0.4], [1, 0.92]),
                     }}
                     className="max-w-7xl mx-auto px-6 text-center"
                 >
@@ -1798,9 +1798,29 @@ export default function ZanooLanding() {
                             Resultados que cuentan<br />
                             <span className="text-blue-600 italic">historias de orden.</span>
                         </h2>
+                        
+                        <div className="mt-12 grid md:grid-cols-3 gap-8">
+                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
+                                <div className="text-5xl font-black text-blue-600 mb-2">8.000+</div>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">CAPS y Salitas de 1er nivel</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El corazón de la salud pública argentina. Donde el desorden administrativo impacta directo en la vida de los vecinos.</p>
+                            </div>
+                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
+                                <div className="text-5xl font-black text-blue-600 mb-2">12M+</div>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Consultas Anuales</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">Un volumen masivo que hoy se gestiona, en gran parte, con planillas de papel, WhatsApp y cuadernos manuscritos.</p>
+                            </div>
+                            <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
+                                <div className="text-5xl font-black text-blue-600 mb-2">45%</div>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Reducción de Espera</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El impacto medido al digitalizar el primer contacto. Menos colas al sol, más tiempo de calidad en el consultorio.</p>
+                            </div>
+                        </div>
                     </motion.div>
 
-                    <MetricsDashboard />
+                    <div className="mt-20">
+                        <MetricsDashboard />
+                    </div>
                 </div>
             </section>
 
