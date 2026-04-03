@@ -1684,119 +1684,6 @@ export default function ZanooLanding() {
                 </div>
             </section>
  
-            {/* APP REAL SECTION (Movido ABAJO de Impacto) */}
-            <section id="appreal" className="py-32 relative">
-                {/* Section Specific Background Spotlights */}
-                <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
-
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-14 items-center">
-                        <motion.div {...fadeUp}>
-                            <div className="mt-4 flex items-center gap-3">
-                                <BrandLogo className="h-8 w-auto" />
-                                <div className="text-xs text-black/45 dark:text-white/50">Producto real · capturas reales</div>
-                            </div>
-
-                            <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight text-black dark:text-white transition-colors duration-500">
-                                Validá cómo se ve la
-                                <br />
-                                herramienta en el <span className="relative inline-block">
-                                    <span className="relative z-10 font-extrabold tracking-tight text-4xl md:text-5xl uppercase bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                        DÍA A DÍA
-                                    </span>
-                                </span>.
-                            </h2>
-
-                            <p className="mt-4 text-black/60 dark:text-white/60 max-w-xl transition-colors duration-500">
-                                Acá se muestran capturas reales adentro de un celu. La misma tecnología que ya está transformando la atención.
-                            </p>
-
-                            <div className="mt-8 flex flex-wrap gap-2">
-                                {APP_SHOTS.map((s, i) => (
-                                    <button
-                                        key={s.id}
-                                        type="button"
-                                        onClick={() => setShotIndex(i)}
-                                        className={cn(
-                                            "px-4 py-2 rounded-full border text-sm transition-all",
-                                            shotIndex % APP_SHOTS.length === i
-                                                ? "border-black/15 bg-white text-black shadow-sm"
-                                                : "border-transparent bg-black/5 text-black/55 hover:bg-black/10 dark:bg-white/10 dark:text-white/70"
-                                        )}
-                                    >
-                                        {s.label}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div className="mt-10 grid sm:grid-cols-2 gap-4">
-                                <TechReveal direction="left" delay={0.1}>
-                                    <FeatureCard
-                                        title="↓ Tiempos de espera"
-                                        desc="Estudios confirman una reducción del 45% en demoras con agenda inteligente."
-                                        icon={<Zap className="text-cyan-500" />}
-                                        bg="from-cyan-400 via-blue-500 to-indigo-600"
-                                    />
-                                </TechReveal>
-                                <TechReveal direction="right" delay={0.2}>
-                                    <FeatureCard
-                                        title="↑ Continuidad clínica"
-                                        desc="El acceso inmediato al historial evita repeticiones y errores de medicación."
-                                        icon={<Layout className="text-blue-500" />}
-                                        bg="from-blue-400 via-indigo-500 to-purple-600"
-                                    />
-                                </TechReveal>
-                                <TechReveal direction="left" delay={0.3}>
-                                    <FeatureCard
-                                        title="↓ Ausentismo"
-                                        desc="Recordatorios automáticos reducen el ausentismo un 30% en el primer mes."
-                                        icon={<BarChartIcon className="text-amber-500" />}
-                                        bg="from-amber-400 via-orange-500 to-red-600"
-                                    />
-                                </TechReveal>
-                                <TechReveal direction="right" delay={0.4}>
-                                    <FeatureCard
-                                        title="↓ Fricción operativa"
-                                        desc="Alertas tempranas previenen cuellos de botella antes de que colapsen la sala."
-                                        icon={<Bell className="text-emerald-500" />}
-                                        bg="from-emerald-400 via-teal-500 to-cyan-600"
-                                    />
-                                </TechReveal>
-                            </div>
-
-
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.7, ease: "easeOut" }}
-                            className="relative perspective-1000"
-                        >
-                            <motion.div
-                                style={{
-                                    y: useTransform(useScroll().scrollYProgress, [0, 1], [50, -50]),
-                                    rotateX: useTransform(useScroll().scrollYProgress, [0.2, 0.8], [5, -5]),
-                                }}
-                                className="transition-transform duration-100 ease-out"
-                            >
-                                <motion.div
-                                    animate={{ y: [0, -20, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                >
-                                    <PhoneFrame label={activeShot.label} src={activeShot.src}>
-                                        <ReplicaScreen
-                                            title="Zanoo"
-                                            subtitle={activeShot.id === "turnos" ? "Recepción" : activeShot.id === "inicio" ? "Inicio" : "Dirección"}
-                                            mode={activeShot.mode || "list"}
-                                        />
-                                    </PhoneFrame>
-                                </motion.div>
-                            </motion.div>
-
-                            <div className="mt-6 max-w-[360px] mx-auto">
                                 <div className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-xl p-4 shadow-[0_18px_55px_-28px_rgba(0,0,0,0.45)] dark:bg-white/10 dark:border-white/10">
                                     <div className="text-xs text-black/55 dark:text-white/60">Siguiente/Anterior</div>
                                     <div className="mt-3 flex gap-2">
@@ -2106,53 +1993,13 @@ export default function ZanooLanding() {
                         </p>
                     </motion.div>
 
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {[
-                            {
-                                quote: "Antes perdíamos horas buscando historias clínicas en papel. Ahora con Zanoo todo el equipo tiene la misma vista al instante. Un alivio total.",
-                                name: "Dra. Laura Gómez",
-                                handle: "@directoraSalitaSur",
-                                avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Laura"
-                            },
-                            {
-                                quote: "Los turnos se superponían y la sala de espera era un caos. Desde que usamos Zanoo, la satisfacción de los pacientes subió muchísimo y nosotros trabajamos en paz.",
-                                name: "Dr. Martín Pérez",
-                                handle: "@medicoProvincia",
-                                avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Martin"
-                            },
-                            {
-                                quote: "El sistema es tan intuitivo que los secretarios lo aprendieron a usar el primer día. Literalmente nos devolvió el orden.",
-                                name: "Lic. Andrea Ruiz",
-                                handle: "@coordAdministrativa",
-                                avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Andrea"
-                            }
-                        ].map((t, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-50px" }}
-                                transition={{ duration: 0.5, delay: idx * 0.15 }}
-                                className="group relative rounded-3xl p-8 bg-white dark:bg-zinc-900/50 border border-black/5 dark:border-white/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                            >
-                                <p className="text-lg text-foreground/80 font-medium mb-6 leading-relaxed">
-                                    "{t.quote}"
-                                </p>
-                                <div className="flex items-center gap-4">
-                                    <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full border border-black/10 dark:border-white/10" loading="lazy" />
-                                    <div>
-                                        <div className="font-bold text-foreground">{t.name}</div>
-                                        <div className="text-sm text-foreground/50">{t.handle}</div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    <motion.div {...fadeUp} className="mt-16 flex justify-center">
+                    <motion.div {...fadeUp} className="mt-16 flex flex-col items-center gap-8">
+                        <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600 text-center animate-pulse">
+                            Convocatoria abierta para pioneros
+                        </p>
                         <button 
                             onClick={() => scrollToId("gratis")}
-                            className="rounded-full px-8 py-3 bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
+                            className="rounded-full px-12 py-5 bg-blue-600 text-white font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/40 hover:scale-105 active:scale-95"
                         >
                             Aplicá para ser el siguiente
                         </button>
