@@ -589,16 +589,6 @@ function Navbar() {
             )}
         >
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-                <div 
-                    className="flex items-center gap-2 cursor-pointer group"
-                    onClick={() => {
-                        if (typeof window !== "undefined") {
-                            window.scrollTo({ top: 0, behavior: "smooth" });
-                        }
-                    }}
-                >
-                    <BrandLogo className="h-8 w-auto group-hover:scale-105 transition-transform" />
-                    <span className="hidden sm:block font-black text-xl tracking-tighter uppercase italic bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Zanoo</span>
                 </div>
 
                 {/* Desktop Menu */}
@@ -1788,6 +1778,21 @@ export default function ZanooLanding() {
                     </div>
 
 
+                </div>
+            </section>
+
+            {/* IMPACTO (Restaurada una sola instancia) */}
+            <section id="impacto" className="py-32 bg-zinc-50/50 dark:bg-zinc-950/30">
+                <div className="max-w-6xl mx-auto px-6">
+                    <motion.div {...fadeUp} className="text-center mb-16">
+                        <SectionBadge>Impacto Real</SectionBadge>
+                        <h2 className="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
+                            Esto no es una promesa.<br />
+                            Es el <span className="text-blue-600 italic">Producto funcionando.</span>
+                        </h2>
+                    </motion.div>
+
+                    <MetricsDashboard />
                 </div>
             </section>
 
