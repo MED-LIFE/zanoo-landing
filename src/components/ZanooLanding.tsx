@@ -974,20 +974,20 @@ function PhoneFrame({
         <div className="relative">
             <div className="absolute -inset-6 rounded-[44px] bg-gradient-to-r from-cyan-400/12 via-blue-500/10 to-purple-600/12 blur-2xl" />
 
-            <div className="relative mx-auto w-[280px] sm:w-[320px]">
-                <div className="relative rounded-[40px] border border-black/15 bg-gradient-to-b from-white to-white/60 shadow-[0_25px_60px_-30px_rgba(0,0,0,0.55)] overflow-hidden">
-                    <div className="absolute inset-[6px] rounded-[34px] border border-black/10" />
-                    <div className="absolute left-1/2 top-[8px] -translate-x-1/2 h-[20px] w-[100px] rounded-full bg-black/10 backdrop-blur" />
+            <div className="relative mx-auto w-[320px] sm:w-[360px]">
+                <div className="relative rounded-[44px] border border-black/15 bg-gradient-to-b from-white to-white/60 shadow-[0_30px_80px_-38px_rgba(0,0,0,0.65)] overflow-hidden">
+                    <div className="absolute inset-[7px] rounded-[38px] border border-black/10" />
+                    <div className="absolute left-1/2 top-[10px] -translate-x-1/2 h-[22px] w-[126px] rounded-full bg-black/10 backdrop-blur" />
 
-                    <div className="relative rounded-[28px] overflow-hidden bg-white">
+                    <div className="relative m-[14px] mt-[0px] rounded-[34px] overflow-hidden bg-white">
                         {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
-                        <div className="relative h-[620px] bg-black">
+                        <div className="relative h-[690px] bg-[#fbfbfe]">
                             {showImage && (
-                                <div className="absolute inset-0 z-0">
+                                <div className="absolute inset-0 z-0 flex items-center justify-center">
                                     <img
                                         src={src}
                                         alt={alt || "Captura de Zanoo"}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-contain"
                                         loading="lazy"
                                         onError={() => setImgError(true)}
                                     />
