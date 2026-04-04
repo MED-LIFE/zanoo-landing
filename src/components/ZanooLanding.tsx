@@ -1512,7 +1512,7 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-16 pb-16 relative overflow-hidden z-10">
+            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-28 pb-16 relative overflow-hidden z-10">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.05),transparent_60%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.05),transparent_65%)]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-6">
@@ -1705,17 +1705,23 @@ export default function ZanooLanding() {
                         
                         <div className="mt-12 grid md:grid-cols-3 gap-8">
                             <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
-                                <div className="text-5xl font-black text-blue-600 mb-2">8.000+</div>
+                                <div className="text-5xl font-black text-blue-600 mb-2">
+                                    <AnimatedCounter value={8000} suffix="+" />
+                                </div>
                                 <div className="text-xs uppercase tracking-widest font-bold opacity-60">Salitas y CAPS activas</div>
                                 <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">Más de 8.000 salitas y CAPS esperan ser digitalizadas en todo nuestro país para transformar la salud pública.</p>
                             </div>
                             <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
-                                <div className="text-5xl font-black text-blue-600 mb-2">12M+</div>
+                                <div className="text-5xl font-black text-blue-600 mb-2">
+                                    <AnimatedCounter value={12} suffix="M+" />
+                                </div>
                                 <div className="text-xs uppercase tracking-widest font-bold opacity-60">Consultas Anuales</div>
                                 <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">Un volumen masivo que hoy se gestiona, en gran parte, con planillas de papel, WhatsApp y cuadernos manuscritos.</p>
                             </div>
                             <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
-                                <div className="text-5xl font-black text-blue-600 mb-2">45%</div>
+                                <div className="text-5xl font-black text-blue-600 mb-2">
+                                    <AnimatedCounter value={45} suffix="%" />
+                                </div>
                                 <div className="text-xs uppercase tracking-widest font-bold opacity-60">Reducción de Espera</div>
                                 <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El impacto medido al digitalizar el primer contacto. Menos colas al sol, más tiempo de calidad en el consultorio.</p>
                             </div>
@@ -2545,3 +2551,4 @@ export default function ZanooLanding() {
 "// touch" 
 "// final crop fix" 
 "// fix: restoring clean proportions" 
+"// anim: metrics counter and hero spacing" 
