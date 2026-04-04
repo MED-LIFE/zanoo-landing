@@ -984,18 +984,16 @@ function PhoneFrame({
                         {/* <div className="absolute -top-12 left-1/2 -translate-x-1/2 h-32 w-64 rounded-full bg-gradient-to-r from-cyan-400/22 via-blue-500/18 to-purple-600/18 blur-2xl" /> */}
 
                         {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
-                        <div className="relative h-[690px] bg-[#f6f7fb]">
+                        <div className="relative h-[690px] bg-[#fbfbfe]">
                             {showImage && (
-                                <div className="absolute inset-0 z-0">
+                                <div className="absolute inset-0 z-0 flex items-center justify-center p-1">
                                     <img
                                         src={src}
                                         alt={alt || "Captura de Zanoo"}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-contain"
                                         loading="lazy"
                                         onError={() => setImgError(true)}
                                     />
-                                    {/* Overlay sutil para mejorar legibilidad de los elementos UI encima */}
-                                    <div className="absolute inset-0 bg-black/5 dark:bg-black/20" />
                                 </div>
                             )}
                             <div className="relative z-10 h-full overflow-y-auto">
