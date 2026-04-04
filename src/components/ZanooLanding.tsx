@@ -38,7 +38,12 @@ import {
     Users,
     ExternalLink,
     Mail,
-    ShieldCheck
+    ShieldCheck,
+    PlusSquare as PlusSquareIcon,
+    FileText,
+    User,
+    ShoppingBag,
+    PlusSquare as PlusSquare2
 } from "lucide-react";
 import Image from "next/image";
 
