@@ -1604,9 +1604,7 @@ export default function ZanooLanding() {
                             <PhoneFrame label={activeHeroShot.label} src={activeHeroShot.src}>
                                 {activeHeroShot.id === "medicos" ? (
                                     <ReplicaScreen title="Zanoo" subtitle="Mis médicos" mode="list" />
-                                ) : (
-                                    <ReplicaScreen title="Zanoo" subtitle="Inicio" mode="dashboard" />
-                                )}
+                                ) : null}
                             </PhoneFrame>
 
                             <div className="mt-6 max-w-[360px] mx-auto">
@@ -1713,8 +1711,8 @@ export default function ZanooLanding() {
                         <div className="mt-12 grid md:grid-cols-3 gap-8">
                             <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
                                 <div className="text-5xl font-black text-blue-600 mb-2">8.000+</div>
-                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">CAPS y Salitas de 1er nivel</div>
-                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">El corazón de la salud pública argentina. Donde el desorden administrativo impacta directo en la vida de los vecinos.</p>
+                                <div className="text-xs uppercase tracking-widest font-bold opacity-60">Salitas y CAPS activas</div>
+                                <p className="mt-4 text-sm text-balance leading-relaxed opacity-80">Más de 8.000 salitas y CAPS esperan ser digitalizadas en todo nuestro país para transformar la salud pública.</p>
                             </div>
                             <div className="p-8 rounded-[32px] border border-black/5 bg-white/50 backdrop-blur-xl">
                                 <div className="text-5xl font-black text-blue-600 mb-2">12M+</div>
@@ -2234,12 +2232,23 @@ export default function ZanooLanding() {
                                             </div>
 
                                             <div className="sm:col-span-2">
+                                                <label className="text-xs text-black/55">¿Por qué querrías sumar ZANOO? (Requerido)</label>
+                                                <textarea
+                                                    required
+                                                    rows={3}
+                                                    name="motivo"
+                                                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                                                    placeholder="Ej: hoy usamos planilla y WhatsApp; queremos ordenar turnos y sala de espera."
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-2">
                                                 <label className="text-xs text-black/55">Comentario (opcional)</label>
                                                 <textarea
-                                                    rows={3}
+                                                    rows={2}
                                                     name="comentarios"
                                                     className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                                                    placeholder="Ej: hoy usamos planilla y WhatsApp; queremos ordenar turnos y sala."
+                                                    placeholder="Cualquier otro detalle que quieras sumar."
                                                 />
                                             </div>
 
