@@ -981,7 +981,7 @@ function PhoneFrame({
 
                     <div className="relative m-[14px] mt-[0px] rounded-[34px] overflow-hidden bg-white">
                         {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
-                        <div className="relative h-[690px] bg-[#fbfbfe]">
+                        <div className="relative h-[690px] bg-white">
                             {showImage && (
                                 <div className="absolute inset-0 z-0 flex items-center justify-center">
                                     <img
