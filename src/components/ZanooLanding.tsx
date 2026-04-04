@@ -979,15 +979,15 @@ function PhoneFrame({
                     <div className="absolute inset-[6px] rounded-[34px] border border-black/10" />
                     <div className="absolute left-1/2 top-[8px] -translate-x-1/2 h-[20px] w-[100px] rounded-full bg-black/10 backdrop-blur" />
 
-                    <div className="relative m-[12px] mt-[16px] rounded-[28px] overflow-hidden bg-white">
+                    <div className="relative rounded-[28px] overflow-hidden bg-white">
                         {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
-                        <div className="relative h-[620px] bg-[#fbfbfe]">
+                        <div className="relative h-[620px] bg-black">
                             {showImage && (
-                                <div className="absolute inset-0 z-0 flex items-center justify-center p-1">
+                                <div className="absolute inset-0 z-0">
                                     <img
                                         src={src}
                                         alt={alt || "Captura de Zanoo"}
-                                        className="w-full h-full object-contain"
+                                        className="w-full h-full object-cover"
                                         loading="lazy"
                                         onError={() => setImgError(true)}
                                     />
