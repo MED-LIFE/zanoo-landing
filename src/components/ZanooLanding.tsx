@@ -2544,3 +2544,4 @@ export default function ZanooLanding() {
 }
 "// touch" 
 "// final crop fix" 
+"// fix: restoring clean proportions" 
