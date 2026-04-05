@@ -983,11 +983,11 @@ function PhoneFrame({
                         {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
                         <div className="relative h-[690px] bg-white overflow-hidden">
                             {showImage && (
-                                <div className="absolute inset-0 z-0">
+                                <div className="absolute inset-0 z-0 overflow-hidden">
                                     <img
                                         src={src}
                                         alt={alt || "Captura de Zanoo"}
-                                        className="absolute -top-[42px] left-0 w-full h-[calc(100%+42px)] object-cover"
+                                        className="w-full h-auto -mt-[46px]"
                                         loading="lazy"
                                         onError={() => setImgError(true)}
                                     />
@@ -1512,7 +1512,7 @@ export default function ZanooLanding() {
             </nav>
 
             {/* HERO */}
-            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-28 pb-16 relative overflow-hidden z-10">
+            <section ref={heroRef} id="top" className="min-h-screen flex items-center pt-56 pb-16 relative overflow-hidden z-10">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.05),transparent_60%),radial-gradient(ellipse_at_right,rgba(168,85,247,0.05),transparent_65%)]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-start pt-6">
