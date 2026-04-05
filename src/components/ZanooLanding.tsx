@@ -983,11 +983,11 @@ function PhoneFrame({
                         {/* Contenido interior: Imagen (si existe) + Children (UI interactiva) */}
                         <div className="relative h-[690px] bg-white overflow-hidden">
                             {showImage && (
-                                <div className="absolute inset-0 z-0 flex items-center justify-center">
+                                <div className="absolute inset-0 z-0">
                                     <img
                                         src={src}
                                         alt={alt || "Captura de Zanoo"}
-                                        className="w-full h-full object-contain"
+                                        className="absolute -top-[42px] left-0 w-full h-[calc(100%+42px)] object-cover"
                                         loading="lazy"
                                         onError={() => setImgError(true)}
                                     />
@@ -2562,3 +2562,4 @@ export default function ZanooLanding() {
 "// final pixel-perfect fit v102" 
 "// pixel perfect dimensions: 375x690" 
 "// notch surgery and definitive scaling" 
+"// final surgical crop: -42px" 
